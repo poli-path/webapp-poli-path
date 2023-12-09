@@ -1,0 +1,65 @@
+/* MobileApp.css */
+
+a{
+  margin-left: 5%;
+  margin-bottom: 5%;
+}
+
+.about-us {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px;
+    margin: 25px;
+    background: #fafafa10;
+    background-size: cover;
+    backdrop-filter: blur(0.4rem);
+    -webkit-backdrop-filter: blur(0.4rem);
+    border: 3px solid fafafa10;
+    border-radius: 50px;
+  }
+  
+  .about-us__description {
+    max-width: 50%;
+    color: #FFF;
+    font-size: 30px;
+
+  }
+  
+.about-us__description h2 {
+  color: #FFF; /* Color del texto */
+  padding: 10px;
+  background-color: #BA0012; /* Color de fondo */
+  background: linear-gradient(90deg, #ba001300, #BA0012,#ba001300);
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-top: 5%;
+  margin-bottom: 0px;
+}
+  
+  
+  .about-us__image {
+    max-width: 50%;
+  }
+  
+  .about-us__image img {
+    width: 100%;
+    height: auto;
+  }
+  
+.about-us__image a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #BA0012;
+  background-color: #BA0012;
+  text-decoration: none;
+}
+
+  
+  .about-us__image a:hover {
+    text-decoration: underline;
+  }
+  

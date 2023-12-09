@@ -1,0 +1,17 @@
+/* LandingPage.css */
+
+/* Estilos para la Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Asegura que la Navbar esté por encima de otros elementos */
+    /* Agrega aquí otros estilos deseados para la Navbar */
+  }
+  
+  /* Estilos para el contenedor del carousel */
+  .carousel-container {
+    padding-top: 50px;
+    /* Agrega aquí otros estilos deseados para el contenedor del carousel */
+  }
+  

@@ -1,0 +1,65 @@
+/* MobileApp.css */
+
+a{
+  margin-left: 5%;
+  margin-bottom: 5%;
+}
+
+.mobile-app {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px;
+    margin: 25px;
+    background: #fafafa10;
+    background-size: cover;
+    backdrop-filter: blur(0.4rem);
+    -webkit-backdrop-filter: blur(0.4rem);
+    border: 3px solid fafafa10;
+    border-radius: 50px;
+  }
+  
+  .mobile-app__description {
+    max-width: 50%;
+    color: #FFF;
+    font-size: 30px;
+
+  }
+  
+.mobile-app__description h2 {
+  color: #FFF; /* Color del texto */
+  padding: 10px;
+  background-color: #BA0012; /* Color de fondo */
+  background: linear-gradient(90deg, #ba001300, #BA0012,#ba001300);
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-top: 5%;
+  margin-bottom: 0px;
+}
+  
+  
+  .mobile-app__gif {
+    max-width: 50%;
+  }
+  
+  .mobile-app__gif img {
+    width: 100%;
+    height: auto;
+  }
+  
+.mobile-app__gif a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #BA0012;
+  background-color: #BA0012;
+  text-decoration: none;
+}
+
+  
+  .mobile-app__gif a:hover {
+    text-decoration: underline;
+  }
+  

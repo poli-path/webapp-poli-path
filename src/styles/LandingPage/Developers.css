@@ -1,0 +1,69 @@
+/* Developers.css */
+
+h1 {
+    color: #ba0012;
+  }
+  
+  .developers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background: #fafafa10;
+    background-size: cover;
+    backdrop-filter: blur(0.4rem);
+    -webkit-backdrop-filter: blur(0.4rem);
+    border: 3px solid fafafa10;
+    border-radius: 50px;
+  }
+  
+  .developers > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .developer_info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 20px;
+    max-width: 50%;
+
+  }
+  
+  .developer_info h2 {
+    color: #fff;
+    padding: 10px;
+    background-color: #ba0012;
+    background: linear-gradient(90deg, #ba001300, #ba0012, #ba001300);
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-top: 5%;
+    margin-bottom: 0;
+  }
+  
+  .developer_info p {
+    color: #ffffff;
+    font-size: 24px;
+    margin-top: 5px;
+  }
+  
+  .developer_contact {
+    max-width: 50%;
+    display: flex;
+    align-items: center; /* Alinea los elementos hacia arriba */
+    flex-direction: column; /* Apila los elementos verticalmente */
+    gap: 10px;
+  }
+  
+  .developer_contact img {
+    max-width: 50%;
+    border-radius: 50%;
+    border: 2px solid #121b5b;
+  }
+  

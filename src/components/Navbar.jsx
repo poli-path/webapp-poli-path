@@ -1,19 +1,24 @@
+import '../styles/Navbar.css';
+import { Link } from 'react-router-dom';
 import React from 'react';
-import '../styles/Navbar.css'
-import { Link } from "react-router-dom";
+import Logo from "../assets/Logo.png";
 
 const Navbar = () => {
     return (
         <nav className='navbar'>
             <div className='navbar__logo'>
-                <img src='../assets/Logo.png' alt='Logo'/>
-                <h1>PoliPath</h1>
+                <Link to='/'>
+                    <img src={Logo} alt='Logo' />
+                    <h1><strong>PoliPath</strong></h1>
+                </Link>
             </div>
             <div className='navbar__links'>
-                <Link to='/'>Inicio</Link>
-                <Link to='/invitado'>Modo Invitado</Link>
-                <Link to='/admin'>Administrador</Link>
+                <Link to='/' className='navbar__link'><button>Inicio</button></Link>
+                <Link to='/invitado' className='navbar__link'><button>Invitado</button></Link>
+                <Link to='/admin' className='navbar__link'><button>Administrador</button></Link>
             </div>
         </nav>
-    )
+    );
 }
+
+export default Navbar;

@@ -1,0 +1,67 @@
+/* Estilos para el contenedor del carousel */
+.carousel-container {
+    position: relative;
+    z-index: 1; /* Ajusta el z-index para colocar el carousel detrás del Navbar */
+  }
+  
+
+/* Estilos para los slides */
+.carousel-slide {
+    width: 100vw; /* Ancho del viewport */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Keania One', sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Estilos para los contenidos */
+.carousel-slide > * {
+    margin: 50px 0; /* Separación entre elementos */
+}
+
+/* Estilos específicos para cada slide */
+.slide-0 {
+    background-image: url('../../assets/EPN_360_1.jpg');
+    background-position: left center; /* Alineación a la izquierda */
+}
+
+.slide-1 {
+    background-image: url('../../assets/EPN_360_2.jpg');
+    background-position: right center; /* Alineación a la derecha */
+}
+
+.slide-2 {
+    background-image: url('../../assets/EPN_appmóvil.jpg');
+}
+
+h1 {
+    font-size: 50px; /* Títulos más grandes */
+  }
+  
+  p{
+    margin: 10%;
+  }
+  
+  /* Estilos para los botones */
+  button.slide-button {
+    background-color: #BA0012;
+    color: #FFF;
+    border: 2px solid #000;
+    border-radius: 50px;
+    font-size: 32px;
+    padding: 10px 20px;
+    cursor: pointer;
+    left: 50%;
+  }
+  

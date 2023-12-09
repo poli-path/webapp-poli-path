@@ -1,38 +1,44 @@
-.App {
-  text-align: center;
+
+* {
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  -webkit-text-stroke: 2px black;  
+  text-shadow: 2px 2px 5px black;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* LandingPage.css */
+
+body {
+  /* Define el color inicial de fondo */
+  background-color: #121b5b; /* Color inicial */
+
+  /* Define el fondo con un gradiente que se vuelve más claro a medida que se desplaza hacia abajo */
+  background-image: linear-gradient(to top, rgb(18, 68, 91), rgba(18, 27, 91, 0));
+  background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
+  background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
+  background-repeat: no-repeat;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+html{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155,155,155,0.5) transparent;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+html::-webkit-scrollbar{
+  width: 5px;
+  border-radius: 50px;
 }
 
-.App-link {
-  color: #61dafb;
+html::-webkit-scrollbar-track{
+  background: transparent;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+html::-webkit-scrollbar-thumb{
+  background-color: red;
+  border-radius: 50px;
+  border: 2px solid black;
 }
+
+/* Resto 
+de estilos para los otros elementos */
+/* ... */
