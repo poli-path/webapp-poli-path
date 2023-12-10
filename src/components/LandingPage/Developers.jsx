@@ -1,6 +1,7 @@
 import { FaWhatsapp, FaGithub, FaLinkedin } from "react-icons/fa";
 import "../../styles/LandingPage/Developers.css";
 import Nestor from "../../assets/FotoNstor.jpg";
+import Daniel from "../../assets/FotoDaniel.jpg";
 
 const Developers = () => {
   return (
@@ -93,7 +94,7 @@ const Developers = () => {
           nuestro campus de manera eficiente.</p>
         </div>
         <div className="developer_contact">
-          <img src={Nestor} alt="Foto del desarrollador" />
+          <img src={Daniel} alt="Foto del desarrollador" />
           <a
             href="https://w.app/widget-v1/2CbTOY.js"
             target="_blank"

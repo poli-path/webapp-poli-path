@@ -1,9 +1,16 @@
+import Navbar from "../components/Navbar";
+import LoginCard from "../components/Administrador/LoginCard";
+import Footer from "../components/Footer";
 
-
-const LoginAdministrador = () => {
+const LandingPage = () => {
     return (
-<h1>xd</h1>
+      <div className="landing-page-container">
+        <Navbar />
+        <LoginCard />
+
+<Footer/>
+      </div>
     );
   };
 
-export default LoginAdministrador
+export default LandingPage
