@@ -1,10 +1,13 @@
 /* Estilos para el contenedor del carousel */
-.my-container {
+.carousel-container {
   position: relative;
-  z-index: 1; /* Ajusta el z-index para colocar el carousel detrás del Navbar */
-  margin: 5rem;
 }
 
+.carousel-container a:hover {
+  background:  #BA0012;
+  transform: scale(1.1); /* Cambio de tamaño al hacer hover */
+
+}
 /* Estilos para los slides */
 .carousel-slide {
   width: 100vw; /* Ancho del viewport */
@@ -23,11 +26,16 @@
   line-height: normal;
   position: relative;
   overflow: hidden;
+  height: 600px;
+
 }
+
+
 
 /* Estilos para los contenidos */
 .carousel-slide > * {
   margin: 50px 0; /* Separación entre elementos */
+
 }
 
 /* Estilos específicos para cada slide */
@@ -45,16 +53,18 @@
   background-image: url('../../assets/EPN_appmóvil.jpg');
 }
 
-h1 {
+.carousel-slide h1 {
   font-size: 50px; /* Títulos más grandes */
+  background: linear-gradient(90deg, #ba001300, #ba001300, #BA0012, #ba001300,#ba001300);
+color: #ffffff;
 }
 
-p {
+p{
   margin: 10%;
 }
 
 /* Estilos para los botones */
-.my-button {
+button.slide-button {
   background-color: #BA0012;
   color: #FFF;
   border: 2px solid #000;
@@ -62,16 +72,16 @@ p {
   font-size: 32px;
   padding: 10px 20px;
   cursor: pointer;
-  width: 100%;
-  margin-bottom: 1rem;
+  left: 50%;
 }
 
-.cascading-right {
-margin-right: -50px;
-}
-
-@media (max-width: 900px) {
-.cascading-right {
-  margin-right: 0;
-}
+.slide-button {
+  background-color: #BA0012;
+  color: #FFF;
+  border: 2px solid #000;
+  border-radius: 50px;
+  font-size: 32px;
+  padding: 10px 20px;
+  cursor: pointer;
+  left: 50%;
 }

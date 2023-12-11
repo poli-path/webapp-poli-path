@@ -1,16 +1,18 @@
 import Navbar from "../components/Navbar";
 import LoginCard from "../components/Administrador/LoginCard";
 import Footer from "../components/Footer";
+import "../styles/Administrador/LoginAdministrador.css";
 
 const LandingPage = () => {
-    return (
-      <div className="landing-page-container">
-        <Navbar />
+  return (
+    <div className="loginad-page-container">
+      <Navbar />
+      <div className="login-card">
         <LoginCard />
-
-<Footer/>
       </div>
-    );
-  };
+      <Footer />
+    </div>
+  );
+};
 
-export default LandingPage
+export default LandingPage;

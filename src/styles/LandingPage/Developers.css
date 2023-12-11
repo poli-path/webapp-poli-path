@@ -1,7 +1,8 @@
 /* Developers.css */
 
-h1 {
+.developers h1 {
     color: #ba0012;
+    font-size: 50px;
   }
   
   .developers {
@@ -45,6 +46,7 @@ h1 {
     width: 100%;
     margin-top: 5%;
     margin-bottom: 0;
+    font-size: 40px;
   }
   
   .developer_info p {

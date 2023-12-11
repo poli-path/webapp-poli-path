@@ -24,7 +24,7 @@ const MobileApp = () => {
         <a
           href="https://play.google.com "
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer"          className="app-download-button"
         >
           <FaGooglePlay />
           Descargar desde Google Play

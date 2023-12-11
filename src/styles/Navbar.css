@@ -9,7 +9,9 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 65px;
+  height: 90px;
+  z-index: 1; /* Ajusta el z-index para colocar el carousel detrás del Navbar */
+
 }
 
 .navbar__logo {
@@ -27,6 +29,7 @@
 
 .navbar__logo a:hover {
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
+
 }
 
 .navbar__logo img {
@@ -41,7 +44,7 @@
 }
 
 .navbar__logo h1 {
-  font-size: 40px;
+  font-size: 50px;
   font-weight: bold;
   margin: 0;
   font-family: 'Kenia One', sans-serif;

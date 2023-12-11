@@ -4,8 +4,26 @@
   font-weight: bold;
   -webkit-text-stroke: 2px black;  
   text-shadow: 2px 2px 5px black;
+  
+}
+a:hover {
+  transform: scale(1.1); /* Cambio de tamaño al hacer hover */
+  background: linear-gradient(90deg, #ba001300, #BA0012,#ba001300);
+}
+a:active {
+  /* Aquí puedes agregar los estilos que quieras para cuando se hace clic */
+  transform: scale(0.95);
+}
+button:hover{
+  transform: scale(1.1); /* Cambio de tamaño al hacer hover */
+
+
 }
 
+button:active {
+  /* Aquí puedes agregar los estilos que quieras para cuando se hace clic */
+  transform: scale(0.95);
+}
 /* LandingPage.css */
 
 body {
@@ -17,6 +35,11 @@ body {
   background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
   background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
   background-repeat: no-repeat;
+}
+
+a:-webkit-any-link{
+  text-decoration: none;
+  color: aliceblue;
 }
 
 html{

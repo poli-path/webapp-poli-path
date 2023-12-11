@@ -1,52 +1,120 @@
-.my-container {
-    margin: 5rem;
+/* Estilos base para resetear márgenes y rellenos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+  overflow: hidden; /* Ocultar cualquier desbordamiento de los elementos hijos */
+}
+
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Color semi-transparente oscuro */
+}
+
+.login-container::after {
+  content: "";
+  background-image: url('../../assets/EntradaPoli.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(5px); /* Aplicar un desenfoque a la imagen de fondo */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1; /* Colocar detrás del contenido */
+}
+
+.login-form {
+  position: relative;
+  background: #fafafa10;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid #fafafa10;
+  border-radius: 50px;
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 40px 80px rgb(0, 0, 0);
+font-size: 20px;
+  z-index: 1;
+  min-width: 50%;
+  margin-left: 20px;
+}
+
+.login-form h2 {
+  font-size: 30px;
+}
+
+.input-group {
+  margin-bottom: 15px; /* Reducción del espacio entre los grupos de entrada */
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+}
+
+.forgot-password {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+}
+
+
+.login-image {
+  height: 100%; /* Ajuste del 10% de altura adicional */
+  max-width: 80%;
+  object-fit: cover;
+  border-radius: 100%;
+  box-shadow: 0 40px 80px rgb(0, 0, 0);
+}
+
+button {
+  background-color: #ba0012;
+  color: #fff;
+  border: 2px solid #000;
+  border-radius: 50px;
+  font-size: 24px; /* Reducción del tamaño del texto */
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+/* Estilos para responsive */
+@media screen and (max-width: 768px) {
+  .login-form {
+    width: 80%; /* Reducción del ancho del formulario en dispositivos más pequeños */
   }
-  
-  .my-row {
-    display: flex;
-    align-items: center;
-  }
-  
-  .my-col {
-    flex: 1;
-  }
-  
-  .my-card {
-    margin: 5rem;
-    background: hsla(0, 0%, 100%, 0.55);
-    backdrop-filter: blur(30px);
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  }
-  
-  .my-card-body {
-    padding: 5rem;
-    text-align: center;
-  }
-  
-  .my-input {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-  }
-  
-  .my-button {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  
-  .my-img {
-    width: 100%;
-    border-radius: 1rem;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  }
-  
-  .cascading-right {
-    margin-right: -50px;
-  }
-  
-  @media (max-width: 900px) {
-    .cascading-right {
-      margin-right: 0;
-    }
-  }
+}
