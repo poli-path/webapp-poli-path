@@ -1,11 +1,11 @@
 .footer {
-    background-color: #121b5b;
-    background: linear-gradient(90deg, #ba001300, #121b5b,#ba001300);
+    background-color: #3b52ff;
+    background: linear-gradient(90deg, #3b52ff80,#3b52ff ,#3b52ffc2);
     color: #fff;
     padding: 20px;
     text-align: center;
-    font-size: 22px;
-    height: 200px; /* Altura fija del footer */
+    font-size: 14px;
+    height: 100px; /* Altura fija del footer */
   }
   
   .footer__content {

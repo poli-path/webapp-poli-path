@@ -1,71 +1,63 @@
-/* Developers.css */
+.developers {
+  text-align: center;
+}
 
-.developers h1 {
-    color: #ba0012;
-    font-size: 50px;
-  }
-  
-  .developers {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-    background: #fafafa10;
-    background-size: cover;
-    backdrop-filter: blur(0.4rem);
-    -webkit-backdrop-filter: blur(0.4rem);
-    border: 3px solid fafafa10;
-    border-radius: 50px;
-  }
-  
-  .developers > div {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 30px;
-    margin-bottom: 20px;
-  }
-  
-  .developer_info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 20px;
-    max-width: 50%;
+.developers h1{
+  font-size: 40px;
+  color: red;
+}
 
+.developers_v1, .developers_v2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2em;
+  margin: 7%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  background: #fafafa10;
+background-size: cover;
+backdrop-filter: blur(0.4rem);
+-webkit-backdrop-filter: blur(0.4rem);
+border: 3px solid fafafa10;
+border-radius: 50px;
+padding: 7%;
+}
+.developers_v2 {
+  flex-direction: row-reverse;
+}
+.developer_info {
+  width: 50%;
+}
+
+.developer_contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.developer_contact img {
+  height: 40vh;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Código responsive para pantallas pequeñas (menos de 600px) */
+@media (max-width: 600px) {
+  .developers_v1, .developers_v2 {
+    flex-direction: column;
   }
-  
-  .developer_info h2 {
-    color: #fff;
-    padding: 10px;
-    background-color: #ba0012;
-    background: linear-gradient(90deg, #ba001300, #ba0012, #ba001300);
-    display: inline-block;
-    text-align: center;
-    width: 100%;
-    margin-top: 5%;
-    margin-bottom: 0;
-    font-size: 40px;
+  .developers_v2 {
+    flex-direction: column;
   }
-  
-  .developer_info p {
-    color: #ffffff;
-    font-size: 24px;
-    margin-top: 5px;
-  }
-  
-  .developer_contact {
-    max-width: 50%;
-    display: flex;
-    align-items: center; /* Alinea los elementos hacia arriba */
-    flex-direction: column; /* Apila los elementos verticalmente */
-    gap: 10px;
-  }
-  
   .developer_contact img {
-    max-width: 50%;
-    border-radius: 50%;
-    border: 2px solid #121b5b;
+    width: 100%;
+    height: auto;
   }
-  
+
+  .developer_info {
+    width: 100%;
+  }
+}

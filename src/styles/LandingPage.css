@@ -1,17 +1,20 @@
-/* LandingPage.css */
+/* Estilos para pantallas grandes */
+.carousel-container{
+  margin-top: 80px;
+}
 
-/* Estilos para la Navbar */
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000; /* Asegura que la Navbar esté por encima de otros elementos */
-    /* Agrega aquí otros estilos deseados para la Navbar */
+/* Estilos para pantallas medianas */
+@media screen and (max-width: 768px) {
+  .landing-page-container {
+    display: flex;
+    flex-direction: column;
   }
-  
-  /* Estilos para el contenedor del carousel */
-  .carousel-container {
-    padding-top: 50px;
-    /* Agrega aquí otros estilos deseados para el contenedor del carousel */
+}
+
+/* Estilos para pantallas pequeñas */
+@media screen and (max-width: 480px) {
+  .landing-page-container {
+    display: flex;
+    flex-direction: column;
   }
-  
+}

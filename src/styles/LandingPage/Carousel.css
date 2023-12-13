@@ -4,10 +4,10 @@
 }
 
 .carousel-container a:hover {
-  background:  #BA0012;
+  background:  #eb1c31;
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
-
 }
+
 /* Estilos para los slides */
 .carousel-slide {
   width: 100vw; /* Ancho del viewport */
@@ -27,15 +27,11 @@
   position: relative;
   overflow: hidden;
   height: 600px;
-
 }
-
-
 
 /* Estilos para los contenidos */
 .carousel-slide > * {
   margin: 50px 0; /* Separación entre elementos */
-
 }
 
 /* Estilos específicos para cada slide */
@@ -55,17 +51,18 @@
 
 .carousel-slide h1 {
   font-size: 50px; /* Títulos más grandes */
-  background: linear-gradient(90deg, #ba001300, #ba001300, #BA0012, #ba001300,#ba001300);
-color: #ffffff;
+  background: linear-gradient(90deg, #ba001300, #ba001300, #eb1c31, #ba001300,#ba001300);
+  color: #ffffff;
 }
 
-p{
+.carousel-slide p{
   margin: 10%;
+  -webkit-text-stroke: 1px black;  
 }
 
 /* Estilos para los botones */
 button.slide-button {
-  background-color: #BA0012;
+  background-color: #eb1c31;
   color: #FFF;
   border: 2px solid #000;
   border-radius: 50px;
@@ -76,7 +73,7 @@ button.slide-button {
 }
 
 .slide-button {
-  background-color: #BA0012;
+  background-color: #eb1c31;
   color: #FFF;
   border: 2px solid #000;
   border-radius: 50px;
@@ -84,4 +81,20 @@ button.slide-button {
   padding: 10px 20px;
   cursor: pointer;
   left: 50%;
+}
+
+/* Código responsive para pantallas pequeñas (menos de 600px) */
+@media (max-width: 600px) {
+  .carousel-slide {
+    height: auto; /* Ajusta la altura para dispositivos móviles */
+  }
+
+  .carousel-slide h1 {
+    font-size: 32px; /* Títulos más pequeños para dispositivos móviles */
+  }
+
+  button.slide-button, .slide-button {
+    font-size: 24px; /* Botones más pequeños para dispositivos móviles */
+    padding: 5px 10px;
+  }
 }

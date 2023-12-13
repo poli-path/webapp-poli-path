@@ -9,13 +9,8 @@ const Developers = () => {
       <h1>Nuestro Equipo</h1>
       <div className="developers_v1">
         <div className="developer_info">
-          <h2>Néstor Chumania</h2>
-          <p>          Como parte del equipo de PoliPath, parte integral de nuestro proyecto
-          de titulación, nos hemos comprometido a brindarte una herramienta que
-          simplifique tu experiencia en el campus de la Escuela Politécnica
-          Nacional. Nos dedicamos a ofrecerte una aplicación de geolocalización
-          intuitiva y completa que te permita navegar y descubrir cada faceta de
-          nuestro campus de manera eficiente.</p>
+          <h2>Néstor Chumania</h2><br />
+          <p>          Como parte del equipo de PoliPath</p>
         </div>
         <div className="developer_contact">
           <img src={Nestor} alt="Foto del desarrollador" />
@@ -46,7 +41,12 @@ const Developers = () => {
         </div>
       </div>
       <div className="developers_v2">
+      <div className="developer_info">
+          <h2>Néstor Chumania</h2><br />
+          <p>          Como parte del equipo de PoliPath</p>
+        </div>
         <div className="developer_contact">
+
           <img src={Nestor} alt="Foto del desarrollador" />
           <a
             href="https://w.app/widget-v1/2CbTOY.js"
@@ -73,25 +73,12 @@ const Developers = () => {
             Linkedin
           </a>
         </div>
-        <div className="developer_info">
-          <h2>Néstor Chumania</h2>
-          <p>          Como parte del equipo de PoliPath, parte integral de nuestro proyecto
-          de titulación, nos hemos comprometido a brindarte una herramienta que
-          simplifique tu experiencia en el campus de la Escuela Politécnica
-          Nacional. Nos dedicamos a ofrecerte una aplicación de geolocalización
-          intuitiva y completa que te permita navegar y descubrir cada faceta de
-          nuestro campus de manera eficiente.</p>
-        </div>
+
       </div>
       <div className="developers_v1">
         <div className="developer_info">
-          <h2>Néstor Chumania</h2>
-          <p>          Como parte del equipo de PoliPath, parte integral de nuestro proyecto
-          de titulación, nos hemos comprometido a brindarte una herramienta que
-          simplifique tu experiencia en el campus de la Escuela Politécnica
-          Nacional. Nos dedicamos a ofrecerte una aplicación de geolocalización
-          intuitiva y completa que te permita navegar y descubrir cada faceta de
-          nuestro campus de manera eficiente.</p>
+          <h2>Néstor Chumania</h2><br />
+          <p>          Como parte del equipo de PoliPath.</p>
         </div>
         <div className="developer_contact">
           <img src={Daniel} alt="Foto del desarrollador" />

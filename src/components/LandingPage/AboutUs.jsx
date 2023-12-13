@@ -8,7 +8,7 @@ const AboutUs = () => {
         <img src={ImgGift} alt="Imagen Nosotros" />
       </div>
       <div className="about-us__description">
-        <h2>¡Explora el Campus con Nosotros!</h2>
+        <h2>¡Explora el Campus con Nosotros!</h2><br />
         <p>
           Como parte del equipo de PoliPath, parte integral de nuestro proyecto
           de titulación, nos hemos comprometido a brindarte una herramienta que

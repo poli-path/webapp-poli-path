@@ -26,7 +26,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Color semi-transparente oscuro */
+  background-color: rgba(0, 0, 0, 0.3); /* Color semi-transparente oscuro */
 }
 
 .login-container::after {
@@ -34,7 +34,6 @@ body {
   background-image: url('../../assets/EntradaPoli.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-  filter: blur(5px); /* Aplicar un desenfoque a la imagen de fondo */
   position: absolute;
   top: 0;
   left: 0;
