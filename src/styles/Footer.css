@@ -1,19 +1,26 @@
 .footer {
-    background-color: #3b52ff;
-    background: linear-gradient(90deg, #3b52ff80,#3b52ff ,#3b52ffc2);
+    background-color: #1a61b3;
+    background: linear-gradient(90deg, #1a61b3,#266dbd ,#1a61b3);
     color: #fff;
     padding: 20px;
     text-align: center;
     font-size: 14px;
-    height: 100px; /* Altura fija del footer */
+    height: 70px; /* Altura fija del footer */
+    min-width: 100%;
+
   }
   
   .footer__content {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
     height: 100%; /* Ocupa toda la altura del footer */
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
+.dark-mode .footer{
+  background-color: #010326; /*#092640*/
+  background: linear-gradient(90deg,#010326 ,#0a1a74 ,#010326);
+
+}

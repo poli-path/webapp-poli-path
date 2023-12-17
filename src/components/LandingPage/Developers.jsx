@@ -2,6 +2,7 @@ import { FaWhatsapp, FaGithub, FaLinkedin } from "react-icons/fa";
 import "../../styles/LandingPage/Developers.css";
 import Nestor from "../../assets/FotoNstor.jpg";
 import Daniel from "../../assets/FotoDaniel.jpg";
+import Salo from "../../assets/FotoSalo.jpg";
 
 const Developers = () => {
   return (
@@ -9,18 +10,18 @@ const Developers = () => {
       <h1>Nuestro Equipo</h1>
       <div className="developers_v1">
         <div className="developer_info">
-          <h2>Néstor Chumania</h2><br />
+          <h2>Salomé Quispe</h2><br />
           <p>          Como parte del equipo de PoliPath</p>
         </div>
         <div className="developer_contact">
-          <img src={Nestor} alt="Foto del desarrollador" />
+          <img src={Salo} alt="Foto del desarrollador" />
           <a
             href="https://w.app/widget-v1/2CbTOY.js"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaWhatsapp />
-            Whatsap
+            Whatsapp
           </a>
           <a
             href="https://github.com/RotsenCH?tab=repositories"
@@ -54,7 +55,7 @@ const Developers = () => {
             rel="noopener noreferrer"
           >
             <FaWhatsapp />
-            Whatsap
+            Whatsapp
           </a>
           <a
             href="https://github.com/RotsenCH?tab=repositories"
@@ -77,7 +78,7 @@ const Developers = () => {
       </div>
       <div className="developers_v1">
         <div className="developer_info">
-          <h2>Néstor Chumania</h2><br />
+          <h2>Daniel Quishpe</h2><br />
           <p>          Como parte del equipo de PoliPath.</p>
         </div>
         <div className="developer_contact">
@@ -88,7 +89,7 @@ const Developers = () => {
             rel="noopener noreferrer"
           >
             <FaWhatsapp />
-            Whatsap
+            Whatsapp
           </a>
           <a
             href="https://github.com/RotsenCH?tab=repositories"

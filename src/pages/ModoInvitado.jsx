@@ -1,8 +1,16 @@
 
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
+import MapComponent from "../components/Invitado/MapaCampus";
 
 const ModoInvitado = () => {
     return (
-<h1>xd</h1>
+      <div className="modo-invitado">
+        <Navbar/>
+        <MapComponent/>
+      </div>
+
+
     );
   };
 
