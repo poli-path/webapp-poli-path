@@ -1,18 +1,18 @@
 import Navbar from "../components/Navbar";
-import LoginCard from "../components/Administrador/LoginCard";
+import RecoverPasswordCard from "../components/Administrador/RecoverPassCard";
 import Footer from "../components/Footer";
 import "../styles/Administrador/LoginAdministrador.css";
 
-const LoginAdministrador= () => {
+const RecoverAdministrador = () => {
   return (
     <div className="loginad-page-container">
       <Navbar />
       <div className="login-card">
-        <LoginCard />
+        <RecoverPasswordCard />
       </div>
       <Footer />
     </div>
   );
 };
 
-export default LoginAdministrador;
+export default RecoverAdministrador;

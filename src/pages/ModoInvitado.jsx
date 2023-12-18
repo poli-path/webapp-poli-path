@@ -8,6 +8,7 @@ const ModoInvitado = () => {
       <div className="modo-invitado">
         <Navbar/>
         <MapComponent/>
+        {/* <Footer/> */}
       </div>
 
 

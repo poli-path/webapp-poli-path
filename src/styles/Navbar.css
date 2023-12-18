@@ -11,8 +11,9 @@
   right: 0;
   height: 70px;
   z-index: 1; /* Ajusta el z-index para colocar el carousel detrás del Navbar */
-
 }
+
+/* ... rest of your CSS ... */
 
 .navbar__logo {
   display: flex;
@@ -92,34 +93,38 @@
   background-color: #020644; /*#092640*/
 }
 
+/* ... rest of your CSS ... */
+
+.menu-btn {
+  display: none;
+}
 
 
-
-
-
-
-
+.navbar__links.show {
+  display: flex;
+}
 
 @media screen and (max-width: 768px) {
   .menu-btn {
     display: block;
-    cursor: pointer;
   }
-
-  .navbar {
-    padding: 10px;
-  }
-
-  .navbar__logo {
-    margin-right: auto;
-  }
-
   .navbar__links {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 5px;
+    display: none;
+    position: absolute; /* Add this line */
+    background-color: #020644; /* Add this line */
+    width: 50%; /* Add this line */
+    top: 70px; /* Add this line */
+    right: 1%;
   }
-
-  .navbar__link {
-    margin-bottom: 5px;
-  }}
+  .light-mode .navbar__links {
+    background-color: #1a61b3; /* Add this line */
+  }
+  .dark-mode .navbar__links {
+    background-color: #020644; /* Add this line */
+  }
+  .navbar__links.show {
+    display: flex;
+    flex-direction: column; /* Add this line */
+  }
+  
+}

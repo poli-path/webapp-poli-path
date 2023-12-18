@@ -20,6 +20,8 @@ p{
 a{
   font-size: 18px;
   padding: 5%;
+  border-radius: 50px;
+
 }
 h2{
     font-size: 30px; /* Títulos más grandes */
@@ -64,11 +66,16 @@ a:-webkit-any-link{
   right: 2%; /* Muestra el botón cuando el mouse pasa por encima */
 }
 
-
+.imgbutton{
+   width: 150px;
+   height: auto;
+   border-radius: 50px
+}
 
 html{
   scrollbar-width: thin;
   scrollbar-color: rgba(155,155,155,0.5) transparent;
+  background-color: #034c8b;
 }
 
 html::-webkit-scrollbar{
@@ -77,7 +84,7 @@ html::-webkit-scrollbar{
 }
 
 html::-webkit-scrollbar-track{
-  background: #1a61b3;
+  background: #1a31b3;
 }
 
 html::-webkit-scrollbar-thumb{
@@ -110,6 +117,12 @@ html::-webkit-scrollbar-thumb{
 
 }
 
+.light-mode html::-webkit-scrollbar-track{
+  background: #1a61b3;
+}
+.light-mode html{
+  background-color: #1a61b3;
+}
 /* Estilos para el modo oscuro */
 .dark-mode {
   background-color: #010326;
@@ -118,6 +131,10 @@ html::-webkit-scrollbar-thumb{
   background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
   background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
   background-repeat: no-repeat;
+}
+
+.dark-mode html::-webkit-scrollbar-track{
+  background: #010326;
 }
 
 .dark-mode a:hover {
@@ -136,16 +153,20 @@ html::-webkit-scrollbar-thumb{
 .dark-mode a:-webkit-any-link{
   text-decoration: none;
 }
+.dark-mode html{
+  background-color: #010326;
+}
 
 /* Para pantallas pequeñas */
 @media (max-width: 600px) {
   .my-button {
     right: -25px; /* Oculta parcialmente el botón a la derecha */
-    width: 75px; /* Ajusta el tamaño del botón */
+    width: 80px; /* Ajusta el tamaño del botón */
   }
-  .my-button:hover {
-    right: 20%; /* Muestra el botón cuando el mouse pasa por encima */
-  }
+
+  .imgbutton{
+    width: 80px;
+ }
   body {
     font-size: 14px; /* Ajusta el tamaño de la fuente */
   }
@@ -156,10 +177,12 @@ html::-webkit-scrollbar-thumb{
 /* Para pantallas medianas */
 @media (min-width: 601px) and (max-width: 1024px) {
   .my-button {
-    right: -35px; /* Oculta parcialmente el botón a la derecha */
-    width: 100px; /* Ajusta el tamaño del botón */
+    right: -25px; /* Oculta parcialmente el botón a la derecha */
+    width: 80px; /* Ajusta el tamaño del botón */
   }
-
+  .imgbutton{
+    width: 80px;
+ }
   body {
     font-size: 16px; /* Ajusta el tamaño de la fuente */
   }

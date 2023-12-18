@@ -3,7 +3,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: #ffffff;
 }
 .login-container a{
   padding: 2%;
@@ -83,6 +82,7 @@
   padding: 10px; /* Aumento del relleno */
   border-radius: 25px; /* Reducción del radio del borde */
   border: 5px solid #00000028;
+  color: #000;
 }
 
 .forgot-password {

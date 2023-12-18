@@ -4,7 +4,6 @@
 }
 
 .carousel-container a:hover {
-  background:  #ff3246;
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
 }
 
@@ -84,6 +83,7 @@ button.slide-button {
 .slide-button {
   background-color: #eb1c31;
   color: #FFF;
+
   border: 2px solid #000;
   border-radius: 50px;
   font-size: 32px;
@@ -95,7 +95,10 @@ button.slide-button {
 .light-mode .carousel-slide h1 {
   background: linear-gradient(90deg, #ba001300, #ba001300, #eb1c31, #ba001300,#ba001300);
 }
-
+.light-mode a.slide-button:hover{
+  background-color: #eb1c31;
+  transform: scale(1.1); /* Cambio de tamaño al hacer hover */
+}
 .dark-mode .carousel-slide h1 {
   background: linear-gradient(90deg, #ba001300, #ba001300, #8C0303, #ba001300,#ba001300);
 }
@@ -103,10 +106,17 @@ button.slide-button {
 .dark-mode .slide-button {
   background-color: #8C0303;
 }
+
+.dark-mode a.slide-button:hover{
+  background-color: #8C0303;
+  transform: scale(1.1); /* Cambio de tamaño al hacer hover */
+
+}
+
 /* Código responsive para pantallas pequeñas (menos de 600px) */
 @media (max-width: 600px) {
   .carousel-slide {
-    height: auto; /* Ajusta la altura para dispositivos móviles */
+    height: 550px;
   }
 
   .carousel-slide h1 {

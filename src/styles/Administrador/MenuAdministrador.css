@@ -1,0 +1,22 @@
+.menu-admin {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    width: 200px;
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
+  
+  .logo {
+    /* Add your styles for the logo here */
+  }
+  
+  .buttons {
+    /* Add your styles for the buttons here */
+  }
+  
+  .logout {
+    /* Add your styles for the logout button here */
+  }
+  
