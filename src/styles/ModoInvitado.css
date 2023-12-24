@@ -1,0 +1,9 @@
+.modo-invitado {
+    /* Tus estilos existentes */
+  }
+  
+  .map-container {
+    height: 500px; /* Ajusta esto al tamaño que prefieras */
+    width: 500px; /* Asegúrate de que el ancho sea igual a la altura para crear un cuadrado */
+  }
+  

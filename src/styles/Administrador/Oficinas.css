@@ -1,0 +1,17 @@
+.oficinas{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2em;
+    margin: 7%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    background: #fafafa10;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid fafafa10;
+  border-radius: 50px;
+  padding: 7%;
+}

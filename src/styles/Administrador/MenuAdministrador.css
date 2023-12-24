@@ -1,22 +1,255 @@
+
+.container {
+  display: grid;
+  grid-template-columns: 200px auto;
+}
+
 .menu-admin {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100vh;
+  grid-column: 1; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 200px;
+  background-color: #1a61b3;
+  z-index: 2; 
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+}
+.content {
+  grid-column: 2; 
+  background-image: url('../../assets/Logo.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items:first baseline;
+  overflow-y: auto;
+
+}
+
+.content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  background-repeat: repeat;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  align-items:first baseline;
+  overflow-y: auto;
+}
+.menu-admin::-webkit-scrollbar,
+.content::-webkit-scrollbar {
+  width: 5px; /* Ancho de la barra de desplazamiento */
+}
+
+.menu-admin::-webkit-scrollbar-track,
+.content::-webkit-scrollbar-track {
+  background: #1a31b3; /* Color de la pista de la barra de desplazamiento */
+}
+
+.menu-admin::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+  background-color: red; /* Color del pulgar de la barra de desplazamiento */
+  border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
+  border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+}
+
+.toggle-button {
+  display: none;
+  border-radius: 0;
+}
+.menu-admin.active {
+  transform: translateX(0);
+}
+
+.dark-mode .menu-admin{
+  background-color: #010326;
+}
+.editar {
+  z-index: 2; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  height: 30vh;
+  width: 100%;
+  background-image: url('../../assets/EntradaPoli.jpg');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  height: 20vh;
+  object-fit: cover;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.logo h3{
+  z-index: 2;
+  font-size: 21px;
+}
+
+.logo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3); 
+}
+
+.logo::after {
+  content: "";
+  background-image: url('../../assets/EntradaPoli.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1; 
+}
+
+.buttons {
+  z-index: 1; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons button {
+  border-radius: 0;
+  color: #fff;
+  font-size: 17px;
+  padding: 2px;
+  width: 100%;
+  transition: transform 0.2s ease-in-out;
+}
+
+.light-mode .buttons button {
+  background-color: transparent;
+  border: transparent;
+
+}
+
+.dark-mode .buttons button {
+  background-color: transparent;
+  border: transparent;
+
+}
+
+.editar button {
+  background-color: transparent;
+  border: transparent;
+  font-size: 17px;
+}
+
+.light-mode .editar button {
+  background-color: transparent;
+  border: transparent;
+
+}
+
+.dark-mode .editar button {
+  background-color: transparent;
+  border: transparent;
+}
+
+
+.logout button {
+  font-size: 17px;
+}
+
+.light-mode .logout button {
+  background-color: transparent;
+  border: transparent;
+}
+
+.light-mode .buttons button:hover {
+  transform: scale(0.8); 
+  background: linear-gradient(180deg, #ba001300,#ba001300, #ff3246,#ba001300,#ba001300);
+}
+
+.dark-mode .buttons button:hover {
+  transform: scale(0.8); 
+  background: linear-gradient(180deg, #ba001300,#ba001300, #8C0303,#ba001300,#ba001300);
+}
+
+.light-mode .editar button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(180deg, #ba001300,#ba001300, #ff3246,#ba001300,#ba001300);
+}
+
+.dark-mode .editar button:hover {
+  transform: scale(1.1); 
+  background: linear-gradient(180deg, #ba001300,#ba001300, #8C0303,#ba001300,#ba001300);
+}
+
+.light-mode .logout a:hover {
+  transform: scale(1.1); 
+  background: linear-gradient(180deg, #ba001300,#ba001300, #ff3246,#ba001300,#ba001300);
+}
+
+.dark-mode .logout a:hover {
+  transform: scale(1.1); 
+  background: linear-gradient(180deg, #ba001300,#ba001300, #8C0303,#ba001300,#ba001300);
+}
+
+.dark-mode .logout button {
+  background-color: transparent;
+  border: transparent;
+}
+
+.logout {
+  z-index: 1; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+@media screen and (max-width: 768px) {
+  .container {
+    display: grid;
+    grid-template-columns: auto;
+  }
+  .menu-admin {
     width: 200px;
-    background-color: #f0f0f0;
-    padding: 20px;
+    transform: translateX(-200px);
+    transition: transform 0.3s ease-in-out;
+    position: fixed; /* Cambia a fixed */
+    z-index: 1000; /* Asegúrate de que el menú se muestre por encima de los otros componentes */
   }
-  
-  .logo {
-    /* Add your styles for the logo here */
+
+  .toggle-button {
+    width: fixed;
+    border-radius: 0 0 30px;
+    font-size: 15px;
+    display: block;
+    position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
+    top: 0.1%; /* Ajusta según sea necesario */
+    left: 0.1%; /* Ajusta según sea necesario */
+    z-index: 1001; /* Asegúrate de que el botón del menú se muestre por encima del menú */
   }
-  
-  .buttons {
-    /* Add your styles for the buttons here */
-  }
-  
-  .logout {
-    /* Add your styles for the logout button here */
-  }
-  
+}

@@ -26,7 +26,7 @@ function App() {
             <Route path="/invitado" element={<ModoInvitado />} />
             <Route path="/admin" element={<LoginAdministrador />} />
             <Route path="/recuperar" element={<RecoverAdministrador />} />
-            <Route path="/administrador" element={<MenuAdministrador />} />
+            <Route path="/administrador/*" element={<MenuAdministrador />} />
             {/* Puedes añadir más rutas según sea necesario */}
           </Routes>
         </div>

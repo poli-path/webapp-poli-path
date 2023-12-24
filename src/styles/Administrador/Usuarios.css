@@ -1,0 +1,136 @@
+/* Usuarios.css */
+
+.usuarios {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2em;
+  margin: 7%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  background: #fafafa10;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid fafafa10;
+  border-radius: 50px;
+  padding: 7%;
+}
+
+.tablaUsuarios table {
+  width: 100%;
+  border-collapse: collapse; /* Elimina el espacio entre las celdas */
+  border-radius: 50px 50px 25px 25px;
+}
+
+.usuarios th,
+.usuarios td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* Añade una línea debajo de cada fila */
+}
+.usuarios p {
+  text-align: justify; /* Justifica el texto */
+}
+
+/* Añade un efecto hover a las filas */
+.usuarios tr:hover {
+  background: #fafafa10;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  border-radius: 50px;
+
+  -webkit-backdrop-filter: blur(0.4rem);
+}
+
+/* Añade estilos a la entrada de texto del filtro */
+.usuarios input {
+  width: 100%;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: #000;
+}
+
+.usuarios label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.tablaUsuarios {
+  overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es más ancha que la pantalla */
+  width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+  max-height: 50vh; /* Limita la altura de la tabla a la mitad de la altura de la vista */
+  border-radius: 50px 50px 25px 25px;
+  
+}
+.tablaUsuarios::-webkit-scrollbar {
+  width: 5px; /* Ancho de la barra de desplazamiento */
+  border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
+  border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+
+}
+
+.tablaUsuarios::-webkit-scrollbar-track {
+  background: #1a31b3; /* Color de la pista de la barra de desplazamiento */
+}
+
+.tablaUsuarios::-webkit-scrollbar-thumb {
+  background-color: red; /* Color del pulgar de la barra de desplazamiento */
+  border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
+  border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+}
+
+/* Estilos para pantallas grandes */
+@media (min-width: 1200px) {
+  .usuarios {
+    padding: 20px;
+  }
+
+  .usuarios h2 {
+    font-size: 2em;
+  }
+
+  .usuarios table {
+    font-size: 1em;
+  }
+}
+
+/* Estilos para pantallas medianas */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .usuarios {
+    padding: 15px;
+  }
+
+  .usuarios h2 {
+    font-size: 1.75em;
+  }
+
+  .usuarios table {
+    font-size: 0.875em;
+    align-self: first baseline;
+  }
+  
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 767px) {
+  .usuarios {
+    padding: 10px;
+    align-items: center;
+  }
+
+  .usuarios h2 {
+    font-size: 1.5em;
+  }
+
+  .usuarios table {
+    font-size: 0.75em;
+    align-self: first baseline;
+  }
+  .usuarios table, .usuarios th, .usuarios td, .usuarios {
+    min-width: 100px;
+  }
+}
