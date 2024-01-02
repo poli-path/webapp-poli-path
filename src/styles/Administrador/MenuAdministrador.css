@@ -16,7 +16,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  overflow-y: auto;
+  overflow-y:auto;
 }
 .content {
   grid-column: 2; 
@@ -38,7 +38,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.089); 
   background-repeat: repeat;
   background-repeat: no-repeat;
   background-position: center;
@@ -235,11 +235,21 @@
     grid-template-columns: auto;
   }
   .menu-admin {
+    height: 80vh;
     width: 200px;
     transform: translateX(-200px);
     transition: transform 0.3s ease-in-out;
-    position: fixed; /* Cambia a fixed */
     z-index: 1000; /* Asegúrate de que el menú se muestre por encima de los otros componentes */
+    top: 0.1%; /* Ajusta según sea necesario */
+    position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
+
+  }
+
+  .menu-admin.active{
+    top: 0.1%; /* Ajusta según sea necesario */
+    left: 0.1%; /* Ajusta según sea necesario */
+    position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
+    
   }
 
   .toggle-button {

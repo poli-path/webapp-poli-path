@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/Administrador/MenuAdministrador.css';
 import Nestor from '../assets/FotoNstor.jpg'
-
+import NotFoundPage from "../components/Administrador/NotFoundPageAdmin"; // Asegúrate de crear este componente
 import Bienvenida from "../components/Administrador/Bienvenida";
 import Usuarios from "../components/Administrador/Usuarios";
 import Administradores from "../components/Administrador/Administradores";
@@ -61,6 +61,8 @@ const Administrador = () => {
           <Route path="facultades" element={<Facultades />} />
           <Route path="laboratorios" element={<Laboratorios />} />
           <Route path="oficinas" element={<Oficinas />} />
+          <Route path="*" element={<NotFoundPage />} /> {/* Esta es la ruta por defecto para las páginas no encontradas */}
+
           {/* Agrega tus componentes aquí */}
         </Routes>
       </div>

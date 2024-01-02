@@ -1,0 +1,21 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.logoNotFound {
+    height: 80%;
+    width: fit-content;
+background-image: none;
+
+}
+
+
+.message {
+    margin-top: 20px;
+    font-size: 24px;
+}

@@ -5,6 +5,9 @@
   "dependencies": {
     "@fontsource/jockey-one": "^5.0.18",
     "@fontsource/keania-one": "^5.0.18",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@react-google-maps/api": "^2.19.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -14,6 +17,7 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "aos": "^2.3.4",
+    "glamor": "^2.20.40",
     "google-maps-react": "^2.0.6",
     "leaflet": "^1.9.4",
     "next": "^14.0.4",

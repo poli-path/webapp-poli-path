@@ -1,17 +1,147 @@
-.datosUsuario{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2em;
-    margin: 7%;
-    margin-top: 2%;
-    margin-bottom: 2%;
-    background: #fafafa10;
+/* Agrega estos estilos CSS */
+.datosUsuario {
+  display: flex;
+  flex-direction: row; /* Cambia a dirección horizontal */
+  align-items: center; /* Alinea verticalmente */
+  justify-content: space-around; /* Espacio entre elementos */
+  margin: 7% 10%; /* Ajusta los márgenes */
+  background: #fafafa10;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid #fafafa10;
+  border-radius: 50px;
+  padding: 7%;
+  box-sizing: border-box; /* Incluye el borde y el relleno en el tamaño total */
+}
+
+.perfilUsuario {
+  flex: 1; /* Ocupa el espacio restante */
+  display: flex;
+  justify-content: center;
+  padding: 5%;
+}
+
+.perfilUsuario img {
+  max-width: 100%; /* Para ajustar el tamaño de la imagen */
+  border-radius: 50%; /* Ajusta el radio para la imagen circular */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  object-fit: cover; /* Ajusta la imagen para cubrir el contenedor */
+}
+
+/* Resto del CSS se mantiene igual */
+
+.datosUsuario p {
+  text-align: justify;
+}
+
+.datosUsuario input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 25px;
+  border: 5px solid #00000028;
+  color: #000;
+}
+.passwordContainer {
+  position: relative;
+  display: inline-block; /* Para que el contenedor no ocupe todo el ancho */
+  width: 100%;
+}
+
+.passwordInput {
+  padding-right: 50px; /* Para hacer espacio para el ícono */
+}
+
+.passwordIcon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.datosUsuario label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+/* Estilos para el botón de agregar */
+.agregarBtn {
+  background-color: #4CAF50; /* Verde */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5%; /* Margen de 20px */
+  cursor: pointer;
+}
+.modalContent {
+  position: absolute;
+  top: 50%;
+  left: 57.7%;
+  right: auto;
+  bottom: auto;
+  margin-right: -70%;
+  transform: translate(-50%, -50%);
+  background: #fafafa10;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
   border: 3px solid fafafa10;
   border-radius: 50px;
-  padding: 7%;
+  padding: 30px; /* Relleno de 30px */
+  width: 40%; /* Ancho de 600px */
+}
+
+/* Estilos para el fondo del modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75); /* Fondo oscuro */
+}
+
+.modalInput {
+  width: 100%;
+  padding: 15px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: white;
+  margin: 10px; /* Margen de 10px */
+}
+/* Estilos para pantallas de tamaño grande */
+@media (min-width: 1200px) {
+  .modalContent {
+    width: 40%; /* Ancho de 600px */
+  }
+}
+
+/* Estilos para pantallas de tamaño mediano */
+@media (max-width: 1199px) and (min-width: 900px) {
+  .modalContent {
+    width: 50%; /* Ancho de 600px */
+  }
+}
+
+/* Estilos para pantallas de tamaño pequeño */
+@media (max-width: 899px) {
+  .modalContent {
+    width: 70%; /* Ancho de 600px */
+  }
+}
+
+/* Estilos para pantallas de tamaño muy pequeño */
+@media (max-width: 600px) {
+  .modalContent {
+    width: 90%; /* Ancho de 600px */
+    left: 50%;
+  }
+  .datosUsuario {
+    display: flex;
+    flex-direction: column-reverse; /* Cambia a dirección horizontal */
+  }
 }

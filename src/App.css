@@ -51,6 +51,82 @@ a:-webkit-any-link{
   color: aliceblue;
 }
 
+.swal2-title {
+  background: linear-gradient(180deg, #ba001300,#ba001300);
+  color: aliceblue;
+}
+
+.swal2-popup.swal2-modal.swal2-show {
+  left: 8%;
+  background: #fafafa10;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid fafafa10;
+  border-radius: 20px;
+}
+
+.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--error.Toastify--animate.Toastify__bounce-enter--top-right{
+  background: #fafafa7e;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid fafafa10;
+  border-radius: 20px;
+  top: 5vh; /* Ajusta según sea necesario */
+  right: 1vh; /* Ajusta según sea necesario */
+  position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
+
+}
+.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--success.Toastify--animate.Toastify__bounce-enter--top-right{
+  background: #fafafa7e;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid fafafa10;
+  border-radius: 20px;
+  top: 5vh; /* Ajusta según sea necesario */
+  right: 1vh; /* Ajusta según sea necesario */
+  position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
+
+}
+
+
+.modalContent{
+  overflow-y: auto;
+  max-height: 80vh;
+}
+.modalContent::-webkit-scrollbar {
+  width: 5px; /* Ancho de la barra de desplazamiento */
+  
+}
+
+.modalContent::-webkit-scrollbar-track {
+  background: transparent; /* Color de la pista de la barra de desplazamiento */
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 0, 0, 0.24); /* Color del pulgar de la barra de desplazamiento */
+  border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
+  border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+  
+}
+
+.requerido {
+  color: rgba(249, 249, 36, 0.85);
+}
+.Toastify__close-button.Toastify__close-button--light{
+  background: transparent;
+}
+.swal2-popup.swal2-modal.swal2-hide {
+  left: 8%;
+  background: #fafafa10;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border: 3px solid fafafa10;
+  border-radius: 50px;
+}
 .my-button {
   position: fixed;
   right: -50px; /* Oculta inicialmente el botón a la derecha */
@@ -84,8 +160,9 @@ html::-webkit-scrollbar{
 }
 
 html::-webkit-scrollbar-track{
-  background: #1a31b3;
+  background: transparent;
 }
+
 
 html::-webkit-scrollbar-thumb{
   background-color: red;
@@ -118,7 +195,7 @@ html::-webkit-scrollbar-thumb{
 }
 
 .light-mode html::-webkit-scrollbar-track{
-  background: #1a61b3;
+  background: transparent;
 }
 .light-mode html{
   background-color: #1a61b3;
@@ -134,7 +211,7 @@ html::-webkit-scrollbar-thumb{
 }
 
 .dark-mode html::-webkit-scrollbar-track{
-  background: #010326;
+  background: transparent;
 }
 
 .dark-mode a:hover {
@@ -170,7 +247,15 @@ html::-webkit-scrollbar-thumb{
   body {
     font-size: 14px; /* Ajusta el tamaño de la fuente */
   }
+  .swal2-popup.swal2-modal.swal2-show {
+    left: 0;
 
+  }
+  
+  .swal2-popup.swal2-modal.swal2-hide {
+    left: 0%;
+
+  }
   /* Ajusta otros estilos según sea necesario */
 }
 

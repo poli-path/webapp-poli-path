@@ -2,10 +2,12 @@ import React, { useMemo, useState } from "react";
 import { useTable, useFilters } from "react-table";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Swal from 'sweetalert2';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 import "../../styles/Administrador/Administradores.css";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 Modal.setAppElement("#root");
 
@@ -33,26 +35,32 @@ const Administradores = () => {
   ]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
   const onSubmit = (data) => {
     Swal.fire({
-      title: '¿Estás seguro de agregar este administrador?',
+      title: "¿Estás seguro de agregar este administrador?",
       showDenyButton: true,
-      confirmButtonText: `Agregar`,
+      confirmButtonText: `Continuar`,
       denyButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
         setAdministradores([...administradores, data]);
         setModalIsOpen(false);
         toast.success("Administrador agregado exitosamente!");
+        reset(); // Esta línea reinicia los campos del formulario
       }
-    })
+    });
   };
 
   const eliminarAdministrador = (index) => {
     Swal.fire({
-      title: '¿Estás seguro de eliminar este administrador?',
+      title: "¿Estás seguro de eliminar este administrador?",
       showDenyButton: true,
       confirmButtonText: `Eliminar`,
       denyButtonText: `Cancelar`,
@@ -61,7 +69,7 @@ const Administradores = () => {
         setAdministradores(administradores.filter((_, i) => i !== index));
         toast.error("Administrador eliminado exitosamente!");
       }
-    })
+    });
   };
 
   const data = useMemo(() => administradores, [administradores]);
@@ -84,7 +92,14 @@ const Administradores = () => {
         Header: "Acciones",
         Cell: ({ row: { index } }) => (
           <div>
-            <button onClick={() => eliminarAdministrador(index)}>Borrar</button>
+            <button
+              className="botonEyD"
+              title="Eliminar"
+              onClick={() => eliminarAdministrador(index)}
+            >
+              {" "}
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
           </div>
         ),
       },
@@ -107,11 +122,13 @@ const Administradores = () => {
       <h2>Administradores</h2>
       <br />
       <p>
-        ¡Bienvenido a la sección de administración de usuarios! Aquí encontrarás
-        una lista completa de todos los usuarios registrados, proporcionándote
-        una visión integral de nuestra creciente comunidad. Puedes utilizar esta
-        lista para identificar tendencias, entender mejor a nuestra base de
-        usuarios y tomar decisiones informadas para mejorar nuestra aplicación.
+        ¡Bienvenido a la sección de administración de Administradores! Aquí podrás
+        ver y gestionar una lista de administradores en la aplicación. Puedes
+        agregar nuevos administradores introduciendo sus detalles en un
+        formulario, eliminar registros existentes y buscar información
+        específica utilizando la función de búsqueda. Es una herramienta simple
+        pero poderosa para controlar y mantener a los administradores de la
+        aplicación de manera eficiente.
       </p>
       <br />
       <button onClick={() => setModalIsOpen(true)}>
@@ -129,32 +146,43 @@ const Administradores = () => {
             Nombre:
             <input
               className="administradores input modalInput"
-              {...register('col1', { required: true })}
+              {...register("col1", { required: true })}
               placeholder="Nombre"
             />
-            {errors.col1 && <p>Este campo es requerido</p>}
+            {errors.col1 && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
           </label>
           <label>
             Apellido:
             <input
               className="administradores input modalInput"
-              {...register('col2', { required: true })}
+              {...register("col2", { required: true })}
               placeholder="Apellido"
             />
-            {errors.col2 && <p>Este campo es requerido</p>}
+            {errors.col2 && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
           </label>
           <label>
             Email:
             <input
               className="administradores input modalInput"
-              {...register('col3', { required: true })}
+              {...register("col3", { required: true })}
               placeholder="Email"
             />
-            {errors.col3 && <p>Este campo es requerido</p>}
+            {errors.col3 && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
           </label>
           <div className="btnContainer">
-            <button type="submit" className="agregarBtn">Agregar</button>
-            <button className="cancelarBtn" onClick={() => setModalIsOpen(false)}>
+            <button type="submit" className="agregarBtn">
+              Agregar
+            </button>
+            <button
+              className="cancelarBtn"
+              onClick={() => setModalIsOpen(false)}
+            >
               Cancelar
             </button>
           </div>

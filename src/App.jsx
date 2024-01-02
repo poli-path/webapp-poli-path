@@ -5,6 +5,7 @@ import ModoInvitado from "./pages/ModoInvitado";
 import LoginAdministrador from "./pages/LoginAdministrador";
 import MenuAdministrador from "./pages/MenuAdministrador";
 import RecoverAdministrador from "./pages/RecoverAdministrador";
+import NotFoundPage from "./pages/NotFoundPage"; // Asegúrate de crear este componente
 import "@fontsource/keania-one";
 import "./App.css";
 import lightModeIcon from "./assets/LightMode.png";
@@ -27,7 +28,7 @@ function App() {
             <Route path="/admin" element={<LoginAdministrador />} />
             <Route path="/recuperar" element={<RecoverAdministrador />} />
             <Route path="/administrador/*" element={<MenuAdministrador />} />
-            {/* Puedes añadir más rutas según sea necesario */}
+            <Route path="*" element={<NotFoundPage />} /> {/* Esta es la ruta por defecto para las páginas no encontradas */}
           </Routes>
         </div>
       </Router>
