@@ -1,3 +1,4 @@
+// App.js
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
@@ -11,13 +12,18 @@ import "./App.css";
 import lightModeIcon from "./assets/LightMode.png";
 import darkModeIcon from "./assets/DarkMode.png";
 
+// Crear el contexto para el estado del script de Google Maps
+export const GoogleMapsContext = React.createContext();
+
 function App() {
-    const [darkMode, setDarkMode] = useState(false);
-  
-    const toggleDarkMode = () => setDarkMode(!darkMode);
-  
-    return (
-      <Router>
+  const [darkMode, setDarkMode] = useState(false);
+  const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
+
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+
+  return (
+    <Router>
+      <GoogleMapsContext.Provider value={{ googleMapsLoaded, setGoogleMapsLoaded }}>
         <div className={`App ${darkMode ? 'light-mode' : 'dark-mode'}`}>
           <button className="my-button" onClick={toggleDarkMode} title={darkMode ? 'Modo claro activado' : 'Modo oscuro activado'}>
             <img src={darkMode ? lightModeIcon : darkModeIcon} alt="Modo" className="imgbutton"/>
@@ -31,8 +37,9 @@ function App() {
             <Route path="*" element={<NotFoundPage />} /> {/* Esta es la ruta por defecto para las páginas no encontradas */}
           </Routes>
         </div>
-      </Router>
-    );
-  }
-  
-  export default App;
+      </GoogleMapsContext.Provider>
+    </Router>
+  );
+}
+
+export default App;

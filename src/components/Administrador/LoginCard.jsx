@@ -1,24 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 import "../../styles/Administrador/LoginCard.css";
 import Adminis from "../../assets/Adminis.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
 
 const LoginCard = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
+
+  // Crea un estado para el indicador de carga
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = async (data) => {
+    setIsLoading(true); // Comienza la carga
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/v1/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      if (responseData.roles.includes("admin")) {
+        navigate("/administrador");
+      } else {
+        Swal.fire(
+          "No tienes permiso para iniciar sesión como Administrador",
+          "",
+          "error"
+        );
+      }
+    } catch (error) {
+      Swal.fire(error.message, "", "error");
+    }
+    setIsLoading(false); // Termina la carga
+  };
+
   return (
     <div className="login-container">
-      <form className="login-form">
+      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
         <h2>Iniciar sesión como Administrador</h2>
         <p>
           Esta sección es exclusiva para los administradores de la aplicación
         </p>
         <div className="input-group">
-          <label htmlFor="username">Usuario:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="text"
-            id="username"
-            name="username"
-            placeholder="Ingresa tu usuario"
+            id="email"
+            name="email"
+            placeholder="Ingresa tu Email"
+            {...register("email", { required: true })}
           />
+          {errors.email && (
+            <span className="requerido">Este campo es requerido</span>
+          )}
         </div>
         <div className="input-group">
           <label htmlFor="password">Contraseña:</label>
@@ -27,14 +79,31 @@ const LoginCard = () => {
             id="password"
             name="password"
             placeholder="Ingresa tu contraseña"
+            {...register("password", { required: true })}
           />
+          {errors.password && (
+            <span className="requerido">Este campo es requerido</span>
+          )}
         </div>
         <div className="forgot-password">
           <Link to="/recuperar">¿Olvidaste tu contraseña?</Link>
         </div>
-        <Link to="/administrador">
+        {isLoading ? (
+          <div
+            className="loading-button"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <span>Cargando...</span>
+
+            <ClipLoader color="#3d8463" loading={isLoading} size={30} />
+          </div>
+        ) : (
           <button type="submit">Iniciar sesión</button>
-        </Link>
+        )}
       </form>
       <div className="image-container">
         <img

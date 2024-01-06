@@ -1,9 +1,18 @@
+/* ModoInvitado.css */
+
+/* Estilos generales para la página */
 .modo-invitado {
-    /* Tus estilos existentes */
-  }
-  
-  .map-container {
-    height: 500px; /* Ajusta esto al tamaño que prefieras */
-    width: 500px; /* Asegúrate de que el ancho sea igual a la altura para crear un cuadrado */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Estilos para el contenedor del mapa */
+.map-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5%;
+  padding-top: 10%;
+}

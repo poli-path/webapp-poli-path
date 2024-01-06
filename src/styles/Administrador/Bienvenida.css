@@ -14,6 +14,8 @@
   border: 3px solid fafafa10;
   border-radius: 50px;
   padding: 7%;
+  box-shadow: 0 20px 32px 0 black;
+
 }
 
 .bienvenida .logoNotFound{

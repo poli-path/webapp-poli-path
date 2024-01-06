@@ -64,6 +64,8 @@ a:-webkit-any-link{
   -webkit-backdrop-filter: blur(0.4rem);
   border: 3px solid fafafa10;
   border-radius: 20px;
+  box-shadow: 0 20px 32px 0 black;
+
 }
 
 .Toastify__toast.Toastify__toast-theme--light.Toastify__toast--error.Toastify--animate.Toastify__bounce-enter--top-right{
@@ -71,6 +73,8 @@ a:-webkit-any-link{
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+
   border: 3px solid fafafa10;
   border-radius: 20px;
   top: 5vh; /* Ajusta según sea necesario */
@@ -83,6 +87,8 @@ a:-webkit-any-link{
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+
   border: 3px solid fafafa10;
   border-radius: 20px;
   top: 5vh; /* Ajusta según sea necesario */
@@ -124,8 +130,12 @@ a:-webkit-any-link{
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+
   border: 3px solid fafafa10;
   border-radius: 50px;
+  box-shadow: 0 20px 32px 0 black;
+
 }
 .my-button {
   position: fixed;
@@ -136,6 +146,7 @@ a:-webkit-any-link{
   border: none;
   background: none;
   transition: right 1s; /* Agrega una transición suave */
+  box-shadow: 0 20px 32px 0 black;
 }
 
 .my-button:hover {
@@ -179,6 +190,16 @@ html::-webkit-scrollbar-thumb{
   text-shadow: 1px 1px 5px black;
 
 }
+/* Estilos para el modo oscuro */
+.dark-mode {
+  background-color: #010326;
+  background: linear-gradient(#010326 ,#0a1a74 ,#010326);
+  text-shadow: 1px 1px 3px black;
+  background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
+  background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
+  background-repeat: no-repeat;
+}
+
 
 .light-mode a:hover {
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
@@ -199,15 +220,6 @@ html::-webkit-scrollbar-thumb{
 }
 .light-mode html{
   background-color: #1a61b3;
-}
-/* Estilos para el modo oscuro */
-.dark-mode {
-  background-color: #010326;
-  background: linear-gradient(#010326 ,#0a1a74 ,#010326);
-  text-shadow: 1px 1px 3px black;
-  background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
-  background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
-  background-repeat: no-repeat;
 }
 
 .dark-mode html::-webkit-scrollbar-track{

@@ -16,6 +16,8 @@
   border: 3px solid fafafa10;
   border-radius: 50px;
   padding: 7%;
+  box-shadow: 0 20px 32px 0 black;
+
 }
 
 .tablaUsuarios table {
@@ -41,6 +43,8 @@
   backdrop-filter: blur(0.4rem);
 
   -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
+
 }
 
 /* Añade estilos a la entrada de texto del filtro */

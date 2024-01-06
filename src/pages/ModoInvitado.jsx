@@ -1,3 +1,5 @@
+
+// ModoInvitado.js
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import MyMap from "../components/Invitado/MapaCampus";
@@ -10,7 +12,7 @@ const ModoInvitado = () => {
         <div className="map-container">
           <MyMap/>
         </div>
-        {/* <Footer/> */}
+        <Footer/>
       </div>
     );
 };

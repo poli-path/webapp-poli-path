@@ -9,7 +9,7 @@ const Navbar = () => {
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
-
+    
     return (
         <nav className='navbar'>
             <div className='navbar__logo'>

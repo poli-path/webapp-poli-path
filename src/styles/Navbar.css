@@ -9,8 +9,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
   z-index: 1; /* Ajusta el z-index para colocar el carousel detrás del Navbar */
+height: 10%;
 }
 
 /* ... rest of your CSS ... */
@@ -127,4 +127,22 @@
     flex-direction: column; /* Add this line */
   }
   
+}
+.light-mode {
+  background-color: #034c8b;
+  background: linear-gradient(#034c8b ,#2477c0 ,#034c8b);
+  background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
+  background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
+  background-repeat: no-repeat;
+  text-shadow: 1px 1px 5px black;
+
+}
+/* Estilos para el modo oscuro */
+.dark-mode {
+  background-color: #010326;
+  background: linear-gradient(#010326 ,#0a1a74 ,#010326);
+  text-shadow: 1px 1px 3px black;
+  background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
+  background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
+  background-repeat: no-repeat;
 }

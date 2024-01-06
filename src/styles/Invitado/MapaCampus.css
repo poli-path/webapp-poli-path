@@ -1,4 +1,46 @@
-.leaflet-container{
-    height: 600px;
-    width: 100%;
+/* MapComponent.css */
+
+/* Estilos generales para el componente */
+.mapInvitado {
+  padding: 3%;  background: #fafafa10;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+  border: 3px solid fafafa10;
+  border-radius: 50px;
+}
+
+/* Estilos para los títulos */
+
+.mapInvitado h2 {
+  margin-bottom: 10px;
+}
+
+/* Estilos para los párrafos */
+.mapInvitado p {
+  margin-bottom: 20px;
+}
+
+/* Estilos para el contenedor principal de las secciones */
+.main-container {
+  display: flex;
+}
+
+/* Estilos para el contenedor del buscador */
+.search-container {
+  flex: 1;
+  max-width: 30vh;
+}
+
+/* Estilos para el contenedor del mapa */
+.map-container {
+  flex: 2;
+  height: 80vh;
+}
+
+/* Estilos para el mapa */
+.map {
+  width: 100%;
+  height: 100%;
 }

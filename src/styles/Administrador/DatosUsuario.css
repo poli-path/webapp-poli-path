@@ -7,6 +7,8 @@
   margin: 7% 10%; /* Ajusta los márgenes */
   background: #fafafa10;
   backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+
   -webkit-backdrop-filter: blur(0.4rem);
   border: 3px solid #fafafa10;
   border-radius: 50px;
@@ -89,6 +91,8 @@
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+
   border: 3px solid fafafa10;
   border-radius: 50px;
   padding: 30px; /* Relleno de 30px */
