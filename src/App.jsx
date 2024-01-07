@@ -11,6 +11,7 @@ import "@fontsource/keania-one";
 import "./App.css";
 import lightModeIcon from "./assets/LightMode.png";
 import darkModeIcon from "./assets/DarkMode.png";
+import WithAdminAuth from './hoc/WithAdminAuth';
 
 // Crear el contexto para el estado del script de Google Maps
 export const GoogleMapsContext = React.createContext();
@@ -33,7 +34,7 @@ function App() {
             <Route path="/invitado" element={<ModoInvitado />} />
             <Route path="/admin" element={<LoginAdministrador />} />
             <Route path="/recuperar" element={<RecoverAdministrador />} />
-            <Route path="/administrador/*" element={<MenuAdministrador />} />
+            <Route path="/administrador/*" element={<WithAdminAuth><MenuAdministrador /></WithAdminAuth>} />
             <Route path="*" element={<NotFoundPage />} /> {/* Esta es la ruta por defecto para las páginas no encontradas */}
           </Routes>
         </div>

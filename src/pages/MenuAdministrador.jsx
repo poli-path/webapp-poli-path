@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import '../styles/Administrador/MenuAdministrador.css';
-import Nestor from '../assets/FotoNstor.jpg'
+import React, { useState, useEffect } from "react";
+import "../styles/Administrador/MenuAdministrador.css";
 import NotFoundPage from "../components/Administrador/NotFoundPageAdmin"; // Asegúrate de crear este componente
 import Bienvenida from "../components/Administrador/Bienvenida";
 import Usuarios from "../components/Administrador/Usuarios";
@@ -10,50 +9,100 @@ import Facultades from "../components/Administrador/Facultades";
 import Laboratorios from "../components/Administrador/Laboratorios";
 import Oficinas from "../components/Administrador/Oficinas";
 import DatosUsuario from "../components/Administrador/DatosUsuario";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import Adminis from "../assets/Default.jpg"; // Esta será tu imagen por defecto
+import ClipLoader from "react-spinners/ClipLoader";
 
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
-
+import axios from "axios"; // Asegúrate de tener axios instalado
 
 const Administrador = () => {
-    // Añade un estado para rastrear si el menú está abierto o no
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [userImage, setUserImage] = useState("");
 
-    // Función para manejar el clic en el botón de alternar
-    const handleToggleClick = () => {
-      setIsMenuOpen(!isMenuOpen);
-    };
+  const fetchData = async () => {
+    const result = await axios.get(
+      `${process.env.REACT_APP_API_URL}/users/${Cookies.get("id")}`,
+      { headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
+    );
+    setUserName(result.data.name);
+    setUserImage(result.data.imageURL || Adminis);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleToggleClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+    setIsLoading(true);
+    fetchData();
+  };
+
+  const handleLogoutClick = () => {
+    Cookies.remove("token");
+    Cookies.remove("role");
+    navigate("/");
+  };
+
   return (
     <div className="container">
-      {/* Añade un botón para alternar el menú */}
       <button className="toggle-button" onClick={handleToggleClick}>
-        {isMenuOpen ? 'X' : '☰'}
+        {isMenuOpen ? "X" : "☰"}
       </button>
 
-      {/* Añade la clase 'active' al menú cuando isMenuOpen es true */}
-      <div className={`menu-admin ${isMenuOpen ? 'active' : ''}`}>
-        <div className='logo'>
-          <img src={Nestor} alt='User' />
-          <h3>Néstor</h3>
+      <div className={`menu-admin ${isMenuOpen ? "active" : ""}`}>
+        <div className="logo">
+          {isLoading ? (
+            <>
+              <ClipLoader color="#3d8463" loading={isLoading} size={"8vw"} />
+              <div style={{ fontSize: "1vw" }}>Cargando tu información...</div>
+            </>
+          ) : (
+            <>
+              <img src={userImage} alt="User" />
+              <h3>{userName}</h3>
+            </>
+          )}
         </div>
-        <div className='editar'>
-          <Link onClick={handleToggleClick} to="/administrador/editarperfil"><button>Editar Perfil</button></Link>
+        <div className="editar">
+          <Link onClick={handleToggleClick} to="/administrador/editarperfil">
+            <button>Editar Perfil</button>
+          </Link>
         </div>
-        <div className='buttons'>
-        <Link onClick={handleToggleClick} to="/administrador/usuarios"><button>Usuarios</button></Link>
-          <Link onClick={handleToggleClick} to="/administrador/administradores"><button>Administradores</button></Link>
-          <Link onClick={handleToggleClick} to="/administrador/edificios"><button>Edificios</button></Link>
-          <Link onClick={handleToggleClick} to="/administrador/facultades"><button>Facultades</button></Link>
-          <Link onClick={handleToggleClick} to="/administrador/laboratorios"><button>Laboratorios</button></Link>
-          <Link onClick={handleToggleClick} to="/administrador/oficinas"><button>Oficinas</button></Link>
+        <div className="buttons">
+          <Link onClick={handleToggleClick} to="/administrador/usuarios">
+            <button>Usuarios</button>
+          </Link>
+          <Link onClick={handleToggleClick} to="/administrador/administradores">
+            <button>Administradores</button>
+          </Link>
+          <Link onClick={handleToggleClick} to="/administrador/edificios">
+            <button>Edificios</button>
+          </Link>
+          <Link onClick={handleToggleClick} to="/administrador/facultades">
+            <button>Facultades</button>
+          </Link>
+          <Link onClick={handleToggleClick} to="/administrador/laboratorios">
+            <button>Laboratorios</button>
+          </Link>
+          <Link onClick={handleToggleClick} to="/administrador/oficinas">
+            <button>Oficinas</button>
+          </Link>
         </div>
-        <div className='logout'>
-          <Link to="/"><button>Salir</button></Link>
+        <div className="logout">
+          <button onClick={handleLogoutClick}>Salir</button>
         </div>
       </div>
-      <div className='content'>
+      <div className="content">
         <Routes>
-          <Route path="/" element={<Bienvenida/>} />
+          <Route path="/" element={<Bienvenida />} />
           <Route path="editarperfil" element={<DatosUsuario />} />
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="administradores" element={<Administradores />} />
@@ -61,13 +110,11 @@ const Administrador = () => {
           <Route path="facultades" element={<Facultades />} />
           <Route path="laboratorios" element={<Laboratorios />} />
           <Route path="oficinas" element={<Oficinas />} />
-          <Route path="*" element={<NotFoundPage />} /> {/* Esta es la ruta por defecto para las páginas no encontradas */}
-
-          {/* Agrega tus componentes aquí */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </div>
   );
-}
+};
 
 export default Administrador;

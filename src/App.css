@@ -55,9 +55,11 @@ a:-webkit-any-link{
   background: linear-gradient(180deg, #ba001300,#ba001300);
   color: aliceblue;
 }
+div:where(.swal2-container) .swal2-html-container{
+  color: aliceblue;
+}
 
 .swal2-popup.swal2-modal.swal2-show {
-  left: 8%;
   background: #fafafa10;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
@@ -117,6 +119,9 @@ a:-webkit-any-link{
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
   
 }
+.swal2-success-circular-line-left {
+  background-color: rgba(255, 0, 0, 0.24); /* Color del pulgar de la barra de desplazamiento */
+}
 
 .requerido {
   color: rgba(249, 249, 36, 0.85);
@@ -125,18 +130,16 @@ a:-webkit-any-link{
   background: transparent;
 }
 .swal2-popup.swal2-modal.swal2-hide {
-  left: 8%;
   background: #fafafa10;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
-
   border: 3px solid fafafa10;
   border-radius: 50px;
   box-shadow: 0 20px 32px 0 black;
-
 }
+
 .my-button {
   position: fixed;
   right: -50px; /* Oculta inicialmente el botón a la derecha */
@@ -168,17 +171,23 @@ html{
 html::-webkit-scrollbar{
   width: 5px;
   border-radius: 50px;
+  z-index: 99999999;
+
 }
 
 html::-webkit-scrollbar-track{
   background: transparent;
+  z-index: 99999999;
+
 }
 
 
 html::-webkit-scrollbar-thumb{
+  z-index: 99999999;
   background-color: red;
   border-radius: 50px;
   border: 2px solid black;
+
 }
 /* Estilos para el modo claro */
 .light-mode {
@@ -217,6 +226,8 @@ html::-webkit-scrollbar-thumb{
 
 .light-mode html::-webkit-scrollbar-track{
   background: transparent;
+  z-index: 99999999;
+
 }
 .light-mode html{
   background-color: #1a61b3;
@@ -224,6 +235,8 @@ html::-webkit-scrollbar-thumb{
 
 .dark-mode html::-webkit-scrollbar-track{
   background: transparent;
+  z-index: 99999999;
+
 }
 
 .dark-mode a:hover {

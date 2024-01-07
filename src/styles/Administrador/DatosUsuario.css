@@ -8,7 +8,7 @@
   background: #fafafa10;
   backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
-
+  width: 100vw;
   -webkit-backdrop-filter: blur(0.4rem);
   border: 3px solid #fafafa10;
   border-radius: 50px;
@@ -16,22 +16,31 @@
   box-sizing: border-box; /* Incluye el borde y el relleno en el tamaño total */
 }
 
+.datosUsuario h2{
+margin-bottom: 5px;
+}
+
 .perfilUsuario {
   flex: 1; /* Ocupa el espacio restante */
   display: flex;
   justify-content: center;
   padding: 5%;
+  max-width: 50%;
+  margin-left: 5%;
+  
 }
 
 .perfilUsuario img {
-  max-width: 100%; /* Para ajustar el tamaño de la imagen */
+  min-width: 50vh; /* Para ajustar el tamaño de la imagen */
   border-radius: 50%; /* Ajusta el radio para la imagen circular */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
   object-fit: cover; /* Ajusta la imagen para cubrir el contenedor */
 }
 
 /* Resto del CSS se mantiene igual */
-
+.datosUsuario button{
+  margin: 2%;
+}
 .datosUsuario p {
   text-align: justify;
 }
@@ -42,6 +51,7 @@
   border-radius: 25px;
   border: 5px solid #00000028;
   color: #000;
+  margin-bottom: 5px;
 }
 .passwordContainer {
   position: relative;
@@ -148,4 +158,12 @@
     display: flex;
     flex-direction: column-reverse; /* Cambia a dirección horizontal */
   }
+  .perfilUsuario {
+    margin-left: 0;
+  }
+  .perfilUsuario img {
+    min-width: 0;
+    width: 100%; /* Para ajustar el tamaño de la imagen */
+  }
+  
 }

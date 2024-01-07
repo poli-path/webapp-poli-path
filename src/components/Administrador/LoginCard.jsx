@@ -5,6 +5,7 @@ import "../../styles/Administrador/LoginCard.css";
 import Adminis from "../../assets/Adminis.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
+import Cookies from 'js-cookie';
 
 const LoginCard = () => {
   const {
@@ -21,7 +22,7 @@ const LoginCard = () => {
     setIsLoading(true); // Comienza la carga
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/v1/auth/login`,
+        `${process.env.REACT_APP_API_URL}/auth/login`,
         {
           method: "POST",
           headers: {
@@ -36,6 +37,11 @@ const LoginCard = () => {
       if (!response.ok) {
         throw new Error(responseData.message);
       }
+
+      // Almacena todos los datos de responseData en las cookies
+      Object.keys(responseData).forEach(key => {
+        Cookies.set(key, responseData[key], { expires: 2/24 }); // La cookie expira después de 1 hora
+      });
 
       if (responseData.roles.includes("admin")) {
         navigate("/administrador");
@@ -85,9 +91,11 @@ const LoginCard = () => {
             <span className="requerido">Este campo es requerido</span>
           )}
         </div>
-        <div className="forgot-password">
-          <Link to="/recuperar">¿Olvidaste tu contraseña?</Link>
-        </div>
+        {!isLoading && (
+          <div className="forgot-password">
+            <Link to="/recuperar">¿Olvidaste tu contraseña?</Link>
+          </div>
+        )}
         {isLoading ? (
           <div
             className="loading-button"
@@ -97,7 +105,7 @@ const LoginCard = () => {
               justifyContent: "center",
             }}
           >
-            <span>Cargando...</span>
+            <span>Verificando tu sesión...</span>
 
             <ClipLoader color="#3d8463" loading={isLoading} size={30} />
           </div>

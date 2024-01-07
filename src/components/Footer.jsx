@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer__content">
         <p>© 2023 PoliPath. Todos los derechos reservados.</p>
-        <p>Contáctanos: contacto@polipath.com</p>
+        <p>Contáctanos: poli.path.epn@gmail.com</p>
       </div>
     </footer>
   );

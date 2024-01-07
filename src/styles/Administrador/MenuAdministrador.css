@@ -2,6 +2,7 @@
 .container {
   display: grid;
   grid-template-columns: 200px auto;
+  
 }
 
 .menu-admin {
@@ -20,7 +21,7 @@
 }
 .content {
   grid-column: 2; 
-  background-image: url('../../assets/Logo.png');
+  background-image: url('../../assets/LogoDark.png') ;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -29,26 +30,10 @@
   display: flex;
   align-items:first baseline;
   overflow-y: auto;
+  overflow-x: auto;
 
 }
 
-.content::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.55); 
-  background-repeat: repeat;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  height: 100vh;
-  position: fixed;
-  display: flex;
-  align-items:first baseline;
-  overflow-y: auto;
-}
 .menu-admin::-webkit-scrollbar,
 .content::-webkit-scrollbar {
   width: 5px; /* Ancho de la barra de desplazamiento */
@@ -181,10 +166,6 @@
   font-size: 17px;
 }
 
-.light-mode .logout button {
-  background-color: transparent;
-  border: transparent;
-}
 
 .light-mode .buttons button:hover {
   transform: scale(0.8); 
@@ -216,17 +197,13 @@
   background: linear-gradient(180deg, #ba001300,#ba001300, #8C0303,#ba001300,#ba001300);
 }
 
-.dark-mode .logout button {
-  background-color: transparent;
-  border: transparent;
-}
-
 .logout {
   z-index: 1; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 5%;
 
 }
 @media screen and (max-width: 768px) {
