@@ -48,12 +48,12 @@ const LoginCard = () => {
       } else {
         Swal.fire(
           "No tienes permiso para iniciar sesión como Administrador",
-          "",
+          "Solo usuarios con el rol de administrador pueden entrar a esta sección",
           "error"
         );
       }
     } catch (error) {
-      Swal.fire(error.message, "", "error");
+      Swal.fire(error.message, "Intenta de nuevo", "error");
     }
     setIsLoading(false); // Termina la carga
   };

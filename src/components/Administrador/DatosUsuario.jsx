@@ -76,7 +76,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
 
   const [isSaving, setIsSaving] = useState(false); // Nuevo estado para rastrear si se está guardando
 
-  const onSubmit = async (data) => {
+  const onSubmitUserData = async (data) => {
     if (isEditable) {
       Swal.fire({
         title: "¿Estás seguro de editar estos datos?",
@@ -210,7 +210,34 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
   const closePasswordModal = () => {
     setModalPasswordIsOpen(false);
   };
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
+
   const onSubmitPassword = async (data) => {
+    const { newPassword, confirmNewPassword } = data;
+    const confirmError = document.querySelector(".confirmPasswordError");
+  
+    // Validación de coincidencia de contraseñas
+    if (newPassword !== confirmNewPassword) {
+      if (confirmError) {
+        confirmError.textContent = "Las contraseñas no coinciden";
+      }
+      return;
+    } else {
+      setIsSavingPassword(true);
+      confirmError.textContent = "";
+    }
+  
+    // Validación de la nueva contraseña con expresiones regulares
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      if (confirmError) {
+        confirmError.textContent =
+          "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una minúscula y un número";
+      }
+      setIsSavingPassword(false);
+      return;
+    }
+
     try {
       const response = await axios.patch(
         `${process.env.REACT_APP_API_URL}/auth/change-password`,
@@ -225,11 +252,16 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           },
         }
       );
-
+  
       if (response.status === 200) {
         // Contraseña cambiada exitosamente
         toast.success("Contraseña cambiada exitosamente");
         setModalPasswordIsOpen(false); // Cerrar el modal después del cambio
+  
+        // Limpiar los campos de contraseña
+        setValue("oldPassword", "");
+        setValue("newPassword", "");
+        setValue("confirmNewPassword", "");
       } else {
         throw new Error("Error al cambiar la contraseña");
       }
@@ -242,6 +274,8 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           error.response?.data?.message ||
           "Hubo un problema al cambiar la contraseña",
       });
+    } finally {
+      setIsSavingPassword(false);
     }
   };
 
@@ -259,7 +293,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
       <div className="formUsuario">
         <h2>Usuario</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmitUserData)}>
           <label>
             Nombre:
             <input
@@ -309,7 +343,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           </>
         ) : (
           <>
-            <button onClick={handleSubmit(onSubmit)}>
+            <button onClick={handleSubmit(onSubmitUserData)}>
               {isEditable ? "Guardar" : "Editar"}
             </button>
             <button onClick={openPasswordModal}>Cambiar Contraseña</button>
@@ -350,7 +384,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
         {isSaving ? ( // Mostrar ClipLoader durante la carga
           <>
             <div style={{ fontSize: "10" }}>Actualizando Foto de Perfil...</div>
-            <ClipLoader color="#3d8463" loading={isSaving} size={30} />
+            <ClipLoader color="#3d8463" loading={isSaving} size={"30px"} />
           </>
         ) : (
           <>
@@ -429,13 +463,30 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
             {errors.confirmNewPassword && (
               <p className="requerido">Este campo es requerido</p>
             )}
+            <p className="requerido confirmPasswordError"></p>
           </label>
-          <button className="agregarBtn" type="submit">
-            Cambiar Contraseña
-          </button>
-          <button className="cancelarBtn" onClick={closePasswordModal}>
-            Cancelar
-          </button>
+
+          {isSavingPassword ? (
+            <div className="botones">
+                            <ClipLoader
+                color="#3d8463"
+                loading={isSavingPassword}
+                size={"30px"}
+              />
+              <div style={{ fontSize: "10" }}>Actualizando contraseña...</div>
+
+            </div>
+          ) : (
+            <div className="botones">
+                            <button className="cancelarBtn" onClick={closePasswordModal}>
+                Cancelar
+              </button>
+              <button className="agregarBtn" type="submit">
+                Cambiar Contraseña
+              </button>
+
+            </div>
+          )}
         </form>
       </Modal>
 
