@@ -18,14 +18,16 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
   const [usuario, setUsuario] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [previewImage, setPreviewImage] = useState(null); // Estado para previsualizar la imagen cargada
+  const [previewImage, setPreviewImage] = useState(null);
   const [modalPasswordIsOpen, setModalPasswordIsOpen] = useState(false);
+  const [activeForm, setActiveForm] = useState("userData"); // Por defecto, el formulario activo es "userData"
+
 
   const [isEditable, setIsEditable] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [hoverImage, setHoverImage] = useState(false); // Estado para controlar el hover de la imagen
-  const [newImage, setNewImage] = useState(null); // Estado para almacenar la nueva imagen
+  const [hoverImage, setHoverImage] = useState(false);
+  const [newImage, setNewImage] = useState(null);
 
   const {
     register,
@@ -74,10 +76,10 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     getUserData();
   }, []);
 
-  const [isSaving, setIsSaving] = useState(false); // Nuevo estado para rastrear si se está guardando
+  const [isSaving, setIsSaving] = useState(false);
 
   const onSubmitUserData = async (data) => {
-    if (isEditable) {
+    if (activeForm === "userData" && isEditable) {
       Swal.fire({
         title: "¿Estás seguro de editar estos datos?",
         showDenyButton: true,
@@ -101,9 +103,9 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
             );
 
             if (response.status === 200) {
-              const updatedUserData = { ...usuario, imagen: usuario.imagen }; // Actualiza la imagen en el estado local
-              setUsuario(updatedUserData); // Actualiza la imagen en el estado de DatosUsuario
-              setUserData(data); // Actualiza otros datos del usuario
+              const updatedUserData = { ...usuario, imagen: usuario.imagen };
+              setUsuario(updatedUserData);
+              setUserData(data);
               setIsEditable(false);
               toast.success("Datos actualizados exitosamente!");
             } else {
@@ -118,6 +120,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
       });
     } else {
       setIsEditable(true);
+      setActiveForm("userData");
     }
   };
   const handleImageHover = () => {
@@ -129,26 +132,32 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
   };
 
   const handleImageClick = () => {
-    // Abre el modal para cambiar la imagen al hacer clic en la foto
     setModalIsOpen(true);
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setNewImage(file);
-    setPreviewImage(URL.createObjectURL(file)); // Crear una URL de previsualización para la imagen cargada
+    setPreviewImage(URL.createObjectURL(file));
   };
 
   const handleCancelImageChange = () => {
-    // Cancela la acción de cambiar la imagen
     setModalIsOpen(false);
-    setNewImage(null); // Restablece la imagen seleccionada
-    setPreviewImage(usuario.imagen); // Restablece la previsualización a la imagen actual
+    setNewImage(null); 
+    setPreviewImage(usuario.imagen); 
 
-    // Limpia el valor del input
-    setValue("imagen", ""); // Asigna una cadena vacía al input de imagen
+    setValue("imagen", "");
   };
-
+  const openPasswordModal = () => {
+    setModalPasswordIsOpen(true);
+    setActiveForm("password");
+    
+  };
+  
+  const closePasswordModal = () => {
+    setModalPasswordIsOpen(false);
+    setActiveForm("userData"); // Cuando se cierra el modal de contraseña, activamos nuevamente el formulario de userData
+  };
   const handleUploadImage = async () => {
     if (newImage) {
       const formData = new FormData();
@@ -172,14 +181,13 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           const updatedUserData = {
             ...usuario,
             imagen: response.data.imageUrl,
-          }; // Actualiza la imagen en el estado local
-          setUsuario(updatedUserData); // Actualiza la imagen en el estado de DatosUsuario
+          };
+          setUsuario(updatedUserData); 
           setModalIsOpen(false);
           setNewImage(null);
 
           toast.success("Imagen actualizada exitosamente");
 
-          // Actualiza la imagen también en MenuAdministrador
           setUserImage(response.data.imageUrl);
         } else {
           throw new Error("Error al actualizar la imagen");
@@ -203,20 +211,12 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     }
   };
 
-  const openPasswordModal = () => {
-    setModalPasswordIsOpen(true);
-  };
-
-  const closePasswordModal = () => {
-    setModalPasswordIsOpen(false);
-  };
   const [isSavingPassword, setIsSavingPassword] = useState(false);
 
   const onSubmitPassword = async (data) => {
     const { newPassword, confirmNewPassword } = data;
     const confirmError = document.querySelector(".confirmPasswordError");
-  
-    // Validación de coincidencia de contraseñas
+
     if (newPassword !== confirmNewPassword) {
       if (confirmError) {
         confirmError.textContent = "Las contraseñas no coinciden";
@@ -226,8 +226,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
       setIsSavingPassword(true);
       confirmError.textContent = "";
     }
-  
-    // Validación de la nueva contraseña con expresiones regulares
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
       if (confirmError) {
@@ -252,16 +251,15 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           },
         }
       );
-  
+
       if (response.status === 200) {
-        // Contraseña cambiada exitosamente
         toast.success("Contraseña cambiada exitosamente");
-        setModalPasswordIsOpen(false); // Cerrar el modal después del cambio
-  
-        // Limpiar los campos de contraseña
+        setModalPasswordIsOpen(false); 
+
         setValue("oldPassword", "");
         setValue("newPassword", "");
         setValue("confirmNewPassword", "");
+        setActiveForm("userData"); // Cuando se cierra el modal de contraseña, activamos nuevamente el formulario de userData
       } else {
         throw new Error("Error al cambiar la contraseña");
       }
@@ -292,7 +290,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     <div className="datosUsuario">
       <div className="formUsuario">
         <h2>Usuario</h2>
-
+        {(activeForm === "userData" || activeForm === "password") &&(
         <form onSubmit={handleSubmit(onSubmitUserData)}>
           <label>
             Nombre:
@@ -335,7 +333,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
             )}
           </label>
         </form>
-
+)}
         {isSaving ? (
           <>
             <div style={{ fontSize: "25px" }}>Guardando tus datos...</div>
@@ -375,13 +373,12 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
         {previewImage && (
           <img src={previewImage} alt="Previsualización de la imagen" />
         )}{" "}
-        {/* Previsualización de la imagen cargada */}
         <input
           type="file"
           accept="image/jpeg, image/png"
           onChange={handleFileChange}
         />
-        {isSaving ? ( // Mostrar ClipLoader durante la carga
+        {isSaving ? ( 
           <>
             <div style={{ fontSize: "10" }}>Actualizando Foto de Perfil...</div>
             <ClipLoader color="#3d8463" loading={isSaving} size={"30px"} />
@@ -405,6 +402,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
         className="modalContent"
         overlayClassName="modalOverlay"
       >
+        {activeForm === "password" && (
         <form onSubmit={handleSubmit(onSubmitPassword)}>
           <h2>Cambiar Contraseña</h2>
           <label>
@@ -468,26 +466,25 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
 
           {isSavingPassword ? (
             <div className="botones">
-                            <ClipLoader
+              <ClipLoader
                 color="#3d8463"
                 loading={isSavingPassword}
                 size={"30px"}
               />
               <div style={{ fontSize: "10" }}>Actualizando contraseña...</div>
-
             </div>
           ) : (
             <div className="botones">
-                            <button className="cancelarBtn" onClick={closePasswordModal}>
+              <button className="cancelarBtn" onClick={closePasswordModal}>
                 Cancelar
               </button>
               <button className="agregarBtn" type="submit">
                 Cambiar Contraseña
               </button>
-
             </div>
           )}
         </form>
+        )}
       </Modal>
 
       <ToastContainer />
