@@ -23,7 +23,9 @@ const Administrador = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userName, setUserName] = useState("");
+  const [userLastname, setUserLastname] = useState("");
   const [userImage, setUserImage] = useState("");
+  const [usuario, setUsuario] = useState(null);
 
   const fetchData = async () => {
     const result = await axios.get(
@@ -31,18 +33,22 @@ const Administrador = () => {
       { headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
     );
     setUserName(result.data.name);
-    setUserImage(result.data.imageURL || Adminis);
+    setUserLastname(result.data.lastname);
+    setUserImage(result.data.imageUrl || Adminis);
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [usuario, setUsuario]); // Agrega setUsuario como dependencia
+
+  const truncateString = (str, maxLength) => {
+    if (str.length <= maxLength) return str;
+    return `${str.substring(0, maxLength)}...`;
+  };
 
   const handleToggleClick = () => {
     setIsMenuOpen(!isMenuOpen);
-    setIsLoading(true);
-    fetchData();
   };
 
   const handleLogoutClick = () => {
@@ -61,13 +67,15 @@ const Administrador = () => {
         <div className="logo">
           {isLoading ? (
             <>
-              <ClipLoader color="#3d8463" loading={isLoading} size={"8vw"} />
-              <div style={{ fontSize: "1vw" }}>Cargando tu información...</div>
+              <ClipLoader color="#3d8463" loading={isLoading} size={"90px"} />
+              <div style={{ fontSize: "20px" }}>Cargando tu información...</div>
             </>
           ) : (
             <>
               <img src={userImage} alt="User" />
-              <h3>{userName}</h3>
+              <h3 className="truncated" title={`${userName} ${userLastname}`}>
+                {`${userName} ${userLastname}`}
+              </h3>
             </>
           )}
         </div>
@@ -103,7 +111,16 @@ const Administrador = () => {
       <div className="content">
         <Routes>
           <Route path="/" element={<Bienvenida />} />
-          <Route path="editarperfil" element={<DatosUsuario />} />
+          <Route
+            path="editarperfil"
+            element={
+              <DatosUsuario
+                setUserData={setUsuario}
+                setUserImage={setUserImage}
+              />
+            }
+          />
+
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="administradores" element={<Administradores />} />
           <Route path="edificios" element={<Edificios />} />

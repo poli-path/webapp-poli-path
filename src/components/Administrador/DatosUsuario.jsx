@@ -10,16 +10,22 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
+import { faCamera } from "@fortawesome/free-solid-svg-icons"; // Importa el icono de la cámara
 
 Modal.setAppElement("#root");
 
-const DatosUsuario = () => {
+const DatosUsuario = ({ setUserData, setUserImage }) => {
   const [usuario, setUsuario] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null); // Estado para previsualizar la imagen cargada
+  const [modalPasswordIsOpen, setModalPasswordIsOpen] = useState(false);
 
   const [isEditable, setIsEditable] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [hoverImage, setHoverImage] = useState(false); // Estado para controlar el hover de la imagen
+  const [newImage, setNewImage] = useState(null); // Estado para almacenar la nueva imagen
 
   const {
     register,
@@ -42,7 +48,7 @@ const DatosUsuario = () => {
             },
           }
         );
-  
+
         const data = response.data;
         setUsuario({
           nombre: data.name,
@@ -50,22 +56,25 @@ const DatosUsuario = () => {
           contrasena: "",
           imagen: data.imageUrl || Nestor,
         });
-  
-        // Establece los valores iniciales de los campos de entrada
+
+        // Establece los valores iniciales de los campos de entrada y la imagen en la previsualización
         setValue("nombre", data.name);
         setValue("apellido", data.lastname);
         setValue("imagen", data.imageUrl || Nestor);
+        setPreviewImage(data.imageUrl || Nestor); // Establece la imagen actual en la previsualización
 
-  
+        setUserData({ ...data, imageUrl: data.imageUrl }); // Guarda la imageUrl en setUserData
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
     };
-  
+
     getUserData();
   }, []);
-  
+
+  const [isSaving, setIsSaving] = useState(false); // Nuevo estado para rastrear si se está guardando
 
   const onSubmit = async (data) => {
     if (isEditable) {
@@ -76,6 +85,7 @@ const DatosUsuario = () => {
         denyButtonText: "Cancelar",
       }).then(async (result) => {
         if (result.isConfirmed) {
+          setIsSaving(true);
           try {
             const response = await axios.patch(
               `${process.env.REACT_APP_API_URL}/users/${userId}`,
@@ -91,7 +101,9 @@ const DatosUsuario = () => {
             );
 
             if (response.status === 200) {
-              setUsuario(data);
+              const updatedUserData = { ...usuario, imagen: usuario.imagen }; // Actualiza la imagen en el estado local
+              setUsuario(updatedUserData); // Actualiza la imagen en el estado de DatosUsuario
+              setUserData(data); // Actualiza otros datos del usuario
               setIsEditable(false);
               toast.success("Datos actualizados exitosamente!");
             } else {
@@ -99,11 +111,137 @@ const DatosUsuario = () => {
             }
           } catch (error) {
             console.error("Error:", error);
+          } finally {
+            setIsSaving(false);
           }
         }
       });
     } else {
       setIsEditable(true);
+    }
+  };
+  const handleImageHover = () => {
+    setHoverImage(true);
+  };
+
+  const handleImageLeave = () => {
+    setHoverImage(false);
+  };
+
+  const handleImageClick = () => {
+    // Abre el modal para cambiar la imagen al hacer clic en la foto
+    setModalIsOpen(true);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setNewImage(file);
+    setPreviewImage(URL.createObjectURL(file)); // Crear una URL de previsualización para la imagen cargada
+  };
+
+  const handleCancelImageChange = () => {
+    // Cancela la acción de cambiar la imagen
+    setModalIsOpen(false);
+    setNewImage(null); // Restablece la imagen seleccionada
+    setPreviewImage(usuario.imagen); // Restablece la previsualización a la imagen actual
+
+    // Limpia el valor del input
+    setValue("imagen", ""); // Asigna una cadena vacía al input de imagen
+  };
+
+  const handleUploadImage = async () => {
+    if (newImage) {
+      const formData = new FormData();
+      formData.append("file", newImage);
+
+      try {
+        setIsSaving(true);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/files/profile-image`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const updatedUserData = {
+            ...usuario,
+            imagen: response.data.imageUrl,
+          }; // Actualiza la imagen en el estado local
+          setUsuario(updatedUserData); // Actualiza la imagen en el estado de DatosUsuario
+          setModalIsOpen(false);
+          setNewImage(null);
+
+          toast.success("Imagen actualizada exitosamente");
+
+          // Actualiza la imagen también en MenuAdministrador
+          setUserImage(response.data.imageUrl);
+        } else {
+          throw new Error("Error al actualizar la imagen");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al actualizar la imagen",
+        });
+      } finally {
+        setIsSaving(false);
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, selecciona una imagen",
+      });
+    }
+  };
+
+  const openPasswordModal = () => {
+    setModalPasswordIsOpen(true);
+  };
+
+  const closePasswordModal = () => {
+    setModalPasswordIsOpen(false);
+  };
+  const onSubmitPassword = async (data) => {
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}/auth/change-password`,
+        {
+          id: userId,
+          oldPassword: data.oldPassword,
+          newPassword: data.newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Contraseña cambiada exitosamente
+        toast.success("Contraseña cambiada exitosamente");
+        setModalPasswordIsOpen(false); // Cerrar el modal después del cambio
+      } else {
+        throw new Error("Error al cambiar la contraseña");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "Hubo un problema al cambiar la contraseña",
+      });
     }
   };
 
@@ -129,15 +267,15 @@ const DatosUsuario = () => {
               {...register("nombre", {
                 required: isEditable,
                 minLength: isEditable ? 3 : undefined,
+                maxLength: isEditable ? 20 : undefined,
                 pattern: isEditable ? /^[^\s]+$/ : undefined,
               })}
-              
               disabled={!isEditable}
             />
             {errors.nombre && (
               <p className="requerido">
                 {isEditable
-                  ? "Este campo es requerido y debe tener al menos 3 caracteres sin espacios"
+                  ? "Este campo es requerido y debe tener al menos 3 caracteres (20 máximo) sin espacios"
                   : ""}
               </p>
             )}
@@ -149,99 +287,161 @@ const DatosUsuario = () => {
               {...register("apellido", {
                 required: isEditable,
                 minLength: isEditable ? 3 : undefined,
+                maxLength: isEditable ? 20 : undefined,
                 pattern: isEditable ? /^[^\s]+$/ : undefined,
               })}
-              
               disabled={!isEditable}
             />
             {errors.apellido && (
               <p className="requerido">
                 {isEditable
-                  ? "Este campo es requerido y debe tener al menos 3 caracteres sin espacios"
+                  ? "Este campo es requerido y debe tener al menos 3 caracteres (20 máximo) sin espacios"
                   : ""}
               </p>
             )}
           </label>
         </form>
 
-        <button onClick={handleSubmit(onSubmit)}>
-          {isEditable ? "Guardar" : "Editar"}
-        </button>
-        <button onClick={() => setModalIsOpen(true)}>Cambiar Contraseña</button>
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={() => setModalIsOpen(false)}
-          className="modalContent"
-          overlayClassName="modalOverlay"
-        ></Modal>
-        <ToastContainer />
+        {isSaving ? (
+          <>
+            <div style={{ fontSize: "25px" }}>Guardando tus datos...</div>
+            <ClipLoader color="#3d8463" loading={isSaving} size={"30px"} />
+          </>
+        ) : (
+          <>
+            <button onClick={handleSubmit(onSubmit)}>
+              {isEditable ? "Guardar" : "Editar"}
+            </button>
+            <button onClick={openPasswordModal}>Cambiar Contraseña</button>
+          </>
+        )}
       </div>
 
-      <div className="perfilUsuario">
+      <div
+        className="perfilUsuario"
+        onMouseOver={handleImageHover}
+        onMouseLeave={handleImageLeave}
+        onClick={handleImageClick}
+      >
+        {hoverImage && (
+          <div className="overlay">
+            <p>Haz click para cambiar tu foto</p>
+            <FontAwesomeIcon icon={faCamera} />
+          </div>
+        )}
         <img src={usuario.imagen} alt="Foto de perfil" />
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        className="modalContent"
+        overlayClassName="modalOverlay"
+      >
+        <h2>Cambiar Foto de Perfil</h2>
+        {previewImage && (
+          <img src={previewImage} alt="Previsualización de la imagen" />
+        )}{" "}
+        {/* Previsualización de la imagen cargada */}
+        <input
+          type="file"
+          accept="image/jpeg, image/png"
+          onChange={handleFileChange}
+        />
+        {isSaving ? ( // Mostrar ClipLoader durante la carga
+          <>
+            <div style={{ fontSize: "10" }}>Actualizando Foto de Perfil...</div>
+            <ClipLoader color="#3d8463" loading={isSaving} size={30} />
+          </>
+        ) : (
+          <>
+            <div className="botones">
+              <button className="agregarBtn" onClick={handleCancelImageChange}>
+                Cancelar
+              </button>
+              <button className="cancelarBtn" onClick={handleUploadImage}>
+                Cambiar
+              </button>
+            </div>
+          </>
+        )}
+      </Modal>
+      <Modal
+        isOpen={modalPasswordIsOpen}
+        onRequestClose={() => setModalPasswordIsOpen(false)}
+        className="modalContent"
+        overlayClassName="modalOverlay"
+      >
+        <form onSubmit={handleSubmit(onSubmitPassword)}>
+          <h2>Cambiar Contraseña</h2>
+          <label>
+            Contraseña Antigua:
+            <br />
+            <div className="passwordContainer">
+              <input
+                className="datosUsuario input modalInput passwordInput"
+                type={showPassword ? "text" : "password"}
+                {...register("oldPassword", { required: true })}
+              />
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                onClick={() => setShowPassword(!showPassword)}
+                className="passwordIcon"
+              />
+            </div>
+            {errors.oldPassword && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
+          </label>
+          <label>
+            Nueva Contraseña:
+            <br />
+            <div className="passwordContainer">
+              <input
+                className="datosUsuario input modalInput passwordInput"
+                type={showPassword ? "text" : "password"}
+                {...register("newPassword", { required: true })}
+              />
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                onClick={() => setShowPassword(!showPassword)}
+                className="passwordIcon"
+              />
+            </div>
+            {errors.newPassword && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
+          </label>
+          <label>
+            Confirmar Nueva Contraseña:
+            <br />
+            <div className="passwordContainer">
+              <input
+                className="datosUsuario input modalInput passwordInput"
+                type={showPassword ? "text" : "password"}
+                {...register("confirmNewPassword", { required: true })}
+              />
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                onClick={() => setShowPassword(!showPassword)}
+                className="passwordIcon"
+              />
+            </div>
+            {errors.confirmNewPassword && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
+          </label>
+          <button className="agregarBtn" type="submit">
+            Cambiar Contraseña
+          </button>
+          <button className="cancelarBtn" onClick={closePasswordModal}>
+            Cancelar
+          </button>
+        </form>
+      </Modal>
+
+      <ToastContainer />
     </div>
   );
 };
 
 export default DatosUsuario;
-
-// <form onSubmit={handleSubmit(onSubmitPassword)}>
-// <label>
-//   Contraseña Antigua:
-//   <br />
-//   <div className="passwordContainer">
-//     <input
-//       className="datosUsuario input modalInput passwordInput"
-//       type={showPassword ? "text" : "password"}
-//       {...register("oldPassword", { required: true })}
-//     />
-//     <FontAwesomeIcon
-//       icon={showPassword ? faEyeSlash : faEye}
-//       onClick={() => setShowPassword(!showPassword)}
-//       className="passwordIcon"
-//     />
-//   </div>
-//   {errors.oldPassword && <p className="requerido">Este campo es requerido</p>}
-// </label>
-// <label>
-//   Nueva Contraseña:
-//   <br />
-//   <div className="passwordContainer">
-//     <input
-//       className="datosUsuario input modalInput passwordInput"
-//       type={showPassword ? "text" : "password"}
-//       {...register("newPassword", { required: true })}
-//     />
-//     <FontAwesomeIcon
-//       icon={showPassword ? faEyeSlash : faEye}
-//       onClick={() => setShowPassword(!showPassword)}
-//       className="passwordIcon"
-//     />
-//   </div>
-//   {errors.newPassword && <p className="requerido">Este campo es requerido</p>}
-// </label>
-// <label>
-//   Confirmar Nueva Contraseña:
-//   <br />
-//   <div className="passwordContainer">
-//     <input
-//       className="datosUsuario input modalInput passwordInput"
-//       type={showPassword ? "text" : "password"}
-//       {...register("confirmNewPassword", { required: true })}
-//     />
-//     <FontAwesomeIcon
-//       icon={showPassword ? faEyeSlash : faEye}
-//       onClick={() => setShowPassword(!showPassword)}
-//       className="passwordIcon"
-//     />
-//   </div>
-//   {errors.confirmNewPassword && <p className="requerido">Este campo es requerido</p>}
-// </label>
-// <button className="agregarBtn" type="submit">
-//   Cambiar Contraseña
-// </button>
-// <button className="cancelarBtn" onClick={() => setModalIsOpen(false)}>
-//   Cancelar
-// </button>
-// </form>

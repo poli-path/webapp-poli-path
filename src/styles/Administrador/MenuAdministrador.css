@@ -82,7 +82,8 @@
 }
 
 .logo img {
-  height: 20vh;
+  height: 150px;
+  width: 150px;
   object-fit: cover;
   border-radius: 50%;
   z-index: 2;
@@ -92,6 +93,17 @@
   z-index: 2;
   font-size: 21px;
 }
+.logo h3.truncated {
+  /* Regla de truncado */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Otros estilos que desees aplicar */
+  /* Por ejemplo: */
+  width: 180px; /* Ajusta el ancho máximo para el truncado */
+}
+
+
 
 .logo::before {
   content: "";
@@ -221,7 +233,11 @@
     position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
 
   }
+  .logo img {
+    height: 120px;
+    width: 120px;
 
+  }
   .menu-admin.active{
     top: 0.1%; /* Ajusta según sea necesario */
     left: 0.1%; /* Ajusta según sea necesario */

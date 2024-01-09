@@ -21,7 +21,12 @@ function App() {
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
+  const [usuario, setUsuario] = useState(null); // Estado de usuario
 
+  // Función para actualizar usuario que se pasa como prop a DatosUsuario
+  const actualizarUsuario = (nuevosDatos) => {
+    setUsuario(nuevosDatos);
+  };
   return (
     <Router>
       <GoogleMapsContext.Provider value={{ googleMapsLoaded, setGoogleMapsLoaded }}>
