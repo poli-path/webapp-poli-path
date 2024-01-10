@@ -141,10 +141,7 @@ height: 400px;
 }
 .modalContent {
   position: absolute;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   top: 50%;
   left: 57.7%;
   right: auto;
@@ -162,7 +159,12 @@ height: 400px;
   padding: 30px; /* Relleno de 30px */
   width: 40%; /* Ancho de 600px */
 }
-
+.foto{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 /* Estilos para el fondo del modal */
 .modalOverlay {
   position: fixed;

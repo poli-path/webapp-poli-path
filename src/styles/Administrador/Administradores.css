@@ -22,7 +22,7 @@
   padding: 10px;
   font-size: 15px;
 }
-.light-mode .tablaAdministradores button {
+.light-mode .tablaAdministradores td button {
   background-color: transparent;
   border: none;
 }
@@ -30,11 +30,47 @@
   background: linear-gradient(90deg, #ba001300, #ff3246, #ba001300);
   border: none;
 }
-.dark-mode .tablaAdministradores button:hover {
+.botones{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+/* Estilos CSS */
+.botones2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px; /* Espacio entre elementos */
+  padding: 20px;
+
+}
+
+.pagination-button {
+  /* Estilos para los botones de paginación */
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #3d8463;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0; /* Evitar que los botones se reduzcan más allá de su tamaño */
+}
+
+.pagination-button:disabled {
+  /* Estilos para los botones de paginación deshabilitados */
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.dark-mode .tablaAdministradores td button:hover {
   background: linear-gradient(90deg, #ba001300, #8C0303, #ba001300);
   border: none;
 }
-.dark-mode .tablaAdministradores button {
+.dark-mode .tablaAdministradores td button {
   background-color: transparent;
   border: none;
 }
@@ -94,6 +130,24 @@
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
 
 }
+.administradores select{
+  width: 120px;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: #000;
+}
+.administradores option{
+  width: 120px;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: #000;
+}
+.administradores option:hover{
+  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
+
+}
 
 .tablaAdministradores::-webkit-scrollbar-track {
   background: #1a31b3; /* Color de la pista de la barra de desplazamiento */
@@ -105,10 +159,7 @@
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
 }
 
-.modalOverlay{
-  background-color: red; /* Fondo oscuro */
 
-}
 /* Estilos para pantallas grandes */
 @media (min-width: 1200px) {
   .administradores {

@@ -37,11 +37,16 @@
 .menu-admin::-webkit-scrollbar,
 .content::-webkit-scrollbar {
   width: 5px; /* Ancho de la barra de desplazamiento */
+  height: 5px; /* Ancho de la barra de desplazamiento */
+
 }
 
 .menu-admin::-webkit-scrollbar-track,
 .content::-webkit-scrollbar-track {
   background: #1a31b3; /* Color de la pista de la barra de desplazamiento */
+  width: 5px; /* Ancho de la barra de desplazamiento */
+  height: 5px; /* Ancho de la barra de desplazamiento */
+
 }
 
 .menu-admin::-webkit-scrollbar-thumb,
@@ -49,6 +54,9 @@
   background-color: red; /* Color del pulgar de la barra de desplazamiento */
   border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+  width: 5px; /* Ancho de la barra de desplazamiento */
+  height: 5px; /* Ancho de la barra de desplazamiento */
+
 }
 
 .toggle-button {

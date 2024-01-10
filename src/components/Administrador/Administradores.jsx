@@ -1,13 +1,18 @@
-import React, { useMemo, useState } from "react";
-import { useTable, useFilters } from "react-table";
+import React, { useMemo, useState, useEffect } from "react";
+import { useTable, usePagination, useFilters } from "react-table";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import "../../styles/Administrador/Administradores.css";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Cookies from "js-cookie";
+import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
 
 Modal.setAppElement("#root");
 
@@ -26,50 +31,147 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
 }
 
 const Administradores = () => {
-  const [administradores, setAdministradores] = useState([
-    {
-      col1: "Administrador 1",
-      col2: "Apellido 1",
-      col3: "admin1@example.com",
-    },
-  ]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [administradores, setAdministradores] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const token = Cookies.get("token");
+  const [loading, setLoading] = useState(true);
+  const [loadingNew, setLoadingNew] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [defaultPageSize, setDefaultPageSize] = useState(5);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+  const fetchAdministradores = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const filteredAdmins = response.data.filter((user) =>
+        user.roles.includes("admin")
+      );
+      setAdministradores(filteredAdmins);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching admins:", error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchAdministradores();
+  }, [token]);
 
-  const onSubmit = (data) => {
-    Swal.fire({
-      title: "¿Estás seguro de agregar este administrador?",
-      showDenyButton: true,
-      confirmButtonText: `Continuar`,
-      denyButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setAdministradores([...administradores, data]);
+  const onSubmit = async (data) => {
+    try {
+      const { name, lastname, email, password } = data;
+      const registerDate = new Date().toISOString();
+
+      const confirmResult = await Swal.fire({
+        title: "Confirmar ingreso",
+        text: "¿Estas seguro de agregar este nuevo administrador?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí",
+        cancelButtonText: "No",
+      });
+
+      if (confirmResult.isConfirmed) {
+        // Validar contraseña y confirmar contraseña
+        if (password !== confirmPassword) {
+          Swal.fire({
+            title: "Error",
+            text: "Las contraseñas no coinciden",
+            icon: "error",
+          });
+          return;
+        }
+
+        setLoadingNew(true);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/auth/admin-register`,
+          {
+            email,
+            password,
+            name,
+            lastname,
+            registerDate,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        toast.success("¡Administrador agregado correctamente!");
+
         setModalIsOpen(false);
-        toast.success("Administrador agregado exitosamente!");
-        reset(); // Esta línea reinicia los campos del formulario
+
+        fetchAdministradores();
       }
-    });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response.data.message ||
+          "Hubo un error al agregar el administrador",
+        icon: "error",
+      });
+    } finally {
+      setLoadingNew(false);
+    }
   };
 
-  const eliminarAdministrador = (index) => {
-    Swal.fire({
-      title: "¿Estás seguro de eliminar este administrador?",
-      showDenyButton: true,
-      confirmButtonText: `Eliminar`,
-      denyButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setAdministradores(administradores.filter((_, i) => i !== index));
-        toast.error("Administrador eliminado exitosamente!");
+  const eliminarAdministrador = async (id) => {
+    try {
+      const confirmResult = await Swal.fire({
+        title: "Confirmar eliminación",
+        text: "¿Estás seguro de eliminar este administrador?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+        dangerMode: true,
+      });
+
+      if (confirmResult.isConfirmed) {
+        setLoading(true);
+
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/users/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        toast.success("¡Administrador eliminado correctamente!");
+
+        fetchAdministradores();
       }
-    });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: error.response.data.message || "Hubo un error al eliminar el administrador",
+        icon: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const data = useMemo(() => administradores, [administradores]);
@@ -77,25 +179,46 @@ const Administradores = () => {
   const columns = useMemo(
     () => [
       {
+        Header: "Foto",
+        accessor: "imageUrl",
+        Cell: ({ value }) => (
+          <img
+            src={value}
+            alt="Avatar"
+            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+          />
+        ),
+        disableFilters: true,
+      },
+      {
         Header: "Nombre",
-        accessor: "col1",
+        accessor: "name",
       },
       {
         Header: "Apellido",
-        accessor: "col2",
+        accessor: "lastname",
       },
       {
         Header: "Email",
-        accessor: "col3",
+        accessor: "email",
+      },
+      {
+        Header: "Fecha de Registro",
+        accessor: "registerDate",
+      },
+      {
+        Header: "Estado",
+        accessor: "isVerified",
+        Cell: ({ value }) => (value ? "Verificado" : "No Verificado"),
       },
       {
         Header: "Acciones",
-        Cell: ({ row: { index } }) => (
+        Cell: ({ row }) => (
           <div>
             <button
               className="botonEyD"
               title="Eliminar"
-              onClick={() => eliminarAdministrador(index)}
+              onClick={() => eliminarAdministrador(row.original.id)}
             >
               {" "}
               <FontAwesomeIcon icon={faTrash} />
@@ -106,25 +229,39 @@ const Administradores = () => {
     ],
     []
   );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-        defaultColumn: { Filter: TextFilter },
-      },
-      useFilters
-    );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    nextPage,
+    previousPage,
+    pageCount,
+    gotoPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn: { Filter: TextFilter },
+      initialState: { pageIndex: pageNumber, pageSize: defaultPageSize },
+    },
+    useFilters,
+    usePagination
+  );
 
   return (
     <div className="administradores">
       <h2>Administradores</h2>
       <br />
       <p>
-        ¡Bienvenido a la sección de administración de Administradores! Aquí podrás
-        ver y gestionar una lista de administradores en la aplicación. Puedes
-        agregar nuevos administradores introduciendo sus detalles en un
+        ¡Bienvenido a la sección de administración de Administradores! Aquí
+        podrás ver y gestionar una lista de administradores en la aplicación.
+        Puedes agregar nuevos administradores introduciendo sus detalles en un
         formulario, eliminar registros existentes y buscar información
         específica utilizando la función de búsqueda. Es una herramienta simple
         pero poderosa para controlar y mantener a los administradores de la
@@ -146,82 +283,263 @@ const Administradores = () => {
             Nombre:
             <input
               className="administradores input modalInput"
-              {...register("col1", { required: true })}
+              {...register("name", {
+                required: true,
+                minLength: 3,
+                maxLength: 20,
+                pattern: /^[^\s]+$/,
+              })}
               placeholder="Nombre"
             />
-            {errors.col1 && (
+            {errors.name?.type === "required" && (
               <p className="requerido">Este campo es requerido</p>
+            )}
+            {errors.name?.type === "minLength" && (
+              <p className="requerido">
+                El nombre debe tener al menos 3 caracteres
+              </p>
+            )}
+            {errors.name?.type === "maxLength" && (
+              <p className="requerido">
+                El nombre no debe exceder los 20 caracteres
+              </p>
+            )}
+            {errors.name?.type === "pattern" && (
+              <p className="requerido">El nombre no debe contener espacios</p>
             )}
           </label>
           <label>
             Apellido:
             <input
               className="administradores input modalInput"
-              {...register("col2", { required: true })}
+              {...register("lastname", {
+                required: true,
+                minLength: 3,
+                maxLength: 20,
+                pattern: /^[^\s]+$/,
+              })}
               placeholder="Apellido"
             />
-            {errors.col2 && (
+            {errors.lastname?.type === "required" && (
               <p className="requerido">Este campo es requerido</p>
+            )}
+            {errors.lastname?.type === "minLength" && (
+              <p className="requerido">
+                El apellido debe tener al menos 3 caracteres
+              </p>
+            )}
+            {errors.lastname?.type === "maxLength" && (
+              <p className="requerido">
+                El apellido no debe exceder los 20 caracteres
+              </p>
+            )}
+            {errors.lastname?.type === "pattern" && (
+              <p className="requerido">El apellido no debe contener espacios</p>
             )}
           </label>
           <label>
             Email:
             <input
               className="administradores input modalInput"
-              {...register("col3", { required: true })}
+              {...register("email", { required: true })}
               placeholder="Email"
             />
-            {errors.col3 && (
+            {errors.email && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
+          <label>
+            Contraseña:
+            <br />
+            <div className="passwordContainer">
+              <input
+                className="administradores input modalInput"
+                {...register("password", {
+                  required: true,
+                  pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                })}
+                placeholder="Contraseña"
+                type={showPassword ? "text" : "password"}
+              />
+
+              <FontAwesomeIcon
+                icon={showPassword ? faEye : faEyeSlash}
+                onClick={() => setShowPassword(!showPassword)}
+                className="passwordIcon"
+              />
+            </div>
+            {errors.password?.type === "required" && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
+            {errors.password?.type === "pattern" && (
+              <p className="requerido">
+                La contraseña debe tener al menos una mayúscula, una minúscula y
+                un número (8 caracteres mínimo)
+              </p>
+            )}
+          </label>
+          <label>
+            Confirmar Contraseña:
+            <br />
+            <div className="passwordContainer">
+              <input
+                className="administradores input modalInput"
+                {...register("confirmPassword", {
+                  required: true,
+                  pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                })}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirmar Contraseña"
+                type={showConfirmPassword ? "text" : "password"}
+              />
+
+              <FontAwesomeIcon
+                icon={showConfirmPassword ? faEye : faEyeSlash}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="passwordIcon"
+              />
+            </div>
+            {errors.confirmPassword?.type === "required" && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
+            {errors.confirmPassword?.type === "pattern" && (
+              <p className="requerido">
+                La contraseña debe tener al menos una mayúscula, una minúscula y
+                un número.
+              </p>
+            )}
+          </label>
+
           <div className="btnContainer">
-            <button type="submit" className="agregarBtn">
-              Agregar
-            </button>
-            <button
-              className="cancelarBtn"
-              onClick={() => setModalIsOpen(false)}
-            >
-              Cancelar
-            </button>
+            {loadingNew ? (
+              <div className="botones">
+                <ClipLoader
+                  color="#3d8463"
+                  loading={loadingNew}
+                  size={"50px"}
+                />
+                <div style={{ fontSize: "20px" }}>
+                  Ingresando Usuario...
+                </div>
+              </div>
+            ) : (
+              <>
+                <button type="submit" className="agregarBtn">
+                  Agregar
+                </button>
+                <button
+                  className="cancelarBtn"
+                  onClick={() => setModalIsOpen(false)}
+                >
+                  Cancelar
+                </button>
+              </>
+            )}
           </div>
         </form>
       </Modal>
       <ToastContainer />
       <div className="tablaAdministradores">
-        <table
-          {...getTableProps()}
-          style={{ borderRadius: "50px 50px 25px 25px" }}
-        >
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                    <div>
-                      {column.canFilter ? column.render("Filter") : null}
-                    </div>
-                  </th>
+        {loading ? ( // Se muestra el ClipLoader mientras se cargan los datos
+          <div className="botones">
+            <ClipLoader color="#3d8463" loading={loading} size={"90px"} />
+            <div style={{ fontSize: "30px" }}>
+              Actualizando Datos de la Tabla...
+            </div>
+          </div>
+        ) : (
+          <>
+            <table
+              {...getTableProps()}
+              style={{ borderRadius: "50px 50px 25px 25px" }}
+            >
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th {...column.getHeaderProps()}>
+                        {column.render("Header")}
+                        <div>
+                          {column.canFilter ? column.render("Filter") : null}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            ))}
-          </thead>
+              </thead>
 
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              <tbody {...getTableBodyProps()}>
+                {page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="botones2">
+              <button
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+                className="pagination-button"
+              >
+                {"<"}
+              </button>{" "}
+              <button
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+                className="pagination-button"
+              >
+                {">"}
+              </button>{" "}
+              <span>
+                Página{" "}
+                <strong>
+                  {pageIndex + 1} de {pageCount}
+                </strong>{" "}
+              </span>
+              <span>
+                | Ir a la página:{" "}
+                <input
+                  type="number"
+                  defaultValue={pageIndex + 1}
+                  onChange={(e) => {
+                    let pageNumber = e.target.value
+                      ? Number(e.target.value)
+                      : 1;
+                    pageNumber = Math.min(
+                      Math.max(pageNumber, 1),
+                      pageCount || 1
+                    ); // Limita el valor entre 1 y pageCount o 1 si pageCount no está disponible
+                    pageNumber -= 1;
+                    gotoPage(pageNumber);
+                    setPageNumber(pageNumber);
+                  }}
+                  style={{ width: "75px" }}
+                  min={1}
+                  max={pageCount || 1}
+                />
+              </span>
+              <select
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                }}
+              >
+                {[5, 10, 20, 30, 40, 50].map((size) => (
+                  <option key={size} value={size}>
+                    Mostrar {size}
+                  </option>
+                ))}
+              </select>
+            </div>{" "}
+          </>
+        )}
       </div>
     </div>
   );

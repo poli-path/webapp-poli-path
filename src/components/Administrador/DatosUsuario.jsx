@@ -370,6 +370,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
         overlayClassName="modalOverlay"
       >
         <h2>Cambiar Foto de Perfil</h2>
+        <div className="foto">
         {previewImage && (
           <img src={previewImage} alt="Previsualización de la imagen" />
         )}{" "}
@@ -378,6 +379,9 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           accept="image/jpeg, image/png"
           onChange={handleFileChange}
         />
+
+        </div>
+        
         {isSaving ? ( 
           <>
             <div style={{ fontSize: "10" }}>Actualizando Foto de Perfil...</div>
@@ -415,7 +419,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
                 {...register("oldPassword", { required: true })}
               />
               <FontAwesomeIcon
-                icon={showPassword ? faEyeSlash : faEye}
+                icon={showPassword ?  faEye: faEyeSlash}
                 onClick={() => setShowPassword(!showPassword)}
                 className="passwordIcon"
               />
@@ -434,7 +438,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
                 {...register("newPassword", { required: true })}
               />
               <FontAwesomeIcon
-                icon={showPassword ? faEyeSlash : faEye}
+                icon={showPassword ?  faEye: faEyeSlash}
                 onClick={() => setShowPassword(!showPassword)}
                 className="passwordIcon"
               />
@@ -453,7 +457,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
                 {...register("confirmNewPassword", { required: true })}
               />
               <FontAwesomeIcon
-                icon={showPassword ? faEyeSlash : faEye}
+                icon={showPassword ? faEye : faEyeSlash}
                 onClick={() => setShowPassword(!showPassword)}
                 className="passwordIcon"
               />
