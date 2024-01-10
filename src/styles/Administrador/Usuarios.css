@@ -1,5 +1,4 @@
 /* Usuarios.css */
-
 .usuarios {
   display: flex;
   flex-direction: column;
@@ -19,7 +18,62 @@
   box-shadow: 0 20px 32px 0 black;
 
 }
+.botones{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
+/* Estilos CSS */
+.botones2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px; /* Espacio entre elementos */
+  padding: 20px;
+
+}
+
+.pagination-button {
+  /* Estilos para los botones de paginación */
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #3d8463;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0; /* Evitar que los botones se reduzcan más allá de su tamaño */
+}
+
+.pagination-button:disabled {
+  /* Estilos para los botones de paginación deshabilitados */
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+
+.usuarios select{
+  width: 120px;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: #000;
+}
+.usuarios option{
+  width: 120px;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: #000;
+}
+.usuarios option:hover{
+  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
+
+}
 .tablaUsuarios table {
   width: 100%;
   border-collapse: collapse; /* Elimina el espacio entre las celdas */
@@ -65,7 +119,6 @@
 .tablaUsuarios {
   overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es más ancha que la pantalla */
   width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
-  max-height: 50vh; /* Limita la altura de la tabla a la mitad de la altura de la vista */
   border-radius: 30px;
   
 }

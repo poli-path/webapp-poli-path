@@ -1,6 +1,9 @@
-import React, { useMemo } from "react";
-import { useTable, useFilters } from "react-table";
+import { useTable, usePagination, useFilters } from "react-table";
 import "../../styles/Administrador/Usuarios.css";
+import React, { useMemo, useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
   const count = preFilteredRows.length;
@@ -17,61 +20,108 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
 }
 
 const Usuarios = () => {
-  const data = useMemo(
-    () => [
-      {
-        col1: "Usuario 1",
-        col2: "Apellido 1",
-        col3: "usuario1@example.com",
-        col4: "Punto 1, Punto 2",
-      },
-      {
-        col1: "Usuario 2",
-        col2: "Apellido 2",
-        col3: "usuario2@example.com",
-        col4: "Punto 3, Punto 4",
-      },
-      {
-        col1: "Usuario 3",
-        col2: "Apellido 3",
-        col3: "usuario3@example.com",
-        col4: "Punto 5, Punto 6",
-      },
-    ],
-    []
-  );
+  const [usuarios, setUsuarios] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [defaultPageSize, setDefaultPageSize] = useState(5); // Cambia el nombre de la variable de estado a defaultPageSize
+
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      const token = Cookies.get("token");
+      if (token) {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/users`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const filteredUsers = response.data.filter(
+            (user) => !user.roles.includes("admin")
+          );
+          setUsuarios(filteredUsers);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUsuarios();
+  }, []);
+  const data = useMemo(() => usuarios, [usuarios]);
 
   const columns = useMemo(
     () => [
       {
+        Header: "Foto",
+        accessor: "imageUrl", // Key para la imagen
+        Cell: ({ value }) => (
+          <img
+            src={value}
+            alt="Avatar"
+            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+          />
+        ),
+        disableFilters: true, // Deshabilita los filtros para esta columna
+      },
+      {
         Header: "Nombre",
-        accessor: "col1", // accessor is the "key" in the data
+        accessor: "name",
       },
       {
         Header: "Apellido",
-        accessor: "col2",
+        accessor: "lastname",
       },
       {
         Header: "Email",
-        accessor: "col3",
+        accessor: "email",
+      },
+      {
+        Header: "Estado",
+        accessor: "isActive",
+        Cell: ({ value }) => (value ? "Activo" : "Inactivo"),
+      },
+      {
+        Header: "Fecha de Registro",
+        accessor: "registerDate",
       },
       {
         Header: "Puntos de Interés",
-        accessor: "col4",
+        accessor: "favoriteBuildings",
       },
     ],
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-        defaultColumn: { Filter: TextFilter }, // Añade esto
-      },
-      useFilters // Añade esto
-    );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    nextPage,
+    previousPage,
+    pageCount,
+    gotoPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn: { Filter: TextFilter },
+      initialState: { pageIndex: pageNumber, pageSize: defaultPageSize },
+    },
+    useFilters,
+    usePagination
+  );
 
   return (
     <div className="usuarios">
@@ -86,40 +136,106 @@ const Usuarios = () => {
       </p>
       <br />
       <div className="tablaUsuarios">
-        {" "}
-        {/* Añade este div */}
-        <table {...getTableProps()} style={{ borderRadius: "50px 50px 25px 25px" }}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                    {/* Añade esto */}
-                    <div>
-                      {column.canFilter ? column.render("Filter") : null}
-                    </div>
-                  </th>
+        {loading ? (
+          <div className="botones">
+            <ClipLoader color="#3d8463" loading={loading} size={"90px"} />
+            <div style={{ fontSize: "30px" }}>
+              Actualizando Datos de la Tabla...
+            </div>
+          </div>
+        ) : (
+          <>
+            <table
+              {...getTableProps()}
+              style={{ borderRadius: "50px 50px 25px 25px" }}
+            >
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th {...column.getHeaderProps()}>
+                        {column.render("Header")}
+                        <div>
+                          {column.canFilter ? column.render("Filter") : null}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            ))}
-          </thead>
+              </thead>
 
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>{" "}
-      {/* Cierra el div */}
+              <tbody {...getTableBodyProps()}>
+                {page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="botones2">
+              <button
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+                className="pagination-button"
+              >
+                {"<"}
+              </button>{" "}
+              <button
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+                className="pagination-button"
+              >
+                {">"}
+              </button>{" "}
+              <span>
+                Página{" "}
+                <strong>
+                  {pageIndex + 1} de {pageCount}
+                </strong>{" "}
+              </span>
+              <span>
+                | Ir a la página:{" "}
+                <input
+                  type="number"
+                  defaultValue={pageIndex + 1}
+                  onChange={(e) => {
+                    let pageNumber = e.target.value
+                      ? Number(e.target.value)
+                      : 1;
+                    pageNumber = Math.min(
+                      Math.max(pageNumber, 1),
+                      pageCount || 1
+                    ); // Limita el valor entre 1 y pageCount o 1 si pageCount no está disponible
+                    pageNumber -= 1;
+                    gotoPage(pageNumber);
+                    setPageNumber(pageNumber);
+                  }}
+                  style={{ width: "75px" }}
+                  min={1}
+                  max={pageCount || 1}
+                />
+              </span>
+              <select
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                }}
+              >
+                {[5, 10, 20, 30, 40, 50].map((size) => (
+                  <option key={size} value={size}>
+                    Mostrar {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
