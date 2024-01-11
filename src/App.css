@@ -58,13 +58,26 @@ a:-webkit-any-link{
 div:where(.swal2-container) .swal2-html-container{
   color: aliceblue;
 }
-
+select{
+  width: 120px;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: #000;
+}
+option{
+  width: 120px;
+  padding: 10px; /* Aumento del relleno */
+  border-radius: 25px; /* Reducción del radio del borde */
+  border: 5px solid #00000028;
+  color: #000;
+}
 .swal2-popup.swal2-modal.swal2-show {
   background: #fafafa10;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
-  border: 3px solid fafafa10;
+  border: 3px solid white;
   border-radius: 20px;
   box-shadow: 0 20px 32px 0 black;
 
@@ -77,7 +90,7 @@ div:where(.swal2-container) .swal2-html-container{
   -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
 
-  border: 3px solid fafafa10;
+  border: 3px solid white;
   border-radius: 20px;
   top: 5vh; /* Ajusta según sea necesario */
   right: 1vh; /* Ajusta según sea necesario */
@@ -91,7 +104,7 @@ div:where(.swal2-container) .swal2-html-container{
   -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
 
-  border: 3px solid fafafa10;
+  border: 3px solid white;
   border-radius: 20px;
   top: 5vh; /* Ajusta según sea necesario */
   right: 1vh; /* Ajusta según sea necesario */
@@ -135,7 +148,7 @@ div:where(.swal2-container) .swal2-html-container{
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
-  border: 3px solid fafafa10;
+  border: 3px solid white;
   border-radius: 50px;
   box-shadow: 0 20px 32px 0 black;
 }
@@ -218,7 +231,20 @@ html::-webkit-scrollbar-thumb{
 .light-mode button {
   background-color: #ff3246;
 }
-
+.dark-mode tr:hover {
+  background: #8c030377;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
+}
+.light-mode tr:hover {
+  background: #ff324676;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
+}
 .light-mode h2{
     background: linear-gradient(90deg, #ba001300, #ff3246, #ba001300);
 

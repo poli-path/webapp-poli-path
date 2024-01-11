@@ -4,6 +4,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import ClipLoader from "react-spinners/ClipLoader";
+import Defaultimg from "../../assets/Default.jpg";
 
 function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
   const count = preFilteredRows.length;
@@ -62,7 +63,7 @@ const Usuarios = () => {
         accessor: "imageUrl", // Key para la imagen
         Cell: ({ value }) => (
           <img
-            src={value}
+            src={value || Defaultimg}
             alt="Avatar"
             style={{ width: "50px", height: "50px", borderRadius: "50%" }}
           />

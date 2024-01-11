@@ -8,7 +8,7 @@
   margin: 7%;
   margin-top: 2%;
   margin-bottom: 2%;
-  background: #fafafa10;
+  background: #010e1f68;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
@@ -91,15 +91,6 @@
 }
 
 /* Añade un efecto hover a las filas */
-.usuarios tr:hover {
-  background: #fafafa10;
-  background-size: cover;
-  backdrop-filter: blur(0.4rem);
-
-  -webkit-backdrop-filter: blur(0.4rem);
-  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
-
-}
 
 /* Añade estilos a la entrada de texto del filtro */
 .usuarios input {

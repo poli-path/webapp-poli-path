@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useTable, usePagination, useFilters } from "react-table";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import Defaultimg from "../../assets/Default.jpg";
 
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
@@ -180,15 +181,15 @@ const Administradores = () => {
     () => [
       {
         Header: "Foto",
-        accessor: "imageUrl",
+        accessor: "imageUrl", // Key para la imagen
         Cell: ({ value }) => (
           <img
-            src={value}
+            src={value || Defaultimg}
             alt="Avatar"
             style={{ width: "50px", height: "50px", borderRadius: "50%" }}
           />
         ),
-        disableFilters: true,
+        disableFilters: true, // Deshabilita los filtros para esta columna
       },
       {
         Header: "Nombre",

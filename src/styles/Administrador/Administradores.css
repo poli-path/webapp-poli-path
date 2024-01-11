@@ -8,7 +8,7 @@
   margin: 7%;
   margin-top: 2%;
   margin-bottom: 2%;
-  background: #fafafa10;
+  background: #010e1f68;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
@@ -128,24 +128,6 @@
   height: 5px; /* Ancho de la barra de desplazamiento */
   border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
-
-}
-.administradores select{
-  width: 120px;
-  padding: 10px; /* Aumento del relleno */
-  border-radius: 25px; /* Reducción del radio del borde */
-  border: 5px solid #00000028;
-  color: #000;
-}
-.administradores option{
-  width: 120px;
-  padding: 10px; /* Aumento del relleno */
-  border-radius: 25px; /* Reducción del radio del borde */
-  border: 5px solid #00000028;
-  color: #000;
-}
-.administradores option:hover{
-  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
 
 }
 

@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from "react";
-import { useTable, useFilters } from "react-table";
+import React, { useMemo, useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,6 +7,10 @@ import Swal from "sweetalert2";
 import "../../styles/Administrador/Edificios.css";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTable, usePagination, useFilters } from "react-table";
+import Cookies from "js-cookie";
+import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
 
 Modal.setAppElement("#root");
 
@@ -26,18 +29,14 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
 }
 
 const Edificios = () => {
-  const [edificios, setEdificios] = useState([
-    {
-      numero: "1",
-      nombre: "Edificio 1",
-      longitud: "0.0",
-      latitud: "0.0",
-    },
-  ]);
-
+  const [edificios, setEdificios] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalEditarIsOpen, setModalEditarIsOpen] = useState(false);
   const [edificioEditado, setEdificioEditado] = useState(null);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [defaultPageSize, setDefaultPageSize] = useState(5);
+  const [loading, setLoading] = useState(true); // Nuevo estado para manejar la carga de datos
+
   const {
     register,
     handleSubmit,
@@ -45,6 +44,32 @@ const Edificios = () => {
     setValue,
     reset,
   } = useForm();
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      fetchBuildings(token);
+    }
+  }, []);
+
+  const fetchBuildings = async (token) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/buildings`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setEdificios(response.data);
+      setLoading(false); // Una vez que se cargan los datos, establecemos loading en false
+    } catch (error) {
+      console.error("Error fetching buildings:", error);
+      setLoading(false); // En caso de error, también establecemos loading en false
+    }
+  };
 
   const onSubmit = (data) => {
     Swal.fire({
@@ -109,19 +134,83 @@ const Edificios = () => {
     () => [
       {
         Header: "Número",
-        accessor: "numero",
+        accessor: "no",
+      },
+      {
+        Header: "Imagenes",
+        accessor: "imageUrls",
+        Cell: ({ value }) => (
+          <div>
+            {value.map((imageUrl, index) => (
+              <img
+                key={index}
+                src={imageUrl}
+                alt={`Imagen ${index + 1}`}
+                style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+              />
+            ))}
+          </div>
+        ),
+        disableFilters: true, // Deshabilita los filtros para esta columna
       },
       {
         Header: "Nombre",
-        accessor: "nombre",
+        accessor: "name",
       },
       {
-        Header: "Longitud",
-        accessor: "longitud",
+        Header: "Dirección",
+        accessor: "address",
       },
       {
-        Header: "Latitud",
-        accessor: "latitud",
+        Header: "Descripcion",
+        accessor: "description",
+      },
+      {
+        Header: "Ubicación",
+        accessor: "location", 
+        Cell: ({ row }) => {
+          const { longitude, latitude } = row.original;
+          const locationUrl = `https://www.google.com/maps/search/?api=1&query=${longitude},${latitude}`;
+          return (
+            <a href={locationUrl} target="_blank" rel="noopener noreferrer">
+              Ver en Google Maps
+            </a>
+          );
+        },
+        disableFilters: true, // Deshabilita los filtros para esta columna
+      },
+      {
+        Header: "Facultades",
+        accessor: "faculties",
+        Cell: ({ value }) => (
+          <ul>
+            {value.map((faculty) => (
+              <li key={faculty.id}>{faculty.name}</li>
+            ))}
+          </ul>
+        ),
+      },
+      {
+        Header: "Laboratorios",
+        accessor: "laboratories",
+        Cell: ({ value }) => (
+          <ul>
+            {value.map((lab) => (
+              <li key={lab.id}>{lab.name}</li>
+            ))}
+          </ul>
+        ),
+      },
+      {
+        Header: "Oficinas",
+        accessor: "offices",
+        Cell: ({ value }) => (
+          <ul>
+            {value.map((office) => (
+              <li key={office.id}>{office.name}</li>
+            ))}
+          </ul>
+        ),
       },
       {
         Header: "Acciones",
@@ -148,15 +237,30 @@ const Edificios = () => {
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-        defaultColumn: { Filter: TextFilter },
-      },
-      useFilters
-    );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    nextPage,
+    previousPage,
+    pageCount,
+    gotoPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn: { Filter: TextFilter },
+      initialState: { pageIndex: pageNumber, pageSize: defaultPageSize },
+    },
+    useFilters,
+    usePagination
+  );
 
   return (
     <div className="edificios">
@@ -304,35 +408,103 @@ const Edificios = () => {
         </form>
       </Modal>
       <ToastContainer />
+
       <div className="tablaEdificios">
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                    <div>
-                      {column.canFilter ? column.render("Filter") : null}
-                    </div>
-                  </th>
+        {loading ? (
+          <div className="botones">
+            <ClipLoader color="#3d8463" loading={loading} size={"90px"} />
+            <div style={{ fontSize: "30px" }}>
+              Actualizando Datos de la Tabla...
+            </div>
+          </div>
+        ) : (
+          <>
+            <table {...getTableProps()}>
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th {...column.getHeaderProps()}>
+                        {column.render("Header")}
+                        <div>
+                          {column.canFilter ? column.render("Filter") : null}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="botones2">
+              <button
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+                className="pagination-button"
+              >
+                {"<"}
+              </button>{" "}
+              <button
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+                className="pagination-button"
+              >
+                {">"}
+              </button>{" "}
+              <span>
+                Página{" "}
+                <strong>
+                  {pageIndex + 1} de {pageCount}
+                </strong>{" "}
+              </span>
+              <span>
+                | Ir a la página:{" "}
+                <input
+                  type="number"
+                  defaultValue={pageIndex + 1}
+                  onChange={(e) => {
+                    let pageNumber = e.target.value
+                      ? Number(e.target.value)
+                      : 1;
+                    pageNumber = Math.min(
+                      Math.max(pageNumber, 1),
+                      pageCount || 1
+                    ); // Limita el valor entre 1 y pageCount o 1 si pageCount no está disponible
+                    pageNumber -= 1;
+                    gotoPage(pageNumber);
+                    setPageNumber(pageNumber);
+                  }}
+                  style={{ width: "75px" }}
+                  min={1}
+                  max={pageCount || 1}
+                />
+              </span>
+              <select
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                }}
+              >
+                {[5, 10, 20, 30, 40, 50].map((size) => (
+                  <option key={size} value={size}>
+                    Mostrar {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

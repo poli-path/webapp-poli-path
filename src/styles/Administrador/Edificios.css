@@ -1,4 +1,32 @@
 
+/* Estilos CSS */
+.botones2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px; /* Espacio entre elementos */
+  padding: 20px;
+
+}
+
+.pagination-button {
+  /* Estilos para los botones de paginación */
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #3d8463;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0; /* Evitar que los botones se reduzcan más allá de su tamaño */
+}
+
+.pagination-button:disabled {
+  /* Estilos para los botones de paginación deshabilitados */
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
 .edificios {
   display: flex;
   flex-direction: column;
@@ -8,7 +36,7 @@
   margin: 7%;
   margin-top: 2%;
   margin-bottom: 2%;
-  background: #fafafa10;
+  background: #010e1f68;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
@@ -36,19 +64,19 @@
   padding: 10px;
   font-size: 15px;
 }
-.light-mode .tablaEdificios button {
+.light-mode .tablaEdificios td button {
   background-color: transparent;
   border: none;
 }
-.light-mode .tablaEdificios button:hover {
+.light-mode .tablaEdificios td button:hover {
   background: linear-gradient(90deg, #ba001300, #ff3246, #ba001300);
   border: none;
 }
-.dark-mode .tablaEdificios button:hover {
+.dark-mode .tablaEdificios td button:hover {
   background: linear-gradient(90deg, #ba001300, #8C0303, #ba001300);
   border: none;
 }
-.dark-mode .tablaEdificios button {
+.dark-mode .tablaEdificios td button {
   background-color: transparent;
   border: none;
 }
