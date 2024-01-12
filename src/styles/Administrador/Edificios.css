@@ -20,7 +20,12 @@
   cursor: pointer;
   flex-shrink: 0; /* Evitar que los botones se reduzcan más allá de su tamaño */
 }
-
+.botones{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+}
 .pagination-button:disabled {
   /* Estilos para los botones de paginación deshabilitados */
   background-color: #ccc;
@@ -205,7 +210,6 @@
   color: white;
   margin: 10px; /* Margen de 10px */
 }
-
 
 
 /* Estilos para el contenedor de los botones */

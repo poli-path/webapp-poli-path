@@ -12,7 +12,7 @@ import "./App.css";
 import lightModeIcon from "./assets/LightMode.png";
 import darkModeIcon from "./assets/DarkMode.png";
 import WithAdminAuth from './hoc/WithAdminAuth';
-
+import { LoadScript } from "@react-google-maps/api";
 // Crear el contexto para el estado del script de Google Maps
 export const GoogleMapsContext = React.createContext();
 
@@ -29,7 +29,8 @@ function App() {
   };
   return (
     <Router>
-      <GoogleMapsContext.Provider value={{ googleMapsLoaded, setGoogleMapsLoaded }}>
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+    
         <div className={`App ${darkMode ? 'light-mode' : 'dark-mode'}`}>
           <button className="my-button" onClick={toggleDarkMode} title={darkMode ? 'Modo claro activado' : 'Modo oscuro activado'}>
             <img src={darkMode ? lightModeIcon : darkModeIcon} alt="Modo" className="imgbutton"/>
@@ -43,7 +44,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} /> {/* Esta es la ruta por defecto para las páginas no encontradas */}
           </Routes>
         </div>
-      </GoogleMapsContext.Provider>
+        </LoadScript>
     </Router>
   );
 }

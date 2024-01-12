@@ -2,7 +2,15 @@
 * {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-
+.mapContainer,
+.mapContainer * {
+  padding: 12 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-color: none !important;
+  border: none !important;
+  color: #000;
+}
 a:hover {
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
   background: linear-gradient(180deg, #ba001300, #ff3246,#ba001300);
@@ -23,6 +31,7 @@ a{
   border-radius: 50px;
 
 }
+
 h2{
     font-size: 30px; /* Títulos más grandes */
     text-align: center;

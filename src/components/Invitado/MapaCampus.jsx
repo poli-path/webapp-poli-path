@@ -9,7 +9,7 @@ const MapComponent = () => {
   useEffect(() => {
     if (!window.google) {
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_GOOGLE_MAPS}&callback=initMap`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=$process.env.REACT_APP_API_GOOGLE_MAPS&callback=initMap`;
       script.async = true;
       window.initMap = () => {
         const map = new window.google.maps.Map(mapRef.current, {
