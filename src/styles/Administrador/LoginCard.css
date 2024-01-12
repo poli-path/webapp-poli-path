@@ -71,6 +71,7 @@
 
 .input-group {
   margin-bottom: 15px; /* Reducción del espacio entre los grupos de entrada */
+  align-items: center;
 }
 
 .input-group label {
@@ -85,6 +86,13 @@
   border-radius: 25px; /* Reducción del radio del borde */
   border: 5px solid #00000028;
   color: #000;
+  
+}
+
+
+.passwordIcon *{
+  padding: 20px;
+  color: black;
 }
 
 .forgot-password {

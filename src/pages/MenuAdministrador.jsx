@@ -72,7 +72,7 @@ const Administrador = () => {
             </>
           ) : (
             <>
-              <img src={userImage} alt="User" />
+              <img src={userImage} alt="User" style={{ objectFit: "cover" }} />
               <h3 className="truncated" title={`${userName} ${userLastname}`}>
                 {`${userName} ${userLastname}`}
               </h3>

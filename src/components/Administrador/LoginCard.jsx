@@ -5,7 +5,9 @@ import "../../styles/Administrador/LoginCard.css";
 import Adminis from "../../assets/Adminis.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const LoginCard = () => {
   const {
@@ -17,6 +19,7 @@ const LoginCard = () => {
 
   // Crea un estado para el indicador de carga
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit = async (data) => {
     setIsLoading(true); // Comienza la carga
@@ -39,8 +42,8 @@ const LoginCard = () => {
       }
 
       // Almacena todos los datos de responseData en las cookies
-      Object.keys(responseData).forEach(key => {
-        Cookies.set(key, responseData[key], { expires: 2/24 }); // La cookie expira después de 1 hora
+      Object.keys(responseData).forEach((key) => {
+        Cookies.set(key, responseData[key], { expires: 2 / 24 }); // La cookie expira después de 1 hora
       });
 
       if (responseData.roles.includes("admin")) {
@@ -80,17 +83,26 @@ const LoginCard = () => {
         </div>
         <div className="input-group">
           <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Ingresa tu contraseña"
-            {...register("password", { required: true })}
-          />
+          <div className="passwordContainer">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              placeholder="Ingresa tu contraseña"
+              {...register("password", { required: true })}
+            />
+            <FontAwesomeIcon
+              icon={showConfirmPassword ? faEye : faEyeSlash}
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="passwordIcon"
+            />
+          </div>
+
           {errors.password && (
             <span className="requerido">Este campo es requerido</span>
           )}
         </div>
+
         {!isLoading && (
           <div className="forgot-password">
             <Link to="/recuperar">¿Olvidaste tu contraseña?</Link>

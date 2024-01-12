@@ -185,7 +185,12 @@ const Administradores = () => {
           <img
             src={value || Defaultimg}
             alt="Avatar"
-            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+            style={{
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
           />
         ),
         disableFilters: true, // Deshabilita los filtros para esta columna

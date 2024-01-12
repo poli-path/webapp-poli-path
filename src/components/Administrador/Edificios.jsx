@@ -43,7 +43,7 @@ const Edificios = () => {
   const [loadingAddEdificio, setLoadingAddEdificio] = useState(false);
   const [mapModalIsOpen, setMapModalIsOpen] = useState(false);
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
-
+  
   const [selectedBuildingCoordinates, setSelectedBuildingCoordinates] =
     useState({
       lat: 0,
@@ -119,12 +119,15 @@ const Edificios = () => {
       setLoading(false);
     }
   };
+  
   const onSubmit = async (data) => {
     try {
       const token = Cookies.get("token");
 
       const confirmResult = await Swal.fire({
-        title: "¿Estás seguro de agregar este edificio?",
+        title: "Confirmar ingreso",
+        text: "¿Estas seguro de agregar este nuevo Edificio?",
+        icon: "question",
         showDenyButton: true,
         confirmButtonText: `Continuar`,
         denyButtonText: `Cancelar`,
@@ -208,6 +211,50 @@ const Edificios = () => {
   const eliminarEdificio = async (id) => {
     try {
       const token = Cookies.get("token");
+  
+      // Mostrar SweetAlert de carga
+      Swal.fire({
+        title: "Verificando Edificio",
+        text: "Por favor, espera...",
+        icon: "info",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+      });
+  
+      // Obtén el edificio por su id
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/buildings/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      const edificio = response.data;
+  
+      // Verifica si existen registros asociados
+      if (
+        edificio.faculties.length > 0 ||
+        edificio.laboratories.length > 0 ||
+        edificio.offices.length > 0
+      ) {
+        // Oculta el SweetAlert de carga
+        Swal.close();
+  
+        // Muestra SweetAlert de error
+        Swal.fire({
+          title: "No se puede eliminar",
+          text: "Este edificio tiene registros asociados en Facultades, Oficinas o Laboratorios. Por favor, elimina estos registros antes de eliminar el edificio.",
+          icon: "error",
+        });
+        return;
+      }
+  
+      // Oculta el SweetAlert de carga antes de mostrar la confirmación
+      Swal.close();
+  
+      // Mostrar SweetAlert de confirmación
       const confirmResult = await Swal.fire({
         title: "Confirmar eliminación",
         text: "¿Estás seguro de eliminar este Edificio?",
@@ -217,18 +264,30 @@ const Edificios = () => {
         cancelButtonText: "Cancelar",
         dangerMode: true,
       });
-
+  
       if (confirmResult.isConfirmed) {
-        setLoading(true);
-
+        // Vuelve a mostrar SweetAlert de carga
+        Swal.fire({
+          title: "Eliminando Edificio",
+          text: "Por favor, espera...",
+          icon: "info",
+          allowOutsideClick: false,
+          showConfirmButton: false,
+        });
+  
+        // Realiza la eliminación
         await axios.delete(`${process.env.REACT_APP_API_URL}/buildings/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        toast.success("Edificio eliminado correctamente!");
-
+  
+        // Oculta el SweetAlert de carga antes de mostrar la confirmación
+        Swal.close();
+  
+        // Muestra SweetAlert de éxito
+        Swal.fire("Edificio eliminado correctamente!", "", "success");
+  
         // Actualiza la lista de edificios después de la eliminación
         const updatedBuildings = edificios.filter(
           (edificio) => edificio.id !== id
@@ -236,6 +295,10 @@ const Edificios = () => {
         setEdificios(updatedBuildings);
       }
     } catch (error) {
+      // Oculta el SweetAlert de carga en caso de error
+      Swal.close();
+  
+      // Muestra SweetAlert de error
       Swal.fire({
         title: "Error",
         text:
@@ -243,11 +306,10 @@ const Edificios = () => {
           "Hubo un error al eliminar el edificio",
         icon: "error",
       });
-    } finally {
-      setLoading(false);
     }
   };
   
+
   const data = useMemo(() => edificios, [edificios]);
 
   const columns = useMemo(
@@ -268,14 +330,6 @@ const Edificios = () => {
             ) : (
               <p className="requerido">Sin imágenes aún</p>
             )}
-            {value.map((imageUrl, index) => (
-              <img
-                key={index}
-                src={imageUrl}
-                alt={`Imagen ${index + 1}`}
-                style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-              />
-            ))}
           </div>
         ),
       },
@@ -444,6 +498,12 @@ const Edificios = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Ubicación en Google Maps</h2>
+        <br />
+        <p>
+          La Ubicación del Edificio "{selectedBuildingInfo.name}" se muestra en el
+          siguiente mapa
+        </p>
+        <br />
 
         <div
           className="mapContainer"
@@ -712,7 +772,7 @@ const Edificios = () => {
             key={index}
             src={imageUrl}
             alt={`Imagen ${index + 1}`}
-            style={{ width: "100%", height: "auto" }}
+            style={{ width: "50%", height: "150px", borderRadius:0,padding:10,margin:0 }}
           />
         ))}
         <div className="botones2">
