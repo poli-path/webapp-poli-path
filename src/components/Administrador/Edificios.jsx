@@ -11,7 +11,7 @@ import { useTable, usePagination, useFilters } from "react-table";
 import Cookies from "js-cookie";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
 import MarkerMi from "../../assets/Marker.png";
 
 Modal.setAppElement("#root");
@@ -42,6 +42,8 @@ const Edificios = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [loadingAddEdificio, setLoadingAddEdificio] = useState(false);
   const [mapModalIsOpen, setMapModalIsOpen] = useState(false);
+  const [infoWindowOpen, setInfoWindowOpen] = useState(false);
+
   const [selectedBuildingCoordinates, setSelectedBuildingCoordinates] =
     useState({
       lat: 0,
@@ -52,6 +54,13 @@ const Edificios = () => {
     setSelectedImages(images);
     setModalImagesIsOpen(true);
   };
+  const [selectedBuildingInfo, setSelectedBuildingInfo] = useState({
+    name: "",
+    coordinates: {
+      lat: 0,
+      lng: 0,
+    },
+  });
 
   const {
     register,
@@ -70,9 +79,19 @@ const Edificios = () => {
     lat: -0.21055556,
     lng: -78.48888889,
   });
-  const handleOpenMapModal = (latitude, longitude) => {
-    setMapModalIsOpen(true);
+
+  const handleOpenMapModal = (latitude, longitude, name) => {
     setSelectedBuildingCoordinates({ lat: latitude, lng: longitude });
+    setSelectedBuildingInfo({
+      name: name,
+      coordinates: { lat: latitude, lng: longitude },
+    });
+
+    if (infoWindowOpen) {
+      setInfoWindowOpen(false);
+    }
+
+    setMapModalIsOpen(true);
   };
 
   useEffect(() => {
@@ -104,7 +123,6 @@ const Edificios = () => {
     try {
       const token = Cookies.get("token");
 
-      // Mostrar confirmación con SweetAlert antes de enviar la solicitud
       const confirmResult = await Swal.fire({
         title: "¿Estás seguro de agregar este edificio?",
         showDenyButton: true,
@@ -113,7 +131,7 @@ const Edificios = () => {
       });
 
       if (confirmResult.isConfirmed) {
-        setLoadingAddEdificio(true); // Establecer el estado de carga a true
+        setLoadingAddEdificio(true);
 
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/buildings`,
@@ -122,7 +140,6 @@ const Edificios = () => {
             name: data.nombre,
             latitude: data.latitud,
             longitude: data.longitud,
-            // Agrega otros campos necesarios según tu modelo de datos
           },
           {
             headers: {
@@ -131,20 +148,18 @@ const Edificios = () => {
           }
         );
 
-        setLoadingAddEdificio(false); // Establecer el estado de carga a false después de la solicitud
+        setLoadingAddEdificio(false);
 
         if (response.status === 201) {
-          // Edificio agregado exitosamente
           Swal.fire({
             title: "Edificio agregado exitosamente",
             icon: "info",
           });
-          setEdificios([...edificios, response.data]); // Agrega el nuevo edificio a la lista local
+          setEdificios([...edificios, response.data]);
           setModalIsOpen(false);
           toast.success("Edificio agregado exitosamente!");
           reset();
         } else {
-          // Error al agregar el edificio
           Swal.fire({
             title: "Error al agregar el edificio",
             text: response.data.message || "Hubo un error inesperado",
@@ -153,9 +168,8 @@ const Edificios = () => {
         }
       }
     } catch (error) {
-      setLoadingAddEdificio(false); // Establecer el estado de carga a false en caso de error
+      setLoadingAddEdificio(false);
       console.error("Error al agregar el edificio:", error);
-      // Maneja errores durante la solicitud y muestra un mensaje de error con Swal
       Swal.fire({
         title: "Error al agregar el edificio",
         text: error.response?.data?.message || "Hubo un error inesperado",
@@ -191,20 +205,49 @@ const Edificios = () => {
     });
   };
 
-  const eliminarEdificio = (index) => {
-    Swal.fire({
-      title: "¿Estás seguro de eliminar este edificio?",
-      showDenyButton: true,
-      confirmButtonText: `Eliminar`,
-      denyButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setEdificios(edificios.filter((_, i) => i !== index));
-        toast.error("Edificio eliminado exitosamente!");
-      }
-    });
-  };
+  const eliminarEdificio = async (id) => {
+    try {
+      const token = Cookies.get("token");
+      const confirmResult = await Swal.fire({
+        title: "Confirmar eliminación",
+        text: "¿Estás seguro de eliminar este Edificio?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+        dangerMode: true,
+      });
 
+      if (confirmResult.isConfirmed) {
+        setLoading(true);
+
+        await axios.delete(`${process.env.REACT_APP_API_URL}/buildings/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        toast.success("Edificio eliminado correctamente!");
+
+        // Actualiza la lista de edificios después de la eliminación
+        const updatedBuildings = edificios.filter(
+          (edificio) => edificio.id !== id
+        );
+        setEdificios(updatedBuildings);
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response.data.message ||
+          "Hubo un error al eliminar el edificio",
+        icon: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   const data = useMemo(() => edificios, [edificios]);
 
   const columns = useMemo(
@@ -263,9 +306,11 @@ const Edificios = () => {
         Header: "Ubicación",
         accessor: "location",
         Cell: ({ row }) => {
-          const { longitude, latitude } = row.original;
+          const { longitude, latitude, name } = row.original;
           return (
-            <button onClick={() => handleOpenMapModal(latitude, longitude)}>
+            <button
+              onClick={() => handleOpenMapModal(latitude, longitude, name)}
+            >
               Ver en Google Maps
             </button>
           );
@@ -273,21 +318,76 @@ const Edificios = () => {
         disableFilters: true,
       },
       {
+        Header: "Facultades",
+        accessor: "faculties",
+        Cell: ({ value }) => (
+          <div>
+            {value && value.length > 0 ? (
+              <ul>
+                {value.map((faculty) => (
+                  <li key={faculty.id}>{faculty.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="requerido">No existen Facultades aún</p>
+            )}
+          </div>
+        ),
+        disableFilters: true,
+      },
+      {
+        Header: "Laboratorios",
+        accessor: "laboratories",
+        Cell: ({ value }) => (
+          <div>
+            {value && value.length > 0 ? (
+              <ul>
+                {value.map((lab) => (
+                  <li key={lab.id}>{lab.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="requerido">No existen Laboratorios aún</p>
+            )}
+          </div>
+        ),
+        disableFilters: true,
+      },
+      {
+        Header: "Oficinas",
+        accessor: "offices",
+        Cell: ({ value }) => (
+          <div>
+            {value && value.length > 0 ? (
+              <ul>
+                {value.map((office) => (
+                  <li key={office.id}>{office.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="requerido">No existen Oficinas aún</p>
+            )}
+          </div>
+        ),
+        disableFilters: true,
+      },
+      {
         Header: "Acciones",
-        Cell: ({ row: { index } }) => (
+        Cell: ({ row }) => (
           <div>
             <button
               className="botonEyD"
               title="Editar"
-              onClick={() => editarEdificio(index)}
+              onClick={() => editarEdificio(row.original.id)}
             >
               <FontAwesomeIcon icon={faEdit} />
             </button>
             <button
               className="botonEyD"
               title="Eliminar"
-              onClick={() => eliminarEdificio(index)}
+              onClick={() => eliminarEdificio(row.original.id)}
             >
+              {" "}
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
@@ -355,7 +455,7 @@ const Edificios = () => {
               width: "100%",
               position: "absolute",
             }}
-            mapTypeId={"satellite"} 
+            mapTypeId={"satellite"}
             center={{
               lat: selectedBuildingCoordinates.lat,
               lng: selectedBuildingCoordinates.lng,
@@ -368,16 +468,29 @@ const Edificios = () => {
                 url: MarkerMi,
                 scaledSize: new window.google.maps.Size(160, 80),
               }}
+              onClick={() => setInfoWindowOpen(true)}
             />
+
+            <InfoWindow
+              position={{
+                lat: selectedBuildingCoordinates.lat + 0.00015, // Ajusta este valor según sea necesario
+                lng: selectedBuildingCoordinates.lng,
+              }}
+            >
+              <div>
+                <h3>{selectedBuildingInfo.name}</h3>
+              </div>
+            </InfoWindow>
           </GoogleMap>
         </div>
-
-        <button
-          className="cancelarBtn"
-          onClick={() => setMapModalIsOpen(false)}
-        >
-          Cerrar
-        </button>
+        <div className="botones2">
+          <button
+            className="cancelarBtn"
+            onClick={() => setMapModalIsOpen(false)}
+          >
+            Cerrar
+          </button>
+        </div>
       </Modal>
       <Modal
         isOpen={modalIsOpen}
@@ -399,10 +512,10 @@ const Edificios = () => {
               className="edificios input modalInput"
               {...register("numero", {
                 required: true,
-                valueAsNumber: true, // Ensure the entered value is converted to a number
+                valueAsNumber: true,
                 validate: (value) =>
                   (Number.isInteger(value) && value >= 0) ||
-                  "Ingrese un número entero positivo", // Validate if it's a positive integer
+                  "Ingrese un número entero positivo",
               })}
               placeholder="Número"
             />
@@ -480,7 +593,7 @@ const Edificios = () => {
               }}
               center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
               zoom={17}
-              mapTypeId={"satellite"} 
+              mapTypeId={"satellite"}
               onClick={(e) => {
                 setValue("longitud", e.latLng.lng());
                 setValue("latitud", e.latLng.lat());
@@ -602,12 +715,14 @@ const Edificios = () => {
             style={{ width: "100%", height: "auto" }}
           />
         ))}
-        <button
-          className="cancelarBtn"
-          onClick={() => setModalImagesIsOpen(false)}
-        >
-          Cerrar
-        </button>
+        <div className="botones2">
+          <button
+            className="cancelarBtn"
+            onClick={() => setModalImagesIsOpen(false)}
+          >
+            Cerrar
+          </button>
+        </div>
       </Modal>
       <ToastContainer />
 
@@ -649,64 +764,59 @@ const Edificios = () => {
                 })}
               </tbody>
             </table>
-            <div className="botones2">
-              <button
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-                className="pagination-button"
-              >
-                {"<"}
-              </button>{" "}
-              <button
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-                className="pagination-button"
-              >
-                {">"}
-              </button>{" "}
-              <span>
-                Página{" "}
-                <strong>
-                  {pageIndex + 1} de {pageCount}
-                </strong>{" "}
-              </span>
-              <span>
-                | Ir a la página:{" "}
-                <input
-                  type="number"
-                  defaultValue={pageIndex + 1}
-                  onChange={(e) => {
-                    let pageNumber = e.target.value
-                      ? Number(e.target.value)
-                      : 1;
-                    pageNumber = Math.min(
-                      Math.max(pageNumber, 1),
-                      pageCount || 1
-                    );
-                    pageNumber -= 1;
-                    gotoPage(pageNumber);
-                    setPageNumber(pageNumber);
-                  }}
-                  style={{ width: "75px" }}
-                  min={1}
-                  max={pageCount || 1}
-                />
-              </span>
-              <select
-                value={pageSize}
-                onChange={(e) => {
-                  setPageSize(Number(e.target.value));
-                }}
-              >
-                {[5, 10, 20, 30, 40, 50].map((size) => (
-                  <option key={size} value={size}>
-                    Mostrar {size}
-                  </option>
-                ))}
-              </select>
-            </div>
           </>
         )}
+      </div>
+      <div className="botones2">
+        <button
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+          className="pagination-button"
+        >
+          {"<"}
+        </button>{" "}
+        <button
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+          className="pagination-button"
+        >
+          {">"}
+        </button>{" "}
+        <span>
+          Página{" "}
+          <strong>
+            {pageIndex + 1} de {pageCount}
+          </strong>{" "}
+        </span>
+        <span>
+          | Ir a la página:{" "}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              let pageNumber = e.target.value ? Number(e.target.value) : 1;
+              pageNumber = Math.min(Math.max(pageNumber, 1), pageCount || 1);
+              pageNumber -= 1;
+              gotoPage(pageNumber);
+              setPageNumber(pageNumber);
+            }}
+            style={{ width: "75px" }}
+            min={1}
+            max={pageCount || 1}
+          />
+        </span>
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[5, 10, 20, 30, 40, 50].map((size) => (
+            <option key={size} value={size}>
+              Mostrar {size}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

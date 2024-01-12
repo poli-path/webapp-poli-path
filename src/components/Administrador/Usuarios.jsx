@@ -178,64 +178,59 @@ const Usuarios = () => {
                 })}
               </tbody>
             </table>
-            <div className="botones2">
-              <button
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-                className="pagination-button"
-              >
-                {"<"}
-              </button>{" "}
-              <button
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-                className="pagination-button"
-              >
-                {">"}
-              </button>{" "}
-              <span>
-                Página{" "}
-                <strong>
-                  {pageIndex + 1} de {pageCount}
-                </strong>{" "}
-              </span>
-              <span>
-                | Ir a la página:{" "}
-                <input
-                  type="number"
-                  defaultValue={pageIndex + 1}
-                  onChange={(e) => {
-                    let pageNumber = e.target.value
-                      ? Number(e.target.value)
-                      : 1;
-                    pageNumber = Math.min(
-                      Math.max(pageNumber, 1),
-                      pageCount || 1
-                    ); // Limita el valor entre 1 y pageCount o 1 si pageCount no está disponible
-                    pageNumber -= 1;
-                    gotoPage(pageNumber);
-                    setPageNumber(pageNumber);
-                  }}
-                  style={{ width: "75px" }}
-                  min={1}
-                  max={pageCount || 1}
-                />
-              </span>
-              <select
-                value={pageSize}
-                onChange={(e) => {
-                  setPageSize(Number(e.target.value));
-                }}
-              >
-                {[5, 10, 20, 30, 40, 50].map((size) => (
-                  <option key={size} value={size}>
-                    Mostrar {size}
-                  </option>
-                ))}
-              </select>
-            </div>
           </>
         )}
+      </div>
+      <div className="botones2">
+        <button
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+          className="pagination-button"
+        >
+          {"<"}
+        </button>{" "}
+        <button
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+          className="pagination-button"
+        >
+          {">"}
+        </button>{" "}
+        <span>
+          Página{" "}
+          <strong>
+            {pageIndex + 1} de {pageCount}
+          </strong>{" "}
+        </span>
+        <span>
+          | Ir a la página:{" "}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              let pageNumber = e.target.value ? Number(e.target.value) : 1;
+              pageNumber = Math.min(Math.max(pageNumber, 1), pageCount || 1); // Limita el valor entre 1 y pageCount o 1 si pageCount no está disponible
+              pageNumber -= 1;
+              gotoPage(pageNumber);
+              setPageNumber(pageNumber);
+            }}
+            style={{ width: "75px" }}
+            min={1}
+            max={pageCount || 1}
+          />
+        </span>
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[5, 10, 20, 30, 40, 50].map((size) => (
+            <option key={size} value={size}>
+              Mostrar {size}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
