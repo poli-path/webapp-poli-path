@@ -8,6 +8,11 @@
   padding: 20px;
 
 }
+.mapContainer * {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
 
 .pagination-button {
   /* Estilos para los botones de paginación */

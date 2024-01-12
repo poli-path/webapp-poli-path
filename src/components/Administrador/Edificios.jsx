@@ -41,6 +41,12 @@ const Edificios = () => {
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [loadingAddEdificio, setLoadingAddEdificio] = useState(false);
+  const [mapModalIsOpen, setMapModalIsOpen] = useState(false);
+  const [selectedBuildingCoordinates, setSelectedBuildingCoordinates] =
+    useState({
+      lat: 0,
+      lng: 0,
+    });
 
   const openImagesModal = (images) => {
     setSelectedImages(images);
@@ -64,6 +70,10 @@ const Edificios = () => {
     lat: -0.21055556,
     lng: -78.48888889,
   });
+  const handleOpenMapModal = (latitude, longitude) => {
+    setMapModalIsOpen(true);
+    setSelectedBuildingCoordinates({ lat: latitude, lng: longitude });
+  };
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -249,17 +259,15 @@ const Edificios = () => {
           </div>
         ),
       },
-      
       {
         Header: "Ubicación",
         accessor: "location",
         Cell: ({ row }) => {
           const { longitude, latitude } = row.original;
-          const locationUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
           return (
-            <a href={locationUrl} target="_blank" rel="noopener noreferrer">
+            <button onClick={() => handleOpenMapModal(latitude, longitude)}>
               Ver en Google Maps
-            </a>
+            </button>
           );
         },
         disableFilters: true,
@@ -329,6 +337,48 @@ const Edificios = () => {
       </p>
       <br />
       <button onClick={() => setModalIsOpen(true)}>Agregar Edificio</button>
+      <Modal
+        isOpen={mapModalIsOpen}
+        onRequestClose={() => setMapModalIsOpen(false)}
+        className="modalContent"
+        overlayClassName="modalOverlay"
+      >
+        <h2>Ubicación en Google Maps</h2>
+
+        <div
+          className="mapContainer"
+          style={{ height: "400px", width: "100%", position: "relative" }}
+        >
+          <GoogleMap
+            mapContainerStyle={{
+              height: "100%",
+              width: "100%",
+              position: "absolute",
+            }}
+            mapTypeId={"satellite"} 
+            center={{
+              lat: selectedBuildingCoordinates.lat,
+              lng: selectedBuildingCoordinates.lng,
+            }}
+            zoom={19}
+          >
+            <Marker
+              position={selectedBuildingCoordinates}
+              icon={{
+                url: MarkerMi,
+                scaledSize: new window.google.maps.Size(160, 80),
+              }}
+            />
+          </GoogleMap>
+        </div>
+
+        <button
+          className="cancelarBtn"
+          onClick={() => setMapModalIsOpen(false)}
+        >
+          Cerrar
+        </button>
+      </Modal>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -430,6 +480,7 @@ const Edificios = () => {
               }}
               center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
               zoom={17}
+              mapTypeId={"satellite"} 
               onClick={(e) => {
                 setValue("longitud", e.latLng.lng());
                 setValue("latitud", e.latLng.lat());
@@ -451,9 +502,7 @@ const Edificios = () => {
           {loadingAddEdificio ? (
             <div className="botones">
               <ClipLoader color="#3d8463" loading={loading} size={"90px"} />
-              <div style={{ fontSize: "30px" }}>
-                Agregando Edificio...
-              </div>
+              <div style={{ fontSize: "30px" }}>Agregando Edificio...</div>
             </div>
           ) : (
             <>
@@ -472,6 +521,7 @@ const Edificios = () => {
           )}
         </form>
       </Modal>
+
       <Modal
         isOpen={modalEditarIsOpen}
         onRequestClose={() => setModalEditarIsOpen(false)}

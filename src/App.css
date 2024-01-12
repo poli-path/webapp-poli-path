@@ -127,7 +127,7 @@ option{
   max-height: 80vh;
 }
 .modalContent::-webkit-scrollbar {
-  width: 5px; /* Ancho de la barra de desplazamiento */
+  width: 10px; /* Ancho de la barra de desplazamiento */
   
 }
 
