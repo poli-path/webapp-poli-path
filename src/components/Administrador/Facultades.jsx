@@ -85,12 +85,16 @@ const Facultades = () => {
             },
           }
         );
+        setLoading(true);
 
         setFacultades([...facultades, response.data]);
         setModalIsOpen(false);
+
+        await fetchFaculties(token);
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
         toast.success("Facultad agregada exitosamente!");
         reset();
-        await fetchFaculties(token);
       }
     } catch (error) {
       Swal.fire({
@@ -100,6 +104,8 @@ const Facultades = () => {
       });
     } finally {
       setLoadingFacultad(false);
+      setLoading(false);
+
     }
   };
 
@@ -131,20 +137,17 @@ const Facultades = () => {
   const eliminarFacultad = async (facultadId) => {
     try {
       const result = await Swal.fire({
-        title: "¿Estás seguro de eliminar esta Facultad?",
-        showDenyButton: true,
+        title: "Confirmar eliminación",
+        text: "¿Estás seguro de eliminar esta Facultad?",
+        icon: "warning",
+        showCancelButton: true,
         confirmButtonText: `Eliminar`,
-        denyButtonText: `Cancelar`,
+        cancelButtonText: "Cancelar",
+        dangerMode: true,
       });
 
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Eliminando Facultad",
-          text: "Por favor, espera...",
-          icon: "info",
-          allowOutsideClick: false,
-          showConfirmButton: false,
-        });
+        setLoading(true);
 
         const token = Cookies.get("token");
         await axios.delete(
@@ -155,16 +158,24 @@ const Facultades = () => {
             },
           }
         );
+        await fetchFaculties(token);
 
-        Swal.close();
         Swal.fire("Facultad eliminada correctamente!", "", "info");
-        setFacultades(
-          facultades.filter((facultad) => facultad.id !== facultadId)
-        );
+        // Actualiza el estado local para forzar la recarga de datos
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
       }
     } catch (error) {
       console.error("Error al eliminar la facultad:", error);
-      toast.error("Error al eliminar la facultad");
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response.data.message ||
+          "Hubo un error al eliminar la facultad",
+        icon: "error",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -393,7 +404,7 @@ const Facultades = () => {
             )}
           </label>
           <label>
-            Nombre:
+            Descripción:
             <input
               className="facultades input modalInput"
               {...register("descripcion", { required: true })}

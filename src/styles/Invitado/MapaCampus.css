@@ -2,7 +2,8 @@
 
 /* Estilos generales para el componente */
 .mapInvitado {
-  padding: 3%;  background: #fafafa10;
+  padding: 3%;  
+  background: #fafafa10;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
@@ -11,6 +12,15 @@
   border-radius: 50px;
 }
 
+.places-suggestions {
+  position: absolute;
+  width: 100%;
+  background-color: #ff00003a;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  z-index: 1;
+  color: black;
+}
 /* Estilos para los títulos */
 
 .mapInvitado h2 {
@@ -30,13 +40,14 @@
 /* Estilos para el contenedor del buscador */
 .search-container {
   flex: 1;
-  max-width: 30vh;
+  width: 40vw;
 }
-
+.search-container p{
+  color: black;
+}
 /* Estilos para el contenedor del mapa */
-.map-container {
+.map-content {
   flex: 2;
-  height: 80vh;
 }
 
 /* Estilos para el mapa */

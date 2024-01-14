@@ -29,7 +29,7 @@ function App() {
   };
   return (
     <Router>
-    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}   libraries={["places"]}>
     
         <div className={`App ${darkMode ? 'light-mode' : 'dark-mode'}`}>
           <button className="my-button" onClick={toggleDarkMode} title={darkMode ? 'Modo claro activado' : 'Modo oscuro activado'}>

@@ -59,7 +59,21 @@ a:-webkit-any-link{
   text-decoration: none;
   color: aliceblue;
 }
+.infoContent{
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+  padding: 20px;
+  text-align: center;
+  max-width: 250px;
+  max-height: 250px;
 
+}
+
+.icon{
+  box-shadow: 0 20px 32px 0 black;
+
+}
 .swal2-title {
   background: linear-gradient(180deg, #ba001300,#ba001300);
   color: aliceblue;

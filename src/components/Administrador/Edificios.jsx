@@ -266,14 +266,7 @@ const Edificios = () => {
       });
   
       if (confirmResult.isConfirmed) {
-        // Vuelve a mostrar SweetAlert de carga
-        Swal.fire({
-          title: "Eliminando Edificio",
-          text: "Por favor, espera...",
-          icon: "info",
-          allowOutsideClick: false,
-          showConfirmButton: false,
-        });
+        setLoading(true);
   
         // Realiza la eliminación
         await axios.delete(`${process.env.REACT_APP_API_URL}/buildings/${id}`, {
@@ -281,18 +274,13 @@ const Edificios = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-  
-        // Oculta el SweetAlert de carga antes de mostrar la confirmación
-        Swal.close();
-  
-        // Muestra SweetAlert de éxito
-        Swal.fire("Edificio eliminado correctamente!", "", "success");
-  
-        // Actualiza la lista de edificios después de la eliminación
-        const updatedBuildings = edificios.filter(
-          (edificio) => edificio.id !== id
-        );
-        setEdificios(updatedBuildings);
+        await fetchBuildings(token)
+
+        toast.success("Edificio eliminado correctamente!");
+        
+        // Actualiza el estado local para forzar la recarga de datos
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
       }
     } catch (error) {
       // Oculta el SweetAlert de carga en caso de error
@@ -306,6 +294,8 @@ const Edificios = () => {
           "Hubo un error al eliminar el edificio",
         icon: "error",
       });
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -515,7 +505,6 @@ const Edificios = () => {
               width: "100%",
               position: "absolute",
             }}
-            mapTypeId={"satellite"}
             center={{
               lat: selectedBuildingCoordinates.lat,
               lng: selectedBuildingCoordinates.lng,
@@ -526,7 +515,7 @@ const Edificios = () => {
               position={selectedBuildingCoordinates}
               icon={{
                 url: MarkerMi,
-                scaledSize: new window.google.maps.Size(160, 80),
+                scaledSize: new window.google.maps.Size(70, 100),
               }}
               onClick={() => setInfoWindowOpen(true)}
             />
@@ -537,7 +526,8 @@ const Edificios = () => {
                 lng: selectedBuildingCoordinates.lng,
               }}
             >
-              <div>
+                <div className="infoContent">
+
                 <h3>{selectedBuildingInfo.name}</h3>
               </div>
             </InfoWindow>
@@ -653,7 +643,6 @@ const Edificios = () => {
               }}
               center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
               zoom={17}
-              mapTypeId={"satellite"}
               onClick={(e) => {
                 setValue("longitud", e.latLng.lng());
                 setValue("latitud", e.latLng.lat());
@@ -667,7 +656,7 @@ const Edificios = () => {
                 position={markerPosition}
                 icon={{
                   url: MarkerMi,
-                  scaledSize: new window.google.maps.Size(160, 80),
+                  scaledSize: new window.google.maps.Size(70, 100),
                 }}
               />
             </GoogleMap>

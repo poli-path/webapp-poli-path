@@ -43,7 +43,7 @@ const Administradores = () => {
   const [loadingNew, setLoadingNew] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [defaultPageSize, setDefaultPageSize] = useState(5);
-
+  const adminId = Cookies.get("id");
   const {
     register,
     handleSubmit,
@@ -147,19 +147,24 @@ const Administradores = () => {
         cancelButtonText: "Cancelar",
         dangerMode: true,
       });
-
+  
       if (confirmResult.isConfirmed) {
         setLoading(true);
-
+  
         await axios.delete(`${process.env.REACT_APP_API_URL}/users/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
+  
+        // Espera a que se resuelva la promesa antes de continuar
+        await fetchAdministradores();
+  
         toast.success("¡Administrador eliminado correctamente!");
-
-        fetchAdministradores();
+  
+        // Actualiza el estado local para forzar la recarga de datos
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
       }
     } catch (error) {
       Swal.fire({
@@ -173,6 +178,7 @@ const Administradores = () => {
       setLoading(false);
     }
   };
+  
 
   const data = useMemo(() => administradores, [administradores]);
 
@@ -220,20 +226,24 @@ const Administradores = () => {
         Header: "Acciones",
         Cell: ({ row }) => (
           <div>
-            <button
-              className="botonEyD"
-              title="Eliminar"
-              onClick={() => eliminarAdministrador(row.original.id)}
-            >
-              {" "}
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
+            {adminId === row.original.id ? (
+              <p className="requerido">Usuario Actual</p>
+            ) : (
+              <button
+                className="botonEyD"
+                title="Eliminar"
+                onClick={() => eliminarAdministrador(row.original.id)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            )}
           </div>
         ),
       },
     ],
-    []
+    [adminId]  // Asegúrate de incluir adminId como dependencia
   );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -444,7 +454,7 @@ const Administradores = () => {
       </Modal>
       <ToastContainer />
       <div className="tablaAdministradores">
-        {loading ? ( // Se muestra el ClipLoader mientras se cargan los datos
+        {loading ? (
           <div className="botones">
             <ClipLoader color="#3d8463" loading={loading} size={"90px"} />
             <div style={{ fontSize: "30px" }}>

@@ -51,7 +51,7 @@
   background-size: cover;
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
-  border: 3px solid fafafa10;
+  border: 3px solid #fafafa10;
   border-radius: 50px;
   box-shadow: 0 20px 32px 0 black;
 max-width: 90%;

@@ -1,44 +1,134 @@
-import React, { useEffect, useRef } from "react";
-import { GoogleMapsOverlay } from "@deck.gl/google-maps";
-import { ScatterplotLayer } from "@deck.gl/layers";
+import { FaGooglePlay } from "react-icons/fa";
 import "../../styles/Invitado/MapaCampus.css";
+import React, { useEffect, useState } from "react";
+import {
+  GoogleMap,
+  Marker,
+  InfoWindow,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
+import axios from "axios";
+import MarkerMi from "../../assets/Marker.png";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-const MapComponent = () => {
-  const mapRef = useRef();
+const MapContainer = () => {
+  const [buildings, setBuildings] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [selectedBuilding, setSelectedBuilding] = useState(null);
+  const [directions, setDirections] = useState(null);
+  const [startLocation, setStartLocation] = useState("");
+  const [startLocationCoords, setStartLocationCoords] = useState(null);
+  const [startBuilding, setStartBuilding] = useState(null);
+  const [infoWindowOpen, setInfoWindowOpen] = useState(false); 
+
+  const handleMarkerClick = (building) => {
+    setSelectedBuilding(building);
+    setInfoWindowOpen(true); 
+  };
+
+  const handleCloseInfoWindow = () => {
+    setInfoWindowOpen(false); 
+  };
+
+  const directionsService = new window.google.maps.DirectionsService();
+
+  const handleClearRoute = () => {
+    setDirections(null);
+    setSelectedBuilding(null);
+    setInfoWindowOpen(false); 
+  };
+
+  const handleBuildingSelect = (building) => {
+    setSelectedBuilding(building);
+    setStartLocationCoords({
+      lat: building.latitude,
+      lng: building.longitude,
+    });
+    setStartLocation("");
+    setInfoWindowOpen(false); 
+  };
+
+  const handleSelect = (e) => {
+    const building = buildings.find(
+      (b) => b.name === e.target.value || b.no === e.target.value
+    );
+    if (building) {
+      handleBuildingSelect(building);
+      setDirections(null);
+    }
+  };
+
+  const handleViewRoute = () => {
+    if ((startLocationCoords || startBuilding) && selectedBuilding) {
+      const origin = startBuilding
+        ? {
+            lat: startBuilding.latitude,
+            lng: startBuilding.longitude,
+          }
+        : userLocation;
+
+      directionsService.route(
+        {
+          origin: origin,
+          destination: {
+            lat: selectedBuilding.latitude,
+            lng: selectedBuilding.longitude,
+          },
+          travelMode: window.google.maps.TravelMode.WALKING,
+        },
+        (result, status) => {
+          if (status === window.google.maps.DirectionsStatus.OK) {
+            setDirections(result);
+          } else {
+            console.error(`Error fetching directions: ${result}`);
+          }
+        }
+      );
+
+      setInfoWindowOpen(false);
+    }
+  };
 
   useEffect(() => {
-    if (!window.google) {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=$process.env.REACT_APP_API_GOOGLE_MAPS&callback=initMap`;
-      script.async = true;
-      window.initMap = () => {
-        const map = new window.google.maps.Map(mapRef.current, {
-          center: { lat: -0.2106, lng: -78.4882 }, // Coordenadas del Campus EPN
-          zoom: 15,
-        });
+    const fetchBuildings = async () => {
+      const result = await axios.get(
+        process.env.REACT_APP_API_URL + "/buildings/guests"
+      );
+      setBuildings(result.data);
+    };
+    fetchBuildings();
 
-        const overlay = new GoogleMapsOverlay({
-          layers: [
-            new ScatterplotLayer({
-              id: 'scatterplot-layer',
-              data: [
-                { position: [-0.21231, -78.49039] },
-                { position: [-0.21196, -78.49204] },
-              ],
-              getRadius: 100, // radio de los marcadores
-              getFillColor: [255, 140, 0], // color de los marcadores
-              getPosition: d => d.position,
-            }),
-          ],
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
-
-        overlay.setMap(map);
-      };
-      document.head.appendChild(script);
+      });
     } else {
-      window.initMap();
+      console.log("Geolocation is not supported by this browser.");
     }
   }, []);
+
+  const directionsRendererOptions = {
+    polylineOptions: {
+      strokeColor: "#8C0303",
+      strokeWeight: 10,
+    },
+  };
+
+  const mapOptions = {
+    mapContainerStyle: { width: "100%", height: "70vh" },
+    mapTypeId: "satellite",
+    center: selectedBuilding
+      ? { lat: selectedBuilding.latitude, lng: selectedBuilding.longitude }
+      : userLocation || { lat: -0.21055556, lng: -78.48888889 },
+    zoom: 19,
+    featureType: "all",
+    elementType: "labels",
+    stylers: [{ visibility: "off" }],
+  };
 
   return (
     <div className="mapInvitado">
@@ -50,15 +140,126 @@ const MapComponent = () => {
       </p>
       <div className="main-container">
         <div className="search-container">
-          <h2>Buscador</h2>
-          {/* Aquí puedes agregar el input para buscar un lugar y los botones para moverse y descargar la app */}
+          <h3>Llegar hasta el Edificio:</h3>
+          <br />
+          <select onChange={handleSelect} style={{ width: "200px" }}>
+            <option value="">Selecciona un edificio</option>
+            {buildings.map((building, index) => (
+              <option key={index} value={building.name}>
+                No.{building.no} "{building.name}"
+              </option>
+            ))}
+          </select>
+          <br />
+          <br />
+          <button onClick={handleViewRoute}>Ir al Edificio</button>
+          <br />
+          <br />
+          <button onClick={handleClearRoute}>Borrar Ruta</button>
         </div>
-        <div className="map-container">
-          <div ref={mapRef} className="map" />
+        <div className="map-content">
+          <GoogleMap {...mapOptions}>
+            {directions && (
+              <DirectionsRenderer
+                directions={directions}
+                options={directionsRendererOptions}
+              />
+            )}
+            {buildings.map((building, index) => (
+              <Marker
+                key={index}
+                position={{
+                  lat: building.latitude,
+                  lng: building.longitude,
+                }}
+                icon={{
+                  url: MarkerMi,
+                  scaledSize: new window.google.maps.Size(70, 100),
+                  labelOrigin: new window.google.maps.Point(35, 110),
+                }}
+                onClick={() => handleMarkerClick(building)}
+                label={{
+                  text: building.name,
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  textShadow: "1px 3px 0px black",
+                }}
+                animation={window.google.maps.Animation.DROP}
+              />
+            ))}
+            {selectedBuilding && infoWindowOpen && (
+              <div className="prueba">
+                <InfoWindow
+                  position={{
+                    lat: selectedBuilding.latitude,
+                    lng: selectedBuilding.longitude,
+                  }}
+                  onCloseClick={handleCloseInfoWindow}
+                >
+                  <div className="infoContent">
+                    <h2>{selectedBuilding.name}</h2>
+                    <Carousel>
+                      {selectedBuilding.imageUrls.map((url, index) => (
+                        <div key={index}>
+                          <img
+                            src={`https://3bcbgw62-3000.use.devtunnels.ms/${url}`}
+                            alt={`Building ${selectedBuilding.name} ${index}`}
+                            style={{
+                              maxWidth: "250px",
+                              maxHeight: "150px",
+                              width: "auto",
+                              height: "auto",
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </Carousel>
+                    <p style={{color:"black"}}>{selectedBuilding.description}</p>
+
+                  </div>
+                </InfoWindow>
+              </div>
+            )}
+            {userLocation && (
+              <Marker
+                position={userLocation}
+                icon={{
+                  url: MarkerMi,
+                  scaledSize: new window.google.maps.Size(70, 100),
+                  labelOrigin: new window.google.maps.Point(35, 110),
+                }}
+                label={{
+                  text: "Tu ubicación",
+                  color: "white",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  textShadow: "1px 3px 0px black",
+                }}
+                animation={window.google.maps.Animation.DROP}
+              />
+            )}
+          </GoogleMap>
         </div>
+      </div>
+      <div style={{ margin: 20 }}>
+        <h3>
+          No olvides descargar la versión completa de PoliPath exclusivamente
+          para la Comunidad Politécnica
+        </h3>
+        <a
+          href="https://play.google.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="app-download-button"
+          style={{ padding: 0 }}
+        >
+          <FaGooglePlay />
+          Descargar desde Google Play
+        </a>
       </div>
     </div>
   );
 };
 
-export default MapComponent;
+export default MapContainer;
