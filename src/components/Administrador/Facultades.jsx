@@ -36,12 +36,25 @@ const Facultades = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalEditarIsOpen, setModalEditarIsOpen] = useState(false);
   const [FacultadEditado, setFacultadEditado] = useState(null);
+
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    reset,
+    register: registerAdd,
+    handleSubmit: handleSubmitAdd,
+    formState: { errors: errorsAdd },
+    setValue: setValueAdd,
+    reset: resetAdd,
+    getValues: getValuesAdd,
+    watch: watchAdd,
+  } = useForm();
+
+  const {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    formState: { errors: errorsEdit },
+    setValue: setValueEdit,
+    reset: resetEdit,
+    getValues: getValuesEdit,
+    watch: watchEdit,
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -85,18 +98,21 @@ const Facultades = () => {
             },
           }
         );
-        setLoading(true);
 
         setFacultades([...facultades, response.data]);
         setModalIsOpen(false);
+        setLoading(true);
 
         await fetchFaculties(token);
         setPageSize(defaultPageSize);
         setPageNumber(0);
         toast.success("Facultad agregada exitosamente!");
-        reset();
+        resetAdd();
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -104,34 +120,101 @@ const Facultades = () => {
       });
     } finally {
       setLoadingFacultad(false);
-      setLoading(false);
-
     }
   };
 
   const editarFacultad = (index) => {
-    setFacultadEditado(index);
-    setValue("edificio", facultades[index].edificio);
-    setValue("nombre", facultades[index].nombre);
-    setModalEditarIsOpen(true);
+    const token = Cookies.get("token");
+    Swal.fire({
+      title: "Verificando Facultad",
+      text: "Por favor, espera...",
+      icon: "info",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/faculties/${index}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const edificio = response.data;
+        setFacultadEditado(edificio);
+
+        setValueEdit("edificio", edificio.building.id);
+        setValueEdit("nombre", edificio.name);
+        setValueEdit("descripcion", edificio.description);
+        Swal.close();
+
+        setModalEditarIsOpen(true);
+      })
+      .catch((error) => {
+        fetchFaculties(token);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al verificar Facultad, prueba de nuevo",
+        });
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
+      });
   };
 
-  const onSubmitEditar = (data) => {
-    Swal.fire({
-      title: "¿Estás seguro de editar esta Facultad?",
-      showDenyButton: true,
-      confirmButtonText: `Continuar`,
-      denyButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedFacultades = [...facultades];
-        updatedFacultades[FacultadEditado] = data;
-        setFacultades(updatedFacultades);
-        setModalEditarIsOpen(false);
+  const onSubmitEditar = async (data) => {
+    const token = Cookies.get("token");
+
+    try {
+      const confirmResult = await Swal.fire({
+        title: "¿Estás seguro de editar esta Facultad?",
+        showDenyButton: true,
+        confirmButtonText: `Continuar`,
+        denyButtonText: `Cancelar`,
+      });
+
+      if (confirmResult.isConfirmed) {
+        setLoadingFacultad(true);
+        // Realiza la petición tipo PATCH con el token
+        await axios.patch(
+          `${process.env.REACT_APP_API_URL}/faculties/${FacultadEditado.id}`,
+          {
+            buildingId: data.edificio,
+            name: data.nombre,
+            description: data.descripcion,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setFacultades(
+          facultades.map((edif) => (edif === FacultadEditado ? data : edif))
+        );
+
+        await fetchFaculties(token);
+
         toast.success("Facultad editada exitosamente!");
-        reset();
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
+
+        setModalEditarIsOpen(false);
+        setLoadingFacultad(false);
       }
-    });
+      resetEdit();
+    } catch (error) {
+      await fetchFaculties(token);
+
+      setLoadingFacultad(false);
+      Swal.fire({
+        title: "Error al editar la Facultad",
+        text: error.response?.data?.message || "Hubo un error inesperado",
+        icon: "error",
+      });
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
+    }
   };
 
   const eliminarFacultad = async (facultadId) => {
@@ -372,12 +455,12 @@ const Facultades = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Agregar nuevo Facultad</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmitAdd(onSubmit)}>
           <label>
             Edificio:
             <select
               className="facultades input modalInput"
-              {...register("edificio", { required: true })}
+              {...registerAdd("edificio", { required: true })}
             >
               {edificios.map((edificio) => (
                 <option key={edificio.id} value={edificio.id}>
@@ -385,7 +468,7 @@ const Facultades = () => {
                 </option>
               ))}
             </select>
-            {errors.edificio && (
+            {errorsAdd.edificio && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -393,13 +476,13 @@ const Facultades = () => {
             Nombre:
             <input
               className="facultades input modalInput"
-              {...register("nombre", {
+              {...registerAdd("nombre", {
                 required: true,
                 validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
               })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
+            {errorsAdd.nombre && (
               <p className="requerido">El nombre debe tener más de 3 letras</p>
             )}
           </label>
@@ -407,11 +490,16 @@ const Facultades = () => {
             Descripción:
             <input
               className="facultades input modalInput"
-              {...register("descripcion", { required: true })}
+              {...registerAdd("descripcion", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
               placeholder="Descripción"
             />
-            {errors.descripcion && (
-              <p className="requerido">Este campo es requerido</p>
+            {errorsAdd.descripcion && (
+              <p className="requerido">
+                La descripción debe tener más de 3 caracteres
+              </p>
             )}
           </label>
           {loadingFacultad ? (
@@ -440,6 +528,7 @@ const Facultades = () => {
           )}
         </form>
       </Modal>
+
       <Modal
         isOpen={modalEditarIsOpen}
         onRequestClose={() => setModalEditarIsOpen(false)}
@@ -447,15 +536,20 @@ const Facultades = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Editar Facultad</h2>
-        <form onSubmit={handleSubmit(onSubmitEditar)}>
+        <form onSubmit={handleSubmitEdit(onSubmitEditar)}>
           <label>
             Edificio:
-            <input
+            <select
               className="facultades input modalInput"
-              {...register("edificio", { required: true })}
-              placeholder="Edificio"
-            />
-            {errors.edificio && (
+              {...registerEdit("edificio", { required: true })}
+            >
+              {edificios.map((edificio) => (
+                <option key={edificio.id} value={edificio.id}>
+                  {edificio.name}
+                </option>
+              ))}
+            </select>
+            {errorsEdit.edificio && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -463,25 +557,58 @@ const Facultades = () => {
             Nombre:
             <input
               className="facultades input modalInput"
-              {...register("nombre", { required: true })}
+              {...registerEdit("nombre", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
-              <p className="requerido">Este campo es requerido</p>
+            {errorsEdit.nombre && (
+              <p className="requerido">
+                El nombre debe tener más de 3 caracteres
+              </p>
             )}
           </label>
-
-          <div className="btnContainer">
-            <button type="submit" className="agregarBtn">
-              Editar
-            </button>
-            <button
-              className="cancelarBtn"
-              onClick={() => setModalEditarIsOpen(false)}
-            >
-              Cancelar
-            </button>
-          </div>
+          <label>
+            Descripción:
+            <input
+              className="facultades input modalInput"
+              {...registerEdit("descripcion", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
+              placeholder="Descripción"
+            />
+            {errorsEdit.descripcion && (
+              <p className="requerido">
+                La descripción debe tener más de 3 caracteres
+              </p>
+            )}
+          </label>
+          {loadingFacultad ? (
+            <div className="botones">
+              <ClipLoader
+                color="#3d8463"
+                loading={loadingFacultad}
+                size={"90px"}
+              />
+              <div style={{ fontSize: "30px" }}>Actualizando Facultad...</div>
+            </div>
+          ) : (
+            <>
+              <div className="btnContainer">
+                <button type="submit" className="agregarBtn">
+                  Actualizar
+                </button>
+                <button
+                  className="cancelarBtn"
+                  onClick={() => setModalEditarIsOpen(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </>
+          )}
         </form>
       </Modal>
 

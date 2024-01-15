@@ -36,12 +36,25 @@ const Oficinas = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalEditarIsOpen, setModalEditarIsOpen] = useState(false);
   const [OficinaEditado, setOficinaEditado] = useState(null);
+
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    reset,
+    register: registerAdd,
+    handleSubmit: handleSubmitAdd,
+    formState: { errors: errorsAdd },
+    setValue: setValueAdd,
+    reset: resetAdd,
+    getValues: getValuesAdd,
+    watch: watchAdd,
+  } = useForm();
+
+  const {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    formState: { errors: errorsEdit },
+    setValue: setValueEdit,
+    reset: resetEdit,
+    getValues: getValuesEdit,
+    watch: watchEdit,
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -51,18 +64,30 @@ const Oficinas = () => {
       name: data.nombre,
       codeOrNo: Number(data.codeOrNo), // Agrega el campo "code_or_no"
     };
-  console.log(payload)
+
     try {
       setLoadingOficina(true);
       const token = Cookies.get("token");
-  
+
+      const existingFaculty = Oficinas.find(
+        (faculty) => faculty.name === data.nombre
+      );
+      if (existingFaculty) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Ya existe una Oficina con ese nombre",
+        });
+        return;
+      }
+
       const result = await Swal.fire({
         title: "¿Estás seguro de agregar esta Oficina?",
         showDenyButton: true,
         confirmButtonText: `Continuar`,
         denyButtonText: `Cancelar`,
       });
-  
+
       if (result.isConfirmed) {
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/offices`,
@@ -73,55 +98,128 @@ const Oficinas = () => {
             },
           }
         );
-        setLoading(true);
 
-        console.log(response.data)
         setOficinas([...Oficinas, response.data]);
         setModalIsOpen(false);
+        setLoading(true);
+
         await fetchoffices(token);
         setPageSize(defaultPageSize);
         setPageNumber(0);
         toast.success("Oficina agregada exitosamente!");
-        reset();
+        resetAdd();
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "Error al agregar la Oficina",
       });
-      console.log(error)
     } finally {
       setLoadingOficina(false);
     }
   };
 
   const editarOficina = (index) => {
-    setOficinaEditado(index);
-    setValue("edificio", Oficinas[index].edificio);
-    setValue("nombre", Oficinas[index].nombre);
-    setModalEditarIsOpen(true);
-  };
-
-  const onSubmitEditar = (data) => {
+    const token = Cookies.get("token");
     Swal.fire({
-      title: "¿Estás seguro de editar esta Oficina?",
-      showDenyButton: true,
-      confirmButtonText: `Continuar`,
-      denyButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedOficinas = [...Oficinas];
-        updatedOficinas[OficinaEditado] = data;
-        setOficinas(updatedOficinas);
-        setModalEditarIsOpen(false);
-        toast.success("Oficina editada exitosamente!");
-        reset();
-      }
+      title: "Verificando Oficina",
+      text: "Por favor, espera...",
+      icon: "info",
+      allowOutsideClick: false,
+      showConfirmButton: false,
     });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/offices/${index}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const edificio = response.data;
+        setOficinaEditado(edificio);
+
+        setValueEdit("edificio", edificio.building.id);
+        setValueEdit("nombre", edificio.name);
+        setValueEdit("profesor", edificio.teacherName);
+        setValueEdit("codeOrNo", edificio.codeOrNo);
+        Swal.close();
+
+        setModalEditarIsOpen(true);
+      })
+      .catch((error) => {
+        fetchoffices(token);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al verificar Oficina, prueba de nuevo",
+        });
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
+      });
   };
 
-  const eliminarOficina= async (oficinaId) => {
+  const onSubmitEditar = async (data) => {
+    const token = Cookies.get("token");
+
+    try {
+      const confirmResult = await Swal.fire({
+        title: "¿Estás seguro de editar esta Oficina?",
+        showDenyButton: true,
+        confirmButtonText: `Continuar`,
+        denyButtonText: `Cancelar`,
+      });
+
+      if (confirmResult.isConfirmed) {
+        setLoadingOficina(true);
+        // Realiza la petición tipo PATCH con el token
+        await axios.patch(
+          `${process.env.REACT_APP_API_URL}/offices/${OficinaEditado.id}`,
+          {
+            buildingId: data.edificio,
+            name: data.nombre,
+            teacherName: data.profesor,
+            codeOrNo: data.codeOrNo,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setOficinas(
+          Oficinas.map((edif) => (edif === OficinaEditado ? data : edif))
+        );
+
+        await fetchoffices(token);
+
+        toast.success("Oficina editada exitosamente!");
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
+
+        setModalEditarIsOpen(false);
+        setLoadingOficina(false);
+      }
+      resetEdit();
+    } catch (error) {
+      await fetchoffices(token);
+
+      setLoadingOficina(false);
+      Swal.fire({
+        title: "Error al editar la Facultad",
+        text: error.response?.data?.message || "Hubo un error inesperado",
+        icon: "error",
+      });
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
+    }
+  };
+
+  const eliminarOficina = async (oficinaId) => {
     try {
       const result = await Swal.fire({
         title: "Confirmar eliminación",
@@ -156,8 +254,7 @@ const Oficinas = () => {
       Swal.fire({
         title: "Error",
         text:
-          error.response.data.message ||
-          "Hubo un error al eliminar la Oficina",
+          error.response.data.message || "Hubo un error al eliminar la Oficina",
         icon: "error",
       });
     } finally {
@@ -273,20 +370,17 @@ const Oficinas = () => {
         accessor: "teacherName", // Cambia a "teacherName"
       },
       {
-        Header: "Imagenes",
+        Header: "Imágenes",
         accessor: "imageUrls",
-        Cell: ({ value }) => (
+        Cell: ({ value, row }) => (
           <div>
-            {value.length > 0 ? (
-              <button onClick={() => openImagesModal(value)}>
-                Ver Imágenes
-              </button>
-            ) : (
-              <p className="requerido">Sin imágenes aún</p>
-            )}
+            <button onClick={() => openImagesModal(value, row.original.id)}>
+              Ver Imágenes
+            </button>
           </div>
         ),
       },
+      
       {
         Header: "Acciones",
         Cell: ({ row: { original } }) => (
@@ -342,12 +436,12 @@ const Oficinas = () => {
       <h2>Oficinas</h2>
       <p>
         ¡Bienvenido a la sección de administración de Oficinas! Aquí podrás
-        administrar y visualizar una lista de Oficinas en tu aplicación.
-        Puedes agregar nuevas Oficinas, editar sus detalles existentes y
-        eliminarlas individualmente. Esta herramienta ofrece una interfaz
-        amigable para mantener y actualizar la información de las Oficinas,
-        proporcionando opciones claras para gestionar eficientemente los
-        registros en tu sistema.
+        administrar y visualizar una lista de Oficinas en tu aplicación. Puedes
+        agregar nuevas Oficinas, editar sus detalles existentes y eliminarlas
+        individualmente. Esta herramienta ofrece una interfaz amigable para
+        mantener y actualizar la información de las Oficinas, proporcionando
+        opciones claras para gestionar eficientemente los registros en tu
+        sistema.
       </p>
       <br />
       <button onClick={() => setModalIsOpen(true)}>Agregar Oficina</button>
@@ -358,12 +452,12 @@ const Oficinas = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Agregar nuevo Oficina</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmitAdd(onSubmit)}>
           <label>
             Edificio:
             <select
               className="Oficinas input modalInput"
-              {...register("edificio", { required: true })}
+              {...registerAdd("edificio", { required: true })}
             >
               {edificios.map((edificio) => (
                 <option key={edificio.id} value={edificio.id}>
@@ -371,7 +465,7 @@ const Oficinas = () => {
                 </option>
               ))}
             </select>
-            {errors.edificio && (
+            {errorsAdd.edificio && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -379,13 +473,13 @@ const Oficinas = () => {
             Nombre:
             <input
               className="Oficinas input modalInput"
-              {...register("nombre", {
+              {...registerAdd("nombre", {
                 required: true,
                 validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
               })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
+            {errorsAdd.nombre && (
               <p className="requerido">El nombre debe tener más de 3 letras</p>
             )}
           </label>
@@ -395,7 +489,7 @@ const Oficinas = () => {
               type="number"
               step="any"
               className="Oficinas input modalInput"
-              {...register("codeOrNo", {
+              {...registerAdd("codeOrNo", {
                 required: true,
                 pattern: {
                   value: /^-?\d*\.?\d+$/,
@@ -404,9 +498,9 @@ const Oficinas = () => {
               })}
               placeholder="Código o Número"
             />
-            {errors.codeOrNo && (
+            {errorsAdd.codeOrNo && (
               <p className="requerido">
-                {errors.codeOrNo.message || "Este campo es requerido"}
+                {errorsAdd.codeOrNo.message || "Este campo es requerido"}
               </p>
             )}
           </label>
@@ -436,6 +530,7 @@ const Oficinas = () => {
           )}
         </form>
       </Modal>
+
       <Modal
         isOpen={modalEditarIsOpen}
         onRequestClose={() => setModalEditarIsOpen(false)}
@@ -443,15 +538,20 @@ const Oficinas = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Editar Oficina</h2>
-        <form onSubmit={handleSubmit(onSubmitEditar)}>
+        <form onSubmit={handleSubmitEdit(onSubmitEditar)}>
           <label>
             Edificio:
-            <input
+            <select
               className="Oficinas input modalInput"
-              {...register("edificio", { required: true })}
-              placeholder="Edificio"
-            />
-            {errors.edificio && (
+              {...registerEdit("edificio", { required: true })}
+            >
+              {edificios.map((edificio) => (
+                <option key={edificio.id} value={edificio.id}>
+                  {edificio.name}
+                </option>
+              ))}
+            </select>
+            {errorsEdit.edificio && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -459,25 +559,70 @@ const Oficinas = () => {
             Nombre:
             <input
               className="Oficinas input modalInput"
-              {...register("nombre", { required: true })}
+              {...registerEdit("nombre", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
-              <p className="requerido">Este campo es requerido</p>
+            {errorsEdit.nombre && (
+              <p className="requerido">El nombre debe tener más de 3 letras</p>
             )}
           </label>
-
-          <div className="btnContainer">
-            <button type="submit" className="agregarBtn">
-              Editar
-            </button>
-            <button
-              className="cancelarBtn"
-              onClick={() => setModalEditarIsOpen(false)}
-            >
-              Cancelar
-            </button>
-          </div>
+          <label>
+            Nombre:
+            <input
+              className="Oficinas input modalInput"
+              {...registerEdit("profesor", {
+                required: false })}
+              placeholder="Profesor"
+            />
+          </label>
+          <label>
+            Código o Número:
+            <input
+              type="number"
+              step="any"
+              className="Oficinas input modalInput"
+              {...registerEdit("codeOrNo", {
+                required: true,
+                pattern: {
+                  value: /^-?\d*\.?\d+$/,
+                  message: "Ingrese un número decimal válido",
+                },
+              })}
+              placeholder="Código o Número"
+            />
+            {errorsEdit.codeOrNo && (
+              <p className="requerido">
+                {errorsEdit.codeOrNo.message || "Este campo es requerido"}
+              </p>
+            )}
+          </label>
+          {loadingOficina ? (
+            <div className="botones">
+              <ClipLoader
+                color="#3d8463"
+                loading={loadingOficina}
+                size={"90px"}
+              />
+              <div style={{ fontSize: "30px" }}>Actualizando Oficina...</div>
+            </div>
+          ) : (
+            <>
+              <div className="btnContainer">
+                <button type="submit" className="agregarBtn">
+                  Actualizar
+                </button>
+                <button
+                  className="cancelarBtn"
+                  onClick={() => setModalIsOpen(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </>
+          )}
         </form>
       </Modal>
 

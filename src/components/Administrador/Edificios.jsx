@@ -63,17 +63,24 @@ const Edificios = () => {
   });
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    reset,
-    getValues,
-    watch,
+    register: registerAdd,
+    handleSubmit: handleSubmitAdd,
+    formState: { errors: errorsAdd },
+    setValue: setValueAdd,
+    reset: resetAdd,
+    getValues: getValuesAdd,
+    watch: watchAdd,
   } = useForm();
 
-  const latitud = watch("latitud", -0.21055556);
-  const longitud = watch("longitud", -78.48888889);
+  const {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    formState: { errors: errorsEdit },
+    setValue: setValueEdit,
+    reset: resetEdit,
+    getValues: getValuesEdit,
+    watch: watchEdit,
+  } = useForm();
 
   const [markerPosition, setMarkerPosition] = useState({
     lat: -0.21055556,
@@ -166,7 +173,7 @@ const Edificios = () => {
           setEdificios([...edificios, response.data]);
           setModalIsOpen(false);
           toast.success("Edificio agregado exitosamente!");
-          reset();
+          resetAdd();
         } else {
           Swal.fire({
             title: "Error al agregar el edificio",
@@ -208,16 +215,13 @@ const Edificios = () => {
       .then((response) => {
         const edificio = response.data;
         setEdificioEditado(edificio);
-        setMarkerPosition({
-          lat: edificio.latitude,
-          lng: edificio.longitude,
-        });
-        setValue("numero", edificio.no);
-        setValue("nombre", edificio.name);
-        setValue("descripcion", edificio.description);
-        setValue("direccion", edificio.address);
-        setValue("longitud", edificio.longitude);
-        setValue("latitud", edificio.latitude);
+
+        setValueEdit("numero", edificio.no);
+        setValueEdit("nombre", edificio.name);
+        setValueEdit("descripcion", edificio.description);
+        setValueEdit("direccion", edificio.address);
+        setValueEdit("longitud", edificio.longitude);
+        setValueEdit("latitud", edificio.latitude);
         Swal.close();
 
         setModalEditarIsOpen(true);
@@ -225,7 +229,11 @@ const Edificios = () => {
       .catch((error) => {
         fetchBuildings(token);
 
-        console.error("Error fetching building details:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al verificar Edificio, prueba de nuevo",
+        });
         setPageSize(defaultPageSize);
         setPageNumber(0);
       });
@@ -276,7 +284,7 @@ const Edificios = () => {
         setPageSize(defaultPageSize);
         setPageNumber(0);
       }
-      reset();
+      resetEdit();
     } catch (error) {
       await fetchBuildings(token);
 
@@ -638,7 +646,7 @@ const Edificios = () => {
       >
         <h2>Agregar nuevo edificio</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmitAdd(onSubmit)}>
           <br />
           <h3>Considera un Número y un Nombre único</h3>
           <br />
@@ -648,7 +656,7 @@ const Edificios = () => {
               type="number"
               min="0"
               className="edificios input modalInput"
-              {...register("numero", {
+              {...registerAdd("numero", {
                 required: true,
                 valueAsNumber: true,
                 validate: (value) =>
@@ -657,7 +665,7 @@ const Edificios = () => {
               })}
               placeholder="Número"
             />
-            {errors.numero && (
+            {errorsAdd.numero && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -666,16 +674,14 @@ const Edificios = () => {
             Nombre:
             <input
               className="edificios input modalInput"
-              {...register("nombre", { required: true, minLength: 3 })}
+              {...registerAdd("nombre", { required: true, minLength: 3 })}
               placeholder="Nombre"
             />
-            {errors.nombre?.type === "required" && (
+            {errorsAdd.nombre?.type === "required" && (
               <p className="requerido">Este campo es requerido</p>
             )}
-            {errors.nombre?.type === "minLength" && (
-              <p className="requerido">
-                Debe tener al menos 3 caracteres
-              </p>
+            {errorsAdd.nombre?.type === "minLength" && (
+              <p className="requerido">Debe tener al menos 3 caracteres</p>
             )}
           </label>
           <br />
@@ -687,7 +693,7 @@ const Edificios = () => {
               type="number"
               step="any"
               className="edificios input modalInput"
-              {...register("longitud", {
+              {...registerAdd("longitud", {
                 required: true,
                 pattern: {
                   value: /^-?\d*\.?\d+$/,
@@ -696,9 +702,9 @@ const Edificios = () => {
               })}
               placeholder="Longitud"
             />
-            {errors.longitud && (
+            {errorsAdd.longitud && (
               <p className="requerido">
-                {errors.longitud.message || "Este campo es requerido"}
+                {errorsAdd.longitud.message || "Este campo es requerido"}
               </p>
             )}
           </label>
@@ -708,7 +714,7 @@ const Edificios = () => {
               type="number"
               step="any"
               className="edificios input modalInput"
-              {...register("latitud", {
+              {...registerAdd("latitud", {
                 required: true,
                 pattern: {
                   value: /^-?\d*\.?\d+$/,
@@ -717,9 +723,9 @@ const Edificios = () => {
               })}
               placeholder="Latitud"
             />
-            {errors.latitud && (
+            {errorsAdd.latitud && (
               <p className="requerido">
-                {errors.latitud.message || "Este campo es requerido"}
+                {errorsAdd.latitud.message || "Este campo es requerido"}
               </p>
             )}
           </label>
@@ -737,8 +743,8 @@ const Edificios = () => {
               center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
               zoom={17}
               onClick={(e) => {
-                setValue("longitud", e.latLng.lng());
-                setValue("latitud", e.latLng.lat());
+                setValueAdd("longitud", e.latLng.lng());
+                setValueAdd("latitud", e.latLng.lat());
                 setMarkerPosition({
                   lat: e.latLng.lat(),
                   lng: e.latLng.lng(),
@@ -795,7 +801,7 @@ const Edificios = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Editar edificio</h2>
-        <form onSubmit={handleSubmit(onSubmitEditar)}>
+        <form onSubmit={handleSubmitEdit(onSubmitEditar)}>
           <br />
           <h3>Considera un Número y un Nombre único</h3>
           <br />
@@ -805,7 +811,7 @@ const Edificios = () => {
               type="number"
               min="0"
               className="edificios input modalInput"
-              {...register("numero", {
+              {...registerEdit("numero", {
                 required: true,
                 valueAsNumber: true,
                 validate: (value) =>
@@ -814,7 +820,7 @@ const Edificios = () => {
               })}
               placeholder="Número"
             />
-            {errors.numero && (
+            {errorsEdit.numero && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -823,10 +829,10 @@ const Edificios = () => {
             Nombre:
             <input
               className="edificios input modalInput"
-              {...register("nombre", { required: true })}
+              {...registerEdit("nombre", { required: true })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
+            {errorsEdit.nombre && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -834,10 +840,10 @@ const Edificios = () => {
             Descripción:
             <input
               className="edificios input modalInput"
-              {...register("descripcion", { required: false })}
+              {...registerEdit("descripcion", { required: true })}
               placeholder="Descripción"
             />
-            {errors.descripcion && (
+            {errorsEdit.descripcion && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -845,10 +851,10 @@ const Edificios = () => {
             Dirección:
             <input
               className="edificios input modalInput"
-              {...register("direccion", { required: false })}
+              {...registerEdit("direccion", { required: true })}
               placeholder="Dirección"
             />
-            {errors.direccion && (
+            {errorsEdit.direccion && (
               <p className="requerido">Este campo es requerido, mayor a 3</p>
             )}
           </label>
@@ -861,7 +867,7 @@ const Edificios = () => {
               type="number"
               step="any"
               className="edificios input modalInput"
-              {...register("longitud", {
+              {...registerEdit("longitud", {
                 required: true,
                 pattern: {
                   value: /^-?\d*\.?\d+$/,
@@ -870,9 +876,9 @@ const Edificios = () => {
               })}
               placeholder="Longitud"
             />
-            {errors.longitud && (
+            {errorsEdit.longitud && (
               <p className="requerido">
-                {errors.longitud.message || "Este campo es requerido"}
+                {errorsEdit.longitud.message || "Este campo es requerido"}
               </p>
             )}
           </label>
@@ -882,7 +888,7 @@ const Edificios = () => {
               type="number"
               step="any"
               className="edificios input modalInput"
-              {...register("latitud", {
+              {...registerEdit("latitud", {
                 required: true,
                 pattern: {
                   value: /^-?\d*\.?\d+$/,
@@ -891,9 +897,9 @@ const Edificios = () => {
               })}
               placeholder="Latitud"
             />
-            {errors.latitud && (
+            {errorsEdit.latitud && (
               <p className="requerido">
-                {errors.latitud.message || "Este campo es requerido"}
+                {errorsEdit.latitud.message || "Este campo es requerido"}
               </p>
             )}
           </label>
@@ -911,8 +917,8 @@ const Edificios = () => {
               center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
               zoom={17}
               onClick={(e) => {
-                setValue("longitud", e.latLng.lng());
-                setValue("latitud", e.latLng.lat());
+                setValueEdit("longitud", e.latLng.lng());
+                setValueEdit("latitud", e.latLng.lat());
                 setMarkerPosition({
                   lat: e.latLng.lat(),
                   lng: e.latLng.lng(),
@@ -950,7 +956,7 @@ const Edificios = () => {
             <>
               <div className="btnContainer">
                 <button type="submit" className="agregarBtn">
-                  Agregar
+                  Actualizar
                 </button>
                 <button
                   className="cancelarBtn"

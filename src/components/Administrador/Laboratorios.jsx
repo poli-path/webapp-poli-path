@@ -36,12 +36,25 @@ const Laboratorios = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalEditarIsOpen, setModalEditarIsOpen] = useState(false);
   const [LaboratorioEditado, setLaboratorioEditado] = useState(null);
+
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    reset,
+    register: registerAdd,
+    handleSubmit: handleSubmitAdd,
+    formState: { errors: errorsAdd },
+    setValue: setValueAdd,
+    reset: resetAdd,
+    getValues: getValuesAdd,
+    watch: watchAdd,
+  } = useForm();
+
+  const {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    formState: { errors: errorsEdit },
+    setValue: setValueEdit,
+    reset: resetEdit,
+    getValues: getValuesEdit,
+    watch: watchEdit,
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -85,19 +98,22 @@ const Laboratorios = () => {
             },
           }
         );
-        setLoading(true);
 
         setLaboratorios([...Laboratorios, response.data]);
         setModalIsOpen(false);
+        setLoading(true);
+
         await fetchlaboratories(token);
         setPageSize(defaultPageSize);
         setPageNumber(0);
         toast.success("Laboratorio agregada exitosamente!");
-        reset();
+        resetAdd();
         // Actualiza el estado local para forzar la recarga de datos
-
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -105,34 +121,103 @@ const Laboratorios = () => {
       });
     } finally {
       setLoadingLaboratorio(false);
-      setLoading(false);
-
     }
   };
 
   const editarLaboratorio = (index) => {
-    setLaboratorioEditado(index);
-    setValue("edificio", Laboratorios[index].edificio);
-    setValue("nombre", Laboratorios[index].nombre);
-    setModalEditarIsOpen(true);
+    const token = Cookies.get("token");
+    Swal.fire({
+      title: "Verificando Laboratorio",
+      text: "Por favor, espera...",
+      icon: "info",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/laboratories/${index}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const edificio = response.data;
+        setLaboratorioEditado(edificio);
+
+        setValueEdit("edificio", edificio.building.id);
+        setValueEdit("nombre", edificio.name);
+        setValueEdit("descripcion", edificio.description);
+        Swal.close();
+
+        setModalEditarIsOpen(true);
+      })
+      .catch((error) => {
+        fetchlaboratories(token);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al verificar Laboratorio, prueba de nuevo",
+        });
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
+      });
   };
 
-  const onSubmitEditar = (data) => {
-    Swal.fire({
-      title: "¿Estás seguro de editar esta Laboratorio?",
-      showDenyButton: true,
-      confirmButtonText: `Continuar`,
-      denyButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedLaboratorios = [...Laboratorios];
-        updatedLaboratorios[LaboratorioEditado] = data;
-        setLaboratorios(updatedLaboratorios);
+  const onSubmitEditar = async (data) => {
+    const token = Cookies.get("token");
+
+    try {
+      const confirmResult = await Swal.fire({
+        title: "¿Estás seguro de editar este Laboratorios?",
+        showDenyButton: true,
+        confirmButtonText: `Continuar`,
+        denyButtonText: `Cancelar`,
+      });
+
+      if (confirmResult.isConfirmed) {
+        setLoadingLaboratorio(true);
+        // Realiza la petición tipo PATCH con el token
+        await axios.patch(
+          `${process.env.REACT_APP_API_URL}/laboratories/${LaboratorioEditado.id}`,
+          {
+            buildingId: data.edificio,
+            name: data.nombre,
+            description: data.descripcion,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setLaboratorios(
+          Laboratorios.map((edif) =>
+            edif === LaboratorioEditado ? data : edif
+          )
+        );
+
+        await fetchlaboratories(token);
+
+        toast.success("Facultad editada exitosamente!");
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
+
         setModalEditarIsOpen(false);
-        toast.success("Laboratorio editada exitosamente!");
-        reset();
+        setLoadingLaboratorio(false);
       }
-    });
+      resetEdit();
+    } catch (error) {
+      await fetchlaboratories(token);
+
+      setLoadingLaboratorio(false);
+      Swal.fire({
+        title: "Error al editar el Laboratorio",
+        text: error.response?.data?.message || "Hubo un error inesperado",
+        icon: "error",
+      });
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
+    }
   };
 
   const eliminarLaboratorio = async (laboratorioId) => {
@@ -373,12 +458,12 @@ const Laboratorios = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Agregar nuevo Laboratorio</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmitAdd(onSubmit)}>
           <label>
             Edificio:
             <select
               className="Laboratorios input modalInput"
-              {...register("edificio", { required: true })}
+              {...registerAdd("edificio", { required: true })}
             >
               {edificios.map((edificio) => (
                 <option key={edificio.id} value={edificio.id}>
@@ -386,7 +471,7 @@ const Laboratorios = () => {
                 </option>
               ))}
             </select>
-            {errors.edificio && (
+            {errorsAdd.edificio && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -394,13 +479,13 @@ const Laboratorios = () => {
             Nombre:
             <input
               className="Laboratorios input modalInput"
-              {...register("nombre", {
+              {...registerAdd("nombre", {
                 required: true,
                 validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
               })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
+            {errorsAdd.nombre && (
               <p className="requerido">El nombre debe tener más de 3 letras</p>
             )}
           </label>
@@ -408,11 +493,17 @@ const Laboratorios = () => {
             Descripcion:
             <input
               className="Laboratorios input modalInput"
-              {...register("descripcion", { required: true })}
+              {...registerAdd("descripcion", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
               placeholder="Descripción"
             />
-            {errors.descripcion && (
-              <p className="requerido">Este campo es requerido</p>
+            {errorsAdd.descripcion && (
+              <p className="requerido">
+                {" "}
+                La descripción debe tener más de 3 caracteres
+              </p>
             )}
           </label>
           {loadingLaboratorio ? (
@@ -448,15 +539,20 @@ const Laboratorios = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Editar Laboratorio</h2>
-        <form onSubmit={handleSubmit(onSubmitEditar)}>
-          <label>
+        <form onSubmit={handleSubmitEdit(onSubmitEditar)}>
+        <label>
             Edificio:
-            <input
+            <select
               className="Laboratorios input modalInput"
-              {...register("edificio", { required: true })}
-              placeholder="Edificio"
-            />
-            {errors.edificio && (
+              {...registerEdit("edificio", { required: true })}
+            >
+              {edificios.map((edificio) => (
+                <option key={edificio.id} value={edificio.id}>
+                  {edificio.name}
+                </option>
+              ))}
+            </select>
+            {errorsEdit.edificio && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
@@ -464,25 +560,56 @@ const Laboratorios = () => {
             Nombre:
             <input
               className="Laboratorios input modalInput"
-              {...register("nombre", { required: true })}
+              {...registerEdit("nombre", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
-              <p className="requerido">Este campo es requerido</p>
+            {errorsEdit.nombre && (
+              <p className="requerido">El nombre debe tener más de 3 letras</p>
             )}
           </label>
-
-          <div className="btnContainer">
-            <button type="submit" className="agregarBtn">
-              Editar
-            </button>
-            <button
-              className="cancelarBtn"
-              onClick={() => setModalEditarIsOpen(false)}
-            >
-              Cancelar
-            </button>
-          </div>
+          <label>
+            Descripcion:
+            <input
+              className="Laboratorios input modalInput"
+              {...registerEdit("descripcion", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
+              placeholder="Descripción"
+            />
+            {errorsEdit.descripcion && (
+              <p className="requerido">
+                La descripción debe tener más de 3 caracteres
+              </p>
+            )}
+          </label>
+          {loadingLaboratorio ? (
+            <div className="botones">
+              <ClipLoader
+                color="#3d8463"
+                loading={loadingLaboratorio}
+                size={"90px"}
+              />
+              <div style={{ fontSize: "30px" }}>Actualizando Laboratorio...</div>
+            </div>
+          ) : (
+            <>
+              <div className="btnContainer">
+                <button type="submit" className="agregarBtn">
+                  Agregar
+                </button>
+                <button
+                  className="cancelarBtn"
+                  onClick={() => setModalEditarIsOpen(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </>
+          )}
         </form>
       </Modal>
 
