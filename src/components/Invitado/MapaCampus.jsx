@@ -20,15 +20,15 @@ const MapContainer = () => {
   const [startLocation, setStartLocation] = useState("");
   const [startLocationCoords, setStartLocationCoords] = useState(null);
   const [startBuilding, setStartBuilding] = useState(null);
-  const [infoWindowOpen, setInfoWindowOpen] = useState(false); 
+  const [infoWindowOpen, setInfoWindowOpen] = useState(false);
 
   const handleMarkerClick = (building) => {
     setSelectedBuilding(building);
-    setInfoWindowOpen(true); 
+    setInfoWindowOpen(true);
   };
 
   const handleCloseInfoWindow = () => {
-    setInfoWindowOpen(false); 
+    setInfoWindowOpen(false);
   };
 
   const directionsService = new window.google.maps.DirectionsService();
@@ -36,7 +36,7 @@ const MapContainer = () => {
   const handleClearRoute = () => {
     setDirections(null);
     setSelectedBuilding(null);
-    setInfoWindowOpen(false); 
+    setInfoWindowOpen(false);
   };
 
   const handleBuildingSelect = (building) => {
@@ -46,7 +46,7 @@ const MapContainer = () => {
       lng: building.longitude,
     });
     setStartLocation("");
-    setInfoWindowOpen(false); 
+    setInfoWindowOpen(false);
   };
 
   const handleSelect = (e) => {
@@ -120,7 +120,6 @@ const MapContainer = () => {
 
   const mapOptions = {
     mapContainerStyle: { width: "100%", height: "70vh" },
-    mapTypeId: "satellite",
     center: selectedBuilding
       ? { lat: selectedBuilding.latitude, lng: selectedBuilding.longitude }
       : userLocation || { lat: -0.21055556, lng: -78.48888889 },
@@ -128,6 +127,13 @@ const MapContainer = () => {
     featureType: "all",
     elementType: "labels",
     stylers: [{ visibility: "off" }],
+    styles: [
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: "red" }]
+      }
+    ]
   };
 
   return (
@@ -180,10 +186,12 @@ const MapContainer = () => {
                 onClick={() => handleMarkerClick(building)}
                 label={{
                   text: building.name,
-                  color: "white",
+                  color: "black",
                   fontSize: "16px",
                   fontWeight: "bold",
-                  textShadow: "1px 3px 0px black",
+                  padding: "20px",
+                  backgroundColor: "aliceblue"
+                
                 }}
                 animation={window.google.maps.Animation.DROP}
               />
@@ -215,8 +223,9 @@ const MapContainer = () => {
                         </div>
                       ))}
                     </Carousel>
-                    <p style={{color:"black"}}>{selectedBuilding.description}</p>
-
+                    <p style={{ color: "black" }}>
+                      {selectedBuilding.description}
+                    </p>
                   </div>
                 </InfoWindow>
               </div>
@@ -231,10 +240,9 @@ const MapContainer = () => {
                 }}
                 label={{
                   text: "Tu ubicación",
-                  color: "white",
+                  color: "black",
                   fontSize: "20px",
                   fontWeight: "bold",
-                  textShadow: "1px 3px 0px black",
                 }}
                 animation={window.google.maps.Animation.DROP}
               />

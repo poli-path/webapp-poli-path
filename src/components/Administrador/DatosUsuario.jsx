@@ -22,7 +22,6 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
   const [modalPasswordIsOpen, setModalPasswordIsOpen] = useState(false);
   const [activeForm, setActiveForm] = useState("userData"); // Por defecto, el formulario activo es "userData"
 
-
   const [isEditable, setIsEditable] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -143,17 +142,16 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
 
   const handleCancelImageChange = () => {
     setModalIsOpen(false);
-    setNewImage(null); 
-    setPreviewImage(usuario.imagen); 
+    setNewImage(null);
+    setPreviewImage(usuario.imagen);
 
     setValue("imagen", "");
   };
   const openPasswordModal = () => {
     setModalPasswordIsOpen(true);
     setActiveForm("password");
-    
   };
-  
+
   const closePasswordModal = () => {
     setModalPasswordIsOpen(false);
     setActiveForm("userData"); // Cuando se cierra el modal de contraseña, activamos nuevamente el formulario de userData
@@ -182,7 +180,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
             ...usuario,
             imagen: response.data.imageUrl,
           };
-          setUsuario(updatedUserData); 
+          setUsuario(updatedUserData);
           setModalIsOpen(false);
           setNewImage(null);
 
@@ -254,7 +252,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
 
       if (response.status === 200) {
         toast.success("Contraseña cambiada exitosamente");
-        setModalPasswordIsOpen(false); 
+        setModalPasswordIsOpen(false);
 
         setValue("oldPassword", "");
         setValue("newPassword", "");
@@ -290,50 +288,50 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     <div className="datosUsuario">
       <div className="formUsuario">
         <h2>Usuario</h2>
-        {(activeForm === "userData" || activeForm === "password") &&(
-        <form onSubmit={handleSubmit(onSubmitUserData)}>
-          <label>
-            Nombre:
-            <input
-              type="text"
-              {...register("nombre", {
-                required: isEditable,
-                minLength: isEditable ? 3 : undefined,
-                maxLength: isEditable ? 20 : undefined,
-                pattern: isEditable ? /^[^\s]+$/ : undefined,
-              })}
-              disabled={!isEditable}
-            />
-            {errors.nombre && (
-              <p className="requerido">
-                {isEditable
-                  ? "Este campo es requerido y debe tener al menos 3 caracteres (20 máximo) sin espacios"
-                  : ""}
-              </p>
-            )}
-          </label>
-          <label>
-            Apellido:
-            <input
-              type="text"
-              {...register("apellido", {
-                required: isEditable,
-                minLength: isEditable ? 3 : undefined,
-                maxLength: isEditable ? 20 : undefined,
-                pattern: isEditable ? /^[^\s]+$/ : undefined,
-              })}
-              disabled={!isEditable}
-            />
-            {errors.apellido && (
-              <p className="requerido">
-                {isEditable
-                  ? "Este campo es requerido y debe tener al menos 3 caracteres (20 máximo) sin espacios"
-                  : ""}
-              </p>
-            )}
-          </label>
-        </form>
-)}
+        {(activeForm === "userData" || activeForm === "password") && (
+          <form onSubmit={handleSubmit(onSubmitUserData)}>
+            <label>
+              Nombre:
+              <input
+                type="text"
+                {...register("nombre", {
+                  required: isEditable,
+                  minLength: isEditable ? 3 : undefined,
+                  maxLength: isEditable ? 20 : undefined,
+                  pattern: isEditable ? /^[^\s]+$/ : undefined,
+                })}
+                disabled={!isEditable}
+              />
+              {errors.nombre && (
+                <p className="requerido">
+                  {isEditable
+                    ? "Este campo es requerido y debe tener al menos 3 caracteres (20 máximo) sin espacios"
+                    : ""}
+                </p>
+              )}
+            </label>
+            <label>
+              Apellido:
+              <input
+                type="text"
+                {...register("apellido", {
+                  required: isEditable,
+                  minLength: isEditable ? 3 : undefined,
+                  maxLength: isEditable ? 20 : undefined,
+                  pattern: isEditable ? /^[^\s]+$/ : undefined,
+                })}
+                disabled={!isEditable}
+              />
+              {errors.apellido && (
+                <p className="requerido">
+                  {isEditable
+                    ? "Este campo es requerido y debe tener al menos 3 caracteres (20 máximo) sin espacios"
+                    : ""}
+                </p>
+              )}
+            </label>
+          </form>
+        )}
         {isSaving ? (
           <>
             <div style={{ fontSize: "25px" }}>Guardando tus datos...</div>
@@ -371,18 +369,17 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
       >
         <h2>Cambiar Foto de Perfil</h2>
         <div className="foto">
-        {previewImage && (
-          <img src={previewImage} alt="Previsualización de la imagen" />
-        )}{" "}
-        <input
-          type="file"
-          accept="image/jpeg, image/png"
-          onChange={handleFileChange}
-        />
-
+          {previewImage && (
+            <img src={previewImage} alt="Previsualización de la imagen" />
+          )}{" "}
+          <input
+            type="file"
+            accept="image/jpeg, image/png"
+            onChange={handleFileChange}
+          />
         </div>
-        
-        {isSaving ? ( 
+
+        {isSaving ? (
           <>
             <div style={{ fontSize: "10" }}>Actualizando Foto de Perfil...</div>
             <ClipLoader color="#3d8463" loading={isSaving} size={"30px"} />
@@ -407,87 +404,87 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
         overlayClassName="modalOverlay"
       >
         {activeForm === "password" && (
-        <form onSubmit={handleSubmit(onSubmitPassword)}>
-          <h2>Cambiar Contraseña</h2>
-          <label>
-            Contraseña Antigua:
-            <br />
-            <div className="passwordContainer">
-              <input
-                className="datosUsuario input modalInput passwordInput"
-                type={showPassword ? "text" : "password"}
-                {...register("oldPassword", { required: true })}
-              />
-              <FontAwesomeIcon
-                icon={showPassword ?  faEye: faEyeSlash}
-                onClick={() => setShowPassword(!showPassword)}
-                className="passwordIcon"
-              />
-            </div>
-            {errors.oldPassword && (
-              <p className="requerido">Este campo es requerido</p>
-            )}
-          </label>
-          <label>
-            Nueva Contraseña:
-            <br />
-            <div className="passwordContainer">
-              <input
-                className="datosUsuario input modalInput passwordInput"
-                type={showPassword ? "text" : "password"}
-                {...register("newPassword", { required: true })}
-              />
-              <FontAwesomeIcon
-                icon={showPassword ?  faEye: faEyeSlash}
-                onClick={() => setShowPassword(!showPassword)}
-                className="passwordIcon"
-              />
-            </div>
-            {errors.newPassword && (
-              <p className="requerido">Este campo es requerido</p>
-            )}
-          </label>
-          <label>
-            Confirmar Nueva Contraseña:
-            <br />
-            <div className="passwordContainer">
-              <input
-                className="datosUsuario input modalInput passwordInput"
-                type={showPassword ? "text" : "password"}
-                {...register("confirmNewPassword", { required: true })}
-              />
-              <FontAwesomeIcon
-                icon={showPassword ? faEye : faEyeSlash}
-                onClick={() => setShowPassword(!showPassword)}
-                className="passwordIcon"
-              />
-            </div>
-            {errors.confirmNewPassword && (
-              <p className="requerido">Este campo es requerido</p>
-            )}
-            <p className="requerido confirmPasswordError"></p>
-          </label>
+          <form onSubmit={handleSubmit(onSubmitPassword)}>
+            <h2>Cambiar Contraseña</h2>
+            <label>
+              Contraseña Antigua:
+              <br />
+              <div className="passwordContainer">
+                <input
+                  className="datosUsuario input modalInput passwordInput"
+                  type={showPassword ? "text" : "password"}
+                  {...register("oldPassword", { required: true })}
+                />
+                <FontAwesomeIcon
+                  icon={showPassword ? faEye : faEyeSlash}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="passwordIcon"
+                />
+              </div>
+              {errors.oldPassword && (
+                <p className="requerido">Este campo es requerido</p>
+              )}
+            </label>
+            <label>
+              Nueva Contraseña:
+              <br />
+              <div className="passwordContainer">
+                <input
+                  className="datosUsuario input modalInput passwordInput"
+                  type={showPassword ? "text" : "password"}
+                  {...register("newPassword", { required: true })}
+                />
+                <FontAwesomeIcon
+                  icon={showPassword ? faEye : faEyeSlash}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="passwordIcon"
+                />
+              </div>
+              {errors.newPassword && (
+                <p className="requerido">Este campo es requerido</p>
+              )}
+            </label>
+            <label>
+              Confirmar Nueva Contraseña:
+              <br />
+              <div className="passwordContainer">
+                <input
+                  className="datosUsuario input modalInput passwordInput"
+                  type={showPassword ? "text" : "password"}
+                  {...register("confirmNewPassword", { required: true })}
+                />
+                <FontAwesomeIcon
+                  icon={showPassword ? faEye : faEyeSlash}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="passwordIcon"
+                />
+              </div>
+              {errors.confirmNewPassword && (
+                <p className="requerido">Este campo es requerido</p>
+              )}
+              <p className="requerido confirmPasswordError"></p>
+            </label>
 
-          {isSavingPassword ? (
-            <div className="botones">
-              <ClipLoader
-                color="#3d8463"
-                loading={isSavingPassword}
-                size={"30px"}
-              />
-              <div style={{ fontSize: "10" }}>Actualizando contraseña...</div>
-            </div>
-          ) : (
-            <div className="botones">
-              <button className="cancelarBtn" onClick={closePasswordModal}>
-                Cancelar
-              </button>
-              <button className="agregarBtn" type="submit">
-                Cambiar Contraseña
-              </button>
-            </div>
-          )}
-        </form>
+            {isSavingPassword ? (
+              <div className="botones">
+                <ClipLoader
+                  color="#3d8463"
+                  loading={isSavingPassword}
+                  size={"30px"}
+                />
+                <div style={{ fontSize: "10" }}>Actualizando contraseña...</div>
+              </div>
+            ) : (
+              <div className="botones">
+                <button className="cancelarBtn" onClick={closePasswordModal}>
+                  Cancelar
+                </button>
+                <button className="agregarBtn" type="submit">
+                  Cambiar Contraseña
+                </button>
+              </div>
+            )}
+          </form>
         )}
       </Modal>
 

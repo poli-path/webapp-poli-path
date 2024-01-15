@@ -43,12 +43,12 @@ const Edificios = () => {
   const [loadingAddEdificio, setLoadingAddEdificio] = useState(false);
   const [mapModalIsOpen, setMapModalIsOpen] = useState(false);
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
-  
   const [selectedBuildingCoordinates, setSelectedBuildingCoordinates] =
     useState({
       lat: 0,
       lng: 0,
     });
+  const [buildingIds, setBuildingIds] = useState([]); // Nuevo estado para almacenar los IDs de los edificios
 
   const openImagesModal = (images) => {
     setSelectedImages(images);
@@ -113,17 +113,22 @@ const Edificios = () => {
       );
 
       setEdificios(response.data);
+      setBuildingIds(response.data.map((building) => building.id)); // Almacena los IDs
       setLoading(false);
     } catch (error) {
+      await fetchBuildings(token);
+
       console.error("Error fetching buildings:", error);
       setLoading(false);
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
     }
   };
-  
-  const onSubmit = async (data) => {
-    try {
-      const token = Cookies.get("token");
 
+  const onSubmit = async (data) => {
+    const token = Cookies.get("token");
+
+    try {
       const confirmResult = await Swal.fire({
         title: "Confirmar ingreso",
         text: "¿Estas seguro de agregar este nuevo Edificio?",
@@ -172,46 +177,125 @@ const Edificios = () => {
       }
     } catch (error) {
       setLoadingAddEdificio(false);
-      console.error("Error al agregar el edificio:", error);
+      await fetchBuildings(token);
+
       Swal.fire({
         title: "Error al agregar el edificio",
         text: error.response?.data?.message || "Hubo un error inesperado",
         icon: "error",
       });
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
     }
   };
 
   const editarEdificio = (index) => {
-    setEdificioEditado(edificios[index]);
-    setValue("numero", edificios[index].numero);
-    setValue("nombre", edificios[index].nombre);
-    setValue("longitud", edificios[index].longitud);
-    setValue("latitud", edificios[index].latitud);
-    setModalEditarIsOpen(true);
+    const token = Cookies.get("token");
+    Swal.fire({
+      title: "Verificando Edificio",
+      text: "Por favor, espera...",
+      icon: "info",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+    });
+    // Realiza una solicitud tipo GET para obtener los detalles del edificio
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/buildings/${index}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const edificio = response.data;
+        setEdificioEditado(edificio);
+        setMarkerPosition({
+          lat: edificio.latitude,
+          lng: edificio.longitude,
+        });
+        setValue("numero", edificio.no);
+        setValue("nombre", edificio.name);
+        setValue("descripcion", edificio.description);
+        setValue("direccion", edificio.address);
+        setValue("longitud", edificio.longitude);
+        setValue("latitud", edificio.latitude);
+        Swal.close();
+
+        setModalEditarIsOpen(true);
+      })
+      .catch((error) => {
+        fetchBuildings(token);
+
+        console.error("Error fetching building details:", error);
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
+      });
   };
 
-  const onSubmitEditar = (data) => {
-    Swal.fire({
-      title: "¿Estás seguro de editar este edificio?",
-      showDenyButton: true,
-      confirmButtonText: `Continuar`,
-      denyButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
+  const onSubmitEditar = async (data) => {
+    const token = Cookies.get("token");
+
+    try {
+      const confirmResult = await Swal.fire({
+        title: "¿Estás seguro de editar este edificio?",
+        showDenyButton: true,
+        confirmButtonText: `Continuar`,
+        denyButtonText: `Cancelar`,
+      });
+
+      if (confirmResult.isConfirmed) {
+        setLoadingAddEdificio(true);
+        // Realiza la petición tipo PATCH con el token
+        await axios.patch(
+          `${process.env.REACT_APP_API_URL}/buildings/${edificioEditado.id}`,
+          {
+            no: data.numero,
+            name: data.nombre,
+            description: data.descripcion,
+            address: data.direccion,
+            longitude: data.longitud,
+            latitude: data.latitud,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
         setEdificios(
           edificios.map((edif) => (edif === edificioEditado ? data : edif))
         );
+
         setModalEditarIsOpen(false);
+        setLoadingAddEdificio(false);
+
+        await fetchBuildings(token);
+
         toast.success("Edificio editado exitosamente!");
-        reset();
+        // Actualiza el estado local para forzar la recarga de datos
+        setPageSize(defaultPageSize);
+        setPageNumber(0);
       }
-    });
+      reset();
+    } catch (error) {
+      await fetchBuildings(token);
+
+      setLoadingAddEdificio(false);
+      console.error("Error al editar el edificio:", error);
+      Swal.fire({
+        title: "Error al editar el edificio",
+        text: error.response?.data?.message || "Hubo un error inesperado",
+        icon: "error",
+      });
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
+    }
   };
 
   const eliminarEdificio = async (id) => {
+    const token = Cookies.get("token");
+
     try {
-      const token = Cookies.get("token");
-  
       // Mostrar SweetAlert de carga
       Swal.fire({
         title: "Verificando Edificio",
@@ -220,7 +304,7 @@ const Edificios = () => {
         allowOutsideClick: false,
         showConfirmButton: false,
       });
-  
+
       // Obtén el edificio por su id
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/buildings/${id}`,
@@ -230,9 +314,9 @@ const Edificios = () => {
           },
         }
       );
-  
+
       const edificio = response.data;
-  
+
       // Verifica si existen registros asociados
       if (
         edificio.faculties.length > 0 ||
@@ -241,7 +325,7 @@ const Edificios = () => {
       ) {
         // Oculta el SweetAlert de carga
         Swal.close();
-  
+
         // Muestra SweetAlert de error
         Swal.fire({
           title: "No se puede eliminar",
@@ -250,10 +334,10 @@ const Edificios = () => {
         });
         return;
       }
-  
+
       // Oculta el SweetAlert de carga antes de mostrar la confirmación
       Swal.close();
-  
+
       // Mostrar SweetAlert de confirmación
       const confirmResult = await Swal.fire({
         title: "Confirmar eliminación",
@@ -264,28 +348,30 @@ const Edificios = () => {
         cancelButtonText: "Cancelar",
         dangerMode: true,
       });
-  
+
       if (confirmResult.isConfirmed) {
         setLoading(true);
-  
+
         // Realiza la eliminación
         await axios.delete(`${process.env.REACT_APP_API_URL}/buildings/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        await fetchBuildings(token)
+        await fetchBuildings(token);
 
         toast.success("Edificio eliminado correctamente!");
-        
+
         // Actualiza el estado local para forzar la recarga de datos
         setPageSize(defaultPageSize);
         setPageNumber(0);
       }
     } catch (error) {
+      await fetchBuildings(token);
+
       // Oculta el SweetAlert de carga en caso de error
       Swal.close();
-  
+
       // Muestra SweetAlert de error
       Swal.fire({
         title: "Error",
@@ -294,11 +380,13 @@ const Edificios = () => {
           "Hubo un error al eliminar el edificio",
         icon: "error",
       });
+
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
     } finally {
       setLoading(false);
     }
   };
-  
 
   const data = useMemo(() => edificios, [edificios]);
 
@@ -490,8 +578,8 @@ const Edificios = () => {
         <h2>Ubicación en Google Maps</h2>
         <br />
         <p>
-          La Ubicación del Edificio "{selectedBuildingInfo.name}" se muestra en el
-          siguiente mapa
+          La Ubicación del Edificio "{selectedBuildingInfo.name}" se muestra en
+          el siguiente mapa
         </p>
         <br />
 
@@ -526,8 +614,7 @@ const Edificios = () => {
                 lng: selectedBuildingCoordinates.lng,
               }}
             >
-                <div className="infoContent">
-
+              <div className="infoContent">
                 <h3>{selectedBuildingInfo.name}</h3>
               </div>
             </InfoWindow>
@@ -542,6 +629,7 @@ const Edificios = () => {
           </button>
         </div>
       </Modal>
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -578,11 +666,16 @@ const Edificios = () => {
             Nombre:
             <input
               className="edificios input modalInput"
-              {...register("nombre", { required: true })}
+              {...register("nombre", { required: true, minLength: 3 })}
               placeholder="Nombre"
             />
-            {errors.nombre && (
+            {errors.nombre?.type === "required" && (
               <p className="requerido">Este campo es requerido</p>
+            )}
+            {errors.nombre?.type === "minLength" && (
+              <p className="requerido">
+                Debe tener al menos 3 caracteres
+              </p>
             )}
           </label>
           <br />
@@ -657,13 +750,24 @@ const Edificios = () => {
                 icon={{
                   url: MarkerMi,
                   scaledSize: new window.google.maps.Size(70, 100),
+                  labelOrigin: new window.google.maps.Point(35, 110),
+                }}
+                label={{
+                  text: "Aquí estará tu edificio",
+                  color: "black",
+                  fontSize: "20px",
+                  fontWeight: "bold",
                 }}
               />
             </GoogleMap>
           </div>
           {loadingAddEdificio ? (
             <div className="botones">
-              <ClipLoader color="#3d8463" loading={loading} size={"90px"} />
+              <ClipLoader
+                color="#3d8463"
+                loading={loadingAddEdificio}
+                size={"90px"}
+              />
               <div style={{ fontSize: "30px" }}>Agregando Edificio...</div>
             </div>
           ) : (
@@ -692,17 +796,29 @@ const Edificios = () => {
       >
         <h2>Editar edificio</h2>
         <form onSubmit={handleSubmit(onSubmitEditar)}>
+          <br />
+          <h3>Considera un Número y un Nombre único</h3>
+          <br />
           <label>
             Número:
             <input
+              type="number"
+              min="0"
               className="edificios input modalInput"
-              {...register("numero", { required: true })}
+              {...register("numero", {
+                required: true,
+                valueAsNumber: true,
+                validate: (value) =>
+                  (Number.isInteger(value) && value >= 0) ||
+                  "Ingrese un número entero positivo",
+              })}
               placeholder="Número"
             />
             {errors.numero && (
               <p className="requerido">Este campo es requerido</p>
             )}
           </label>
+
           <label>
             Nombre:
             <input
@@ -715,40 +831,139 @@ const Edificios = () => {
             )}
           </label>
           <label>
-            Longitud:
+            Descripción:
             <input
               className="edificios input modalInput"
-              {...register("longitud", { required: true })}
+              {...register("descripcion", { required: false })}
+              placeholder="Descripción"
+            />
+            {errors.descripcion && (
+              <p className="requerido">Este campo es requerido</p>
+            )}
+          </label>
+          <label>
+            Dirección:
+            <input
+              className="edificios input modalInput"
+              {...register("direccion", { required: false })}
+              placeholder="Dirección"
+            />
+            {errors.direccion && (
+              <p className="requerido">Este campo es requerido, mayor a 3</p>
+            )}
+          </label>
+          <br />
+          <h3>Haz click en el mapa para extraer las Coordenadas de un lugar</h3>
+          <br />
+          <label>
+            Longitud:
+            <input
+              type="number"
+              step="any"
+              className="edificios input modalInput"
+              {...register("longitud", {
+                required: true,
+                pattern: {
+                  value: /^-?\d*\.?\d+$/,
+                  message: "Ingrese un número decimal válido",
+                },
+              })}
               placeholder="Longitud"
             />
             {errors.longitud && (
-              <p className="requerido">Este campo es requerido</p>
+              <p className="requerido">
+                {errors.longitud.message || "Este campo es requerido"}
+              </p>
             )}
           </label>
           <label>
             Latitud:
             <input
+              type="number"
+              step="any"
               className="edificios input modalInput"
-              {...register("latitud", { required: true })}
+              {...register("latitud", {
+                required: true,
+                pattern: {
+                  value: /^-?\d*\.?\d+$/,
+                  message: "Ingrese un número decimal válido",
+                },
+              })}
               placeholder="Latitud"
             />
             {errors.latitud && (
-              <p className="requerido">Este campo es requerido</p>
+              <p className="requerido">
+                {errors.latitud.message || "Este campo es requerido"}
+              </p>
             )}
           </label>
-          <div className="btnContainer">
-            <button type="submit" className="agregarBtn">
-              Editar
-            </button>
-            <button
-              className="cancelarBtn"
-              onClick={() => setModalEditarIsOpen(false)}
+
+          <div
+            className="mapContainer"
+            style={{ height: "400px", width: "100%", position: "relative" }}
+          >
+            <GoogleMap
+              mapContainerStyle={{
+                height: "100%",
+                width: "100%",
+                position: "absolute",
+              }}
+              center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
+              zoom={17}
+              onClick={(e) => {
+                setValue("longitud", e.latLng.lng());
+                setValue("latitud", e.latLng.lat());
+                setMarkerPosition({
+                  lat: e.latLng.lat(),
+                  lng: e.latLng.lng(),
+                });
+              }}
             >
-              Cancelar
-            </button>
+              <Marker
+                position={markerPosition}
+                icon={{
+                  url: MarkerMi,
+                  scaledSize: new window.google.maps.Size(70, 100),
+                  labelOrigin: new window.google.maps.Point(35, 110),
+                }}
+                label={{
+                  text: "Ubicación del Edificio",
+                  color: "black",
+                  background: "black",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  textShadow: "1px 3px 0px black",
+                }}
+              />
+            </GoogleMap>
           </div>
+          {loadingAddEdificio ? (
+            <div className="botones">
+              <ClipLoader
+                color="#3d8463"
+                loading={loadingAddEdificio}
+                size={"90px"}
+              />
+              <div style={{ fontSize: "30px" }}>Actualizando Edificio...</div>
+            </div>
+          ) : (
+            <>
+              <div className="btnContainer">
+                <button type="submit" className="agregarBtn">
+                  Agregar
+                </button>
+                <button
+                  className="cancelarBtn"
+                  onClick={() => setModalEditarIsOpen(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </>
+          )}
         </form>
       </Modal>
+
       <Modal
         isOpen={modalImagesIsOpen}
         onRequestClose={() => setModalImagesIsOpen(false)}
@@ -761,7 +976,13 @@ const Edificios = () => {
             key={index}
             src={imageUrl}
             alt={`Imagen ${index + 1}`}
-            style={{ width: "50%", height: "150px", borderRadius:0,padding:10,margin:0 }}
+            style={{
+              width: "50%",
+              height: "150px",
+              borderRadius: 0,
+              padding: 10,
+              margin: 0,
+            }}
           />
         ))}
         <div className="botones2">

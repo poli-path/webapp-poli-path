@@ -174,6 +174,9 @@ const Administradores = () => {
           "Hubo un error al eliminar el administrador",
         icon: "error",
       });
+      await fetchAdministradores();
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
     } finally {
       setLoading(false);
     }

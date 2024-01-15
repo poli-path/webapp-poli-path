@@ -1,4 +1,3 @@
-
 /* Estilos CSS */
 .botones2 {
   display: flex;
@@ -7,7 +6,6 @@
   gap: 10px; /* Espacio entre elementos */
   padding: 20px;
   align-items: center;
-
 }
 .mapContainer * {
   margin: 0;
@@ -26,7 +24,7 @@
   cursor: pointer;
   flex-shrink: 0; /* Evitar que los botones se reduzcan más allá de su tamaño */
 }
-.botones{
+.botones {
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
@@ -54,7 +52,7 @@
   border: 3px solid #fafafa10;
   border-radius: 50px;
   box-shadow: 0 20px 32px 0 black;
-max-width: 90%;
+  max-width: 90%;
   padding: 7%;
 }
 
@@ -87,7 +85,7 @@ max-width: 90%;
   border: none;
 }
 .dark-mode .tablaEdificios td button:hover {
-  background: linear-gradient(90deg, #ba001300, #8C0303, #ba001300);
+  background: linear-gradient(90deg, #ba001300, #8c0303, #ba001300);
   border: none;
 }
 .dark-mode .tablaEdificios td button {
@@ -132,19 +130,23 @@ max-width: 90%;
 }
 
 .tablaEdificios::-webkit-scrollbar {
-  width: 5px; /* Ancho de la barra de desplazamiento */
-  height: 5px; /* Ancho de la barra de desplazamiento */
+  width: 7px; /* Ancho de la barra de desplazamiento */
+  height: 7px; /* Ancho de la barra de desplazamiento */
   border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
-
 }
 
 .tablaEdificios::-webkit-scrollbar-track {
-  background: #1a31b3; /* Color de la pista de la barra de desplazamiento */
+  background: transparent; /* Color de la pista de la barra de desplazamiento */
 }
 
 .tablaEdificios::-webkit-scrollbar-thumb {
-  background-color: red; /* Color del pulgar de la barra de desplazamiento */
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.449
+  ); /* Color del pulgar de la barra de desplazamiento */
   border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
 }
@@ -220,7 +222,6 @@ max-width: 90%;
   margin: 10px; /* Margen de 10px */
 }
 
-
 /* Estilos para el contenedor de los botones */
 .btnContainer {
   display: flex;
@@ -228,10 +229,9 @@ max-width: 90%;
   gap: 1%;
 }
 
-
 /* Estilos para el botón de agregar */
 .agregarBtn {
-  background-color: #4CAF50; /* Verde */
+  background-color: #4caf50; /* Verde */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -258,7 +258,6 @@ max-width: 90%;
   cursor: pointer;
 }
 
-
 /* Estilos para pantallas pequeñas */
 @media (max-width: 767px) {
   .edificios {
@@ -274,7 +273,10 @@ max-width: 90%;
     font-size: 0.75em;
     align-self: first baseline;
   }
-  .edificios table, .edificios th, .edificios td, .edificios {
+  .edificios table,
+  .edificios th,
+  .edificios td,
+  .edificios {
     min-width: 100px;
   }
   .modalContent {
@@ -282,5 +284,4 @@ max-width: 90%;
     padding: 20px; /* Relleno de 30px */
     width: 80%; /* Ancho de 600px */
   }
-  
 }
