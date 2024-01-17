@@ -1,6 +1,5 @@
-
 * {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 .mapContainer,
 .mapContainer * {
@@ -13,30 +12,29 @@
 }
 a:hover {
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
-  background: linear-gradient(180deg, #ba001300, #ff3246,#ba001300);
+  background: linear-gradient(180deg, #ba001300, #ff3246, #ba001300);
 }
 a:active {
   /* Aquí puedes agregar los estilos que quieras para cuando se hace clic */
   transform: scale(0.95);
 }
-button:hover{
+button:hover {
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
 }
-p{
+p {
   font-size: 17px;
 }
-a{
+a {
   font-size: 18px;
   padding: 5%;
   border-radius: 50px;
-
 }
 
-h2{
-    font-size: 30px; /* Títulos más grandes */
-    text-align: center;
-    background: linear-gradient(90deg, #ba001300, #ff3246, #ba001300);
-    color: #ffffff;
+h2 {
+  font-size: 30px; /* Títulos más grandes */
+  text-align: center;
+  background: linear-gradient(90deg, #ba001300, #ff3246, #ba001300);
+  color: #ffffff;
 }
 button:active {
   /* Aquí puedes agregar los estilos que quieras para cuando se hace clic */
@@ -47,7 +45,7 @@ button:active {
 body {
   /* Define el color inicial de fondo */
   background-color: #1a61b3; /* Color inicial */
-  background: linear-gradient(#1a61b3 ,rgb(54, 54, 216) ,#1a61b3);
+  background: linear-gradient(#1a61b3, rgb(54, 54, 216), #1a61b3);
 
   /* Define el fondo con un gradiente que se vuelve más claro a medida que se desplaza hacia abajo */
   background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
@@ -55,12 +53,11 @@ body {
   background-repeat: no-repeat;
 }
 
-
-a:-webkit-any-link{
+a:-webkit-any-link {
   text-decoration: none;
   color: aliceblue;
 }
-.infoContent{
+.infoContent {
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
@@ -68,28 +65,26 @@ a:-webkit-any-link{
   text-align: center;
   max-width: 250px;
   max-height: 250px;
-
 }
 
-.icon{
+.icon {
   box-shadow: 0 20px 32px 0 black;
-
 }
 .swal2-title {
-  background: linear-gradient(180deg, #ba001300,#ba001300);
+  background: linear-gradient(180deg, #ba001300, #ba001300);
   color: aliceblue;
 }
-div:where(.swal2-container) .swal2-html-container{
+div:where(.swal2-container) .swal2-html-container {
   color: aliceblue;
 }
-select{
+select {
   width: 120px;
   padding: 10px; /* Aumento del relleno */
   border-radius: 25px; /* Reducción del radio del borde */
   border: 5px solid #00000028;
   color: #000;
 }
-option{
+option {
   width: 120px;
   padding: 10px; /* Aumento del relleno */
   border-radius: 25px; /* Reducción del radio del borde */
@@ -104,10 +99,9 @@ option{
   border: 3px solid white;
   border-radius: 20px;
   box-shadow: 0 20px 32px 0 black;
-
 }
 
-.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--error.Toastify--animate.Toastify__bounce-enter--top-right{
+.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--error.Toastify--animate.Toastify__bounce-enter--top-right {
   background: #fafafa7e;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
@@ -119,9 +113,8 @@ option{
   top: 5vh; /* Ajusta según sea necesario */
   right: 1vh; /* Ajusta según sea necesario */
   position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
-
 }
-.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--success.Toastify--animate.Toastify__bounce-enter--top-right{
+.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--success.Toastify--animate.Toastify__bounce-enter--top-right {
   background: #fafafa7e;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
@@ -133,11 +126,41 @@ option{
   top: 5vh; /* Ajusta según sea necesario */
   right: 1vh; /* Ajusta según sea necesario */
   position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
-
 }
 
+.instrucciones {
+  margin-right: 30px;
+  max-height: 50vh;
+  background: #010e1f68;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+overflow-y: auto;
+  border: 3px solid #fafafa10;
+  border-radius: 50px;
+  padding: 7%;
+}
+.instrucciones::-webkit-scrollbar {
+  width: 7px; /* Ancho de la barra de desplazamiento */
+  height: 7px;
+}
 
-.modalContent{
+.instrucciones::-webkit-scrollbar-track {
+  background: transparent; /* Color de la pista de la barra de desplazamiento */
+}
+
+.instrucciones::-webkit-scrollbar-thumb {
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.24
+  ); /* Color del pulgar de la barra de desplazamiento */
+  border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
+  border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+}
+.modalContent {
   overflow-y: auto;
   max-height: 80vh;
 }
@@ -151,19 +174,28 @@ option{
 }
 
 .modalContent::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 0, 0, 0.24); /* Color del pulgar de la barra de desplazamiento */
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.24
+  ); /* Color del pulgar de la barra de desplazamiento */
   border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
   border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
-  
 }
 .swal2-success-circular-line-left {
-  background-color: rgba(255, 0, 0, 0.24); /* Color del pulgar de la barra de desplazamiento */
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.24
+  ); /* Color del pulgar de la barra de desplazamiento */
 }
 
 .requerido {
   color: rgba(249, 249, 36, 0.85);
 }
-.Toastify__close-button.Toastify__close-button--light{
+.Toastify__close-button.Toastify__close-button--light {
   background: transparent;
 }
 .swal2-popup.swal2-modal.swal2-hide {
@@ -193,64 +225,58 @@ option{
   right: 2%; /* Muestra el botón cuando el mouse pasa por encima */
 }
 
-.imgbutton{
-   width: 150px;
-   height: auto;
-   border-radius: 50px
+.imgbutton {
+  width: 150px;
+  height: auto;
+  border-radius: 50px;
 }
 
-html{
+html {
   scrollbar-width: thin;
-  scrollbar-color: rgba(155,155,155,0.5) transparent;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
   background-color: #034c8b;
 }
 
-html::-webkit-scrollbar{
+html::-webkit-scrollbar {
   width: 7px; /* Ancho de la barra de desplazamiento */
   height: 7px;
   border-radius: 50px;
   z-index: 99999999;
-
 }
 
-html::-webkit-scrollbar-track{
+html::-webkit-scrollbar-track {
   background: transparent;
   z-index: 99999999;
-
 }
 
-
-html::-webkit-scrollbar-thumb{
+html::-webkit-scrollbar-thumb {
   z-index: 99999999;
   background-color: red;
   border-radius: 50px;
   border: 2px solid black;
-
 }
 /* Estilos para el modo claro */
 .light-mode {
   background-color: #034c8b;
-  background: linear-gradient(#034c8b ,#2477c0 ,#034c8b);
+  background: linear-gradient(#034c8b, #2477c0, #034c8b);
   background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
   background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
   background-repeat: no-repeat;
   text-shadow: 1px 1px 5px black;
-
 }
 /* Estilos para el modo oscuro */
 .dark-mode {
   background-color: #010326;
-  background: linear-gradient(#010326 ,#0a1a74 ,#010326);
+  background: linear-gradient(#010326, #0a1a74, #010326);
   text-shadow: 1px 1px 3px black;
   background-size: 100% 100vh; /* Ajusta el tamaño del gradiente */
   background-attachment: fixed; /* Mantiene el gradiente fijo al hacer scroll */
   background-repeat: no-repeat;
 }
 
-
 .light-mode a:hover {
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
-  background: linear-gradient(180deg, #ba001300, #ff3246,#ba001300);
+  background: linear-gradient(180deg, #ba001300, #ff3246, #ba001300);
 }
 
 .light-mode button {
@@ -270,43 +296,40 @@ html::-webkit-scrollbar-thumb{
   -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
 }
-.light-mode h2{
-    background: linear-gradient(90deg, #ba001300, #ff3246, #ba001300);
-
+.light-mode h2 {
+  background: linear-gradient(90deg, #ba001300, #ff3246, #ba001300);
 }
 
-.light-mode html::-webkit-scrollbar-track{
+.light-mode html::-webkit-scrollbar-track {
   background: transparent;
   z-index: 99999999;
-
 }
-.light-mode html{
+.light-mode html {
   background-color: #1a61b3;
 }
 
-.dark-mode html::-webkit-scrollbar-track{
+.dark-mode html::-webkit-scrollbar-track {
   background: transparent;
   z-index: 99999999;
-
 }
 
 .dark-mode a:hover {
   transform: scale(1.1); /* Cambio de tamaño al hacer hover */
-  background: linear-gradient(180deg, #ba001300, #8C0303,#ba001300);
+  background: linear-gradient(180deg, #ba001300, #8c0303, #ba001300);
 }
 
 .dark-mode button {
-  background-color: #8C0303;
+  background-color: #8c0303;
 }
 
-.dark-mode h2{
-    background: linear-gradient(90deg, #ba001300, #8C0303, #ba001300);
+.dark-mode h2 {
+  background: linear-gradient(90deg, #ba001300, #8c0303, #ba001300);
 }
 
-.dark-mode a:-webkit-any-link{
+.dark-mode a:-webkit-any-link {
   text-decoration: none;
 }
-.dark-mode html{
+.dark-mode html {
   background-color: #010326;
 }
 
@@ -317,20 +340,18 @@ html::-webkit-scrollbar-thumb{
     width: 80px; /* Ajusta el tamaño del botón */
   }
 
-  .imgbutton{
+  .imgbutton {
     width: 80px;
- }
+  }
   body {
     font-size: 14px; /* Ajusta el tamaño de la fuente */
   }
   .swal2-popup.swal2-modal.swal2-show {
     left: 0;
-
   }
-  
+
   .swal2-popup.swal2-modal.swal2-hide {
     left: 0%;
-
   }
   /* Ajusta otros estilos según sea necesario */
 }
@@ -341,9 +362,9 @@ html::-webkit-scrollbar-thumb{
     right: -25px; /* Oculta parcialmente el botón a la derecha */
     width: 80px; /* Ajusta el tamaño del botón */
   }
-  .imgbutton{
+  .imgbutton {
     width: 80px;
- }
+  }
   body {
     font-size: 16px; /* Ajusta el tamaño de la fuente */
   }

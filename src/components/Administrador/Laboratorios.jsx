@@ -28,8 +28,16 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
     />
   );
 }
-
+const MAX_DESCRIPTION_LENGTH = 150;
 const Laboratorios = () => {
+  const [remainingChars, setRemainingChars] = useState(MAX_DESCRIPTION_LENGTH);
+
+  const handleDescriptionChange = (e) => {
+    const inputText = e.target.value;
+    const remaining = MAX_DESCRIPTION_LENGTH - inputText.length;
+    setRemainingChars(Math.max(0, remaining));
+  };
+
   const [Laboratorios, setLaboratorios] = useState([]);
   const [edificios, setEdificios] = useState([]); // Nuevo estado para almacenar la lista de edificios
 
@@ -273,10 +281,6 @@ const Laboratorios = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const [defaultPageSize, setDefaultPageSize] = useState(5);
 
-  const openImagesModal = (images) => {
-    setSelectedImages(images);
-    setModalImagesIsOpen(true);
-  };
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
@@ -348,6 +352,129 @@ const Laboratorios = () => {
       console.error("Error fetching buildings:", error);
       setLoading(false);
     }
+  };
+
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [tempImages, setTempImages] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]);
+  const [OficinaIMGEditado, setOficinaIMGEditado] = useState("");
+  const [loadingImages, setLoadingImages] = useState(false);
+
+  const openImagesModal = (images, index) => {
+    setOficinaIMGEditado(index);
+    setSelectedImages(images);
+    setTempImages([...images]); // Guardar una copia de las imágenes en tempImages
+    setModalImagesIsOpen(true);
+    setIsEditMode(false);
+  };
+  const confirmImageDelete = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará la imagen. ¿Estás seguro de continuar? (Los cambios no se harán hasta que confirmes la actualización)",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleImageDelete(index);
+      }
+    });
+  };
+
+  const handleImageDelete = (index) => {
+    setDeletedImages([...deletedImages, index]);
+    setTempImages(tempImages.filter((_, i) => i !== index));
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setTempImages([...tempImages, reader.result]);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const saveChanges = async () => {
+    try {
+      setLoadingImages(true); // Activar el cliploader y deshabilitar elementos
+
+      const token = Cookies.get("token");
+      const formData = new FormData();
+
+      const fetchPromises = tempImages.map((image, index) => {
+        if (image.startsWith("data:image")) {
+          const blob = dataURLtoBlob(image);
+          const file = new File([blob], `image${index}.png`, {
+            type: "image/png",
+          });
+
+          formData.append("files", file);
+        } else {
+          return fetch(`${process.env.REACT_APP_SECURE_URL}${image}`)
+            .then((res) => res.blob())
+            .then((blob) => {
+              const file = new File([blob], `newImage${index}.png`, {
+                type: "image/png",
+              });
+
+              formData.append("files", file);
+            });
+        }
+      });
+
+      await Promise.all(fetchPromises);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/files/laboratories/${OficinaIMGEditado}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setIsEditMode(false);
+
+      await fetchBuildings(token);
+      setPageSize(defaultPageSize);
+      setPageNumber(0);
+      Swal.fire({
+        title: "Imágenes actualizadas exitosamente",
+        icon: "info",
+      });
+    } catch (error) {
+      console.error("Error al guardar imágenes:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Error al guardar las imágenes, ya no se puede dejar esté campo vacío",
+      });
+    } finally {
+      setLoadingImages(false); // Desactivar el cliploader y habilitar elementos
+    }
+  };
+
+  const dataURLtoBlob = (dataURL) => {
+    const byteString = atob(dataURL.split(",")[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([uint8Array], { type: "image/png" });
+  };
+
+  const toggleEditMode = () => {
+    setIsEditMode(!isEditMode);
   };
 
   const data = useMemo(() => Laboratorios, [Laboratorios]);
@@ -495,16 +622,20 @@ const Laboratorios = () => {
               className="Laboratorios input modalInput"
               {...registerAdd("descripcion", {
                 required: true,
-                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+                validate: (value) => value.trim().length > 3,
               })}
               placeholder="Descripción"
+              onChange={handleDescriptionChange}
+              maxLength={MAX_DESCRIPTION_LENGTH}
             />
             {errorsAdd.descripcion && (
               <p className="requerido">
-                {" "}
                 La descripción debe tener más de 3 caracteres
               </p>
             )}
+            <p>
+              Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
+            </p>
           </label>
           {loadingLaboratorio ? (
             <div className="botones">
@@ -540,7 +671,7 @@ const Laboratorios = () => {
       >
         <h2>Editar Laboratorio</h2>
         <form onSubmit={handleSubmitEdit(onSubmitEditar)}>
-        <label>
+          <label>
             Edificio:
             <select
               className="Laboratorios input modalInput"
@@ -579,12 +710,17 @@ const Laboratorios = () => {
                 validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
               })}
               placeholder="Descripción"
+              onChange={handleDescriptionChange}
+              maxLength={MAX_DESCRIPTION_LENGTH}
             />
             {errorsEdit.descripcion && (
               <p className="requerido">
                 La descripción debe tener más de 3 caracteres
               </p>
             )}
+            <p>
+              Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
+            </p>
           </label>
           {loadingLaboratorio ? (
             <div className="botones">
@@ -593,7 +729,9 @@ const Laboratorios = () => {
                 loading={loadingLaboratorio}
                 size={"90px"}
               />
-              <div style={{ fontSize: "30px" }}>Actualizando Laboratorio...</div>
+              <div style={{ fontSize: "30px" }}>
+                Actualizando Laboratorio...
+              </div>
             </div>
           ) : (
             <>
@@ -612,7 +750,6 @@ const Laboratorios = () => {
           )}
         </form>
       </Modal>
-
       <Modal
         isOpen={modalImagesIsOpen}
         onRequestClose={() => setModalImagesIsOpen(false)}
@@ -620,29 +757,88 @@ const Laboratorios = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Imágenes</h2>
-        {selectedImages.map((imageUrl, index) => (
-          <img
-            key={index}
-            src={imageUrl}
-            alt={`Imagen ${index + 1}`}
-            style={{
-              width: "50%",
-              height: "150px",
-              borderRadius: 0,
-              padding: 10,
-              margin: 0,
-            }}
-          />
-        ))}
+        {tempImages.length > 0 ? (
+          tempImages.map((imageUrl, index) => (
+            <div
+              key={index}
+              style={{ position: "relative", textAlign: "center" }}
+            >
+              {isEditMode && (
+                <button
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    zIndex: 1,
+                    cursor: "pointer",
+                    background: "none",
+                    border: "none",
+                  }}
+                  onClick={() => handleImageDelete(index)}
+                >
+                  X
+                </button>
+              )}
+              <img
+                src={
+                  imageUrl.startsWith("data:image")
+                    ? imageUrl
+                    : `${process.env.REACT_APP_SECURE_URL}${imageUrl}`
+                }
+                alt={`Imagen ${index + 1}`}
+                style={{
+                  width: "auto",
+                  height: "150px",
+                  borderRadius: 0,
+                  padding: 10,
+                  margin: "0 auto", // Centra la imagen
+                  display: "block", // Hace que la imagen ocupe el ancho completo del contenedor
+                  opacity: isEditMode ? 0.5 : 1,
+                }}
+              />
+            </div>
+          ))
+        ) : (
+          <h3>Sin imágenes aún. ¡Empieza a agregar imágenes!</h3>
+        )}
         <div className="botones2">
-          <button
-            className="cancelarBtn"
-            onClick={() => setModalImagesIsOpen(false)}
-          >
-            Cerrar
-          </button>
+          {loadingImages ? (
+            <div className="botones">
+              <ClipLoader
+                color="#3d8463"
+                loading={loadingImages}
+                size={"90px"}
+              />
+              <div style={{ fontSize: "30px" }}>Actualizando Imágenes...</div>
+            </div>
+          ) : (
+            <>
+              {isEditMode && (
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  onChange={handleImageUpload}
+                />
+              )}
+              <button onClick={toggleEditMode} className="agregarBtn">
+                {isEditMode ? "Cancelar Editar Imágenes" : "Editar Imágenes"}
+              </button>
+              <button
+                className="cancelarBtn"
+                onClick={() => setModalImagesIsOpen(false)}
+              >
+                Cerrar
+              </button>
+              {isEditMode && (
+                <button className="agregarBtn" onClick={saveChanges}>
+                  Guardar Cambios
+                </button>
+              )}
+            </>
+          )}
         </div>
       </Modal>
+
       <ToastContainer />
       <div className="tablaLaboratorios">
         {loading ? (

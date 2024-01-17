@@ -109,6 +109,7 @@
   /* Otros estilos que desees aplicar */
   /* Por ejemplo: */
   width: 180px; /* Ajusta el ancho máximo para el truncado */
+  text-align: center;
 }
 
 

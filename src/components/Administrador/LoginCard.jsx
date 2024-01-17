@@ -43,7 +43,7 @@ const LoginCard = () => {
 
       // Almacena todos los datos de responseData en las cookies
       Object.keys(responseData).forEach((key) => {
-        Cookies.set(key, responseData[key], { expires: 2 / 24 }); // La cookie expira después de 1 hora
+        Cookies.set(key, responseData[key], { expires: 1.5 / 24 }); // La cookie expira después de 1 hora
       });
 
       if (responseData.roles.includes("admin")) {

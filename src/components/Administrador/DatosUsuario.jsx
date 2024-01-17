@@ -156,6 +156,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     setModalPasswordIsOpen(false);
     setActiveForm("userData"); // Cuando se cierra el modal de contraseña, activamos nuevamente el formulario de userData
   };
+  
   const handleUploadImage = async () => {
     if (newImage) {
       const formData = new FormData();

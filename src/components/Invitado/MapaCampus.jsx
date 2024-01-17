@@ -11,6 +11,7 @@ import axios from "axios";
 import MarkerMi from "../../assets/Marker.png";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
 
 const MapContainer = () => {
   const [buildings, setBuildings] = useState([]);
@@ -21,12 +22,13 @@ const MapContainer = () => {
   const [startLocationCoords, setStartLocationCoords] = useState(null);
   const [startBuilding, setStartBuilding] = useState(null);
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
-
+  const [directionsInstructions, setDirectionsInstructions] = useState([]);
+  const [startMode, setStartMode] = useState("currentLocation"); // 'currentLocation',
   const handleMarkerClick = (building) => {
     setSelectedBuilding(building);
     setInfoWindowOpen(true);
   };
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleCloseInfoWindow = () => {
     setInfoWindowOpen(false);
   };
@@ -37,6 +39,7 @@ const MapContainer = () => {
     setDirections(null);
     setSelectedBuilding(null);
     setInfoWindowOpen(false);
+    setDirectionsInstructions([]); // Añade esta línea
   };
 
   const handleBuildingSelect = (building) => {
@@ -61,6 +64,7 @@ const MapContainer = () => {
 
   const handleViewRoute = () => {
     if ((startLocationCoords || startBuilding) && selectedBuilding) {
+      setIsLoading(true);
       const origin = startBuilding
         ? {
             lat: startBuilding.latitude,
@@ -80,6 +84,11 @@ const MapContainer = () => {
         (result, status) => {
           if (status === window.google.maps.DirectionsStatus.OK) {
             setDirections(result);
+            // Guarda las instrucciones de las direcciones
+            const instructions = result.routes[0].legs[0].steps.map(
+              (step) => step.instructions
+            );
+            setDirectionsInstructions(instructions);
           } else {
             console.error(`Error fetching directions: ${result}`);
           }
@@ -88,6 +97,7 @@ const MapContainer = () => {
 
       setInfoWindowOpen(false);
     }
+    setIsLoading(false); // Añade esta línea
   };
 
   useEffect(() => {
@@ -119,11 +129,12 @@ const MapContainer = () => {
   };
 
   const mapOptions = {
-    mapContainerStyle: { width: "100%", height: "70vh" },
+    mapContainerStyle: { width: "100%", height: "100vh" },
     center: selectedBuilding
       ? { lat: selectedBuilding.latitude, lng: selectedBuilding.longitude }
       : userLocation || { lat: -0.21055556, lng: -78.48888889 },
     zoom: 19,
+    mapId: "9ddcb7692f5e8d1",
     featureType: "all",
     elementType: "labels",
     stylers: [{ visibility: "off" }],
@@ -131,9 +142,9 @@ const MapContainer = () => {
       {
         featureType: "road",
         elementType: "geometry",
-        stylers: [{ color: "red" }]
-      }
-    ]
+        stylers: [{ color: "red" }],
+      },
+    ],
   };
 
   return (
@@ -147,6 +158,35 @@ const MapContainer = () => {
       <div className="main-container">
         <div className="search-container">
           <h3>Llegar hasta el Edificio:</h3>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="currentLocation"
+                checked={startMode === "currentLocation"}
+                onChange={(e) => setStartMode(e.target.value)}
+              />
+              Ubicación actual
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="building"
+                checked={startMode === "building"}
+                onChange={(e) => setStartMode(e.target.value)}
+              />
+              Edificio
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="search"
+                checked={startMode === "search"}
+                onChange={(e) => setStartMode(e.target.value)}
+              />
+              Buscar en Google Maps
+            </label>
+          </div>
           <br />
           <select onChange={handleSelect} style={{ width: "200px" }}>
             <option value="">Selecciona un edificio</option>
@@ -162,9 +202,44 @@ const MapContainer = () => {
           <br />
           <br />
           <button onClick={handleClearRoute}>Borrar Ruta</button>
+          <br />
+          <br />
+          {isLoading ? (
+            <div
+              className="loading-button"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span>Verificando tu sesión...</span>
+
+              <ClipLoader color="#3d8463" loading={isLoading} size={30} />
+            </div>
+          ) : (
+            directionsInstructions.length > 0 && (
+              <div className="instrucciones">
+                <h2>Instrucciones para llegar al edificio:</h2>
+                <ol>
+                  {directionsInstructions.map((instruction, index) => (
+                    <li
+                      key={index}
+                      dangerouslySetInnerHTML={{ __html: instruction }}
+                    />
+                  ))}
+                </ol>
+              </div>
+            )
+          )}
         </div>
         <div className="map-content">
-          <GoogleMap {...mapOptions}>
+          <GoogleMap
+            {...mapOptions}
+            options={{
+              mapId: "9ddcb7692f5e8d1",
+            }}
+          >
             {directions && (
               <DirectionsRenderer
                 directions={directions}
@@ -190,8 +265,7 @@ const MapContainer = () => {
                   fontSize: "16px",
                   fontWeight: "bold",
                   padding: "20px",
-                  backgroundColor: "aliceblue"
-                
+                  backgroundColor: "aliceblue",
                 }}
                 animation={window.google.maps.Animation.DROP}
               />
@@ -211,7 +285,7 @@ const MapContainer = () => {
                       {selectedBuilding.imageUrls.map((url, index) => (
                         <div key={index}>
                           <img
-                            src={`https://3bcbgw62-3000.use.devtunnels.ms/${url}`}
+                            src={`${process.env.REACT_APP_SECURE_URL}${url}`}
                             alt={`Building ${selectedBuilding.name} ${index}`}
                             style={{
                               maxWidth: "250px",
