@@ -11,6 +11,25 @@
   border: 3px solid fafafa10;
   border-radius: 50px;
 }
+.descarga{
+  padding: 3%;  
+  background: #fafafa06;
+  background-size: cover;
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  box-shadow: 0 20px 32px 0 black;
+  border: 3px solid fafafa10;
+  border-radius: 50px;
+  text-align: center;
+  margin-top: 20px;
+}
+.infoContent {
+  background: #0040ff4b;
+
+  color: white; 
+  padding: 10px;
+  max-width: 300px; 
+}
 
 .places-suggestions {
   position: absolute;

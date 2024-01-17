@@ -9,10 +9,10 @@ import {
 } from "@react-google-maps/api";
 import axios from "axios";
 import MarkerMi from "../../assets/Marker.png";
+import PoliPath from "../../assets/App_Mvil.png";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
-
 const MapContainer = () => {
   const [buildings, setBuildings] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -23,7 +23,8 @@ const MapContainer = () => {
   const [startBuilding, setStartBuilding] = useState(null);
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [directionsInstructions, setDirectionsInstructions] = useState([]);
-  const [startMode, setStartMode] = useState("currentLocation"); // 'currentLocation',
+  const [destinationBuilding, setDestinationBuilding] = useState(null);
+
   const handleMarkerClick = (building) => {
     setSelectedBuilding(building);
     setInfoWindowOpen(true);
@@ -42,28 +43,51 @@ const MapContainer = () => {
     setDirectionsInstructions([]); // Añade esta línea
   };
 
-  const handleBuildingSelect = (building) => {
+  const handleBuildingSelect = (
+    building,
+    isStartBuilding,
+    isCurrentLocation
+  ) => {
+    if (isStartBuilding) {
+      setStartBuilding(building);
+      setStartLocationCoords({
+        lat: building ? building.latitude : userLocation.lat,
+        lng: building ? building.longitude : userLocation.lng,
+      });
+    } else {
+      setDestinationBuilding(building);
+    }
+
     setSelectedBuilding(building);
-    setStartLocationCoords({
-      lat: building.latitude,
-      lng: building.longitude,
-    });
-    setStartLocation("");
     setInfoWindowOpen(false);
+
+    // Si es la ubicación actual, establece la ubicación del usuario
+    if (isCurrentLocation) {
+      setStartLocation("currentLocation");
+    }
   };
 
-  const handleSelect = (e) => {
-    const building = buildings.find(
-      (b) => b.name === e.target.value || b.no === e.target.value
-    );
-    if (building) {
-      handleBuildingSelect(building);
-      setDirections(null);
+  const handleSelect = (e, isStartBuilding) => {
+    const value = e.target.value;
+
+    if (value === "currentLocation") {
+      // Si la opción es "currentLocation", utiliza la ubicación actual del usuario
+      handleBuildingSelect(null, isStartBuilding, true);
+    } else {
+      // Si la opción es un edificio, busca el edificio correspondiente
+      const building = buildings.find(
+        (b) => b.name === value || b.no === value
+      );
+
+      if (building) {
+        handleBuildingSelect(building, isStartBuilding, false);
+        setDirections(null);
+      }
     }
   };
 
   const handleViewRoute = () => {
-    if ((startLocationCoords || startBuilding) && selectedBuilding) {
+    if ((startLocationCoords || startBuilding) && destinationBuilding) {
       setIsLoading(true);
       const origin = startBuilding
         ? {
@@ -76,8 +100,8 @@ const MapContainer = () => {
         {
           origin: origin,
           destination: {
-            lat: selectedBuilding.latitude,
-            lng: selectedBuilding.longitude,
+            lat: destinationBuilding.latitude,
+            lng: destinationBuilding.longitude,
           },
           travelMode: window.google.maps.TravelMode.WALKING,
         },
@@ -97,16 +121,29 @@ const MapContainer = () => {
 
       setInfoWindowOpen(false);
     }
-    setIsLoading(false); // Añade esta línea
+    setIsLoading(false);
+  };
+
+  // Antes de tu useEffect:
+  const defaultPoints = [
+    { name: "Entrada Civil", latitude: -0.21189, longitude: -78.492015 },
+    { name: "Entrada Teatro", latitude: -0.212287, longitude: -78.490395 },
+    { name: "Entrada Química", latitude: -0.209893, longitude: -78.488774 },
+    { name: "Entrada Tecnólogos", latitude: -0.209488, longitude: -78.487954 },
+    { name: "Entrada Eléctrica", latitude: -0.208865, longitude: -78.489415 },
+    { name: "Entrada Toledo", latitude: -0.209527, longitude: -78.486717 },
+    { name: "Entrada CCICEV", latitude: -0.209196, longitude: -78.486406 },
+  ];
+
+  // Dentro de tu useEffect:
+  const fetchBuildings = async () => {
+    const result = await axios.get(
+      process.env.REACT_APP_API_URL + "/buildings/guests"
+    );
+    setBuildings([...defaultPoints, ...result.data]);
   };
 
   useEffect(() => {
-    const fetchBuildings = async () => {
-      const result = await axios.get(
-        process.env.REACT_APP_API_URL + "/buildings/guests"
-      );
-      setBuildings(result.data);
-    };
     fetchBuildings();
 
     if (navigator.geolocation) {
@@ -127,7 +164,17 @@ const MapContainer = () => {
       strokeWeight: 10,
     },
   };
-
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 4000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 6000,
+    adaptiveHeight: true,
+    arrows: false,
+  };
   const mapOptions = {
     mapContainerStyle: { width: "100%", height: "100vh" },
     center: selectedBuilding
@@ -157,45 +204,37 @@ const MapContainer = () => {
       </p>
       <div className="main-container">
         <div className="search-container">
-          <h3>Llegar hasta el Edificio:</h3>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="currentLocation"
-                checked={startMode === "currentLocation"}
-                onChange={(e) => setStartMode(e.target.value)}
-              />
-              Ubicación actual
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="building"
-                checked={startMode === "building"}
-                onChange={(e) => setStartMode(e.target.value)}
-              />
-              Edificio
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="search"
-                checked={startMode === "search"}
-                onChange={(e) => setStartMode(e.target.value)}
-              />
-              Buscar en Google Maps
-            </label>
-          </div>
+          <h3>Partir desde:</h3>
           <br />
-          <select onChange={handleSelect} style={{ width: "200px" }}>
-            <option value="">Selecciona un edificio</option>
+          <select
+            onChange={(e) => handleSelect(e, true)}
+            style={{ width: "250px" }}
+          >
+            <option value="">Selecciona un punto de partida</option>
+            <option value="currentLocation">Ubicación Actual</option>
             {buildings.map((building, index) => (
               <option key={index} value={building.name}>
                 No.{building.no} "{building.name}"
               </option>
             ))}
           </select>
+          <br />
+          <br />
+          <h3>Llegar hasta el Edificio:</h3>
+
+          <br />
+          <select
+            onChange={(e) => handleSelect(e, false)}
+            style={{ width: "250px" }}
+          >
+            <option value="">Selecciona un edificio de destino</option>
+            {buildings.map((building, index) => (
+              <option key={index} value={building.name}>
+                No.{building.no} "{building.name}"
+              </option>
+            ))}
+          </select>
+
           <br />
           <br />
           <button onClick={handleViewRoute}>Ir al Edificio</button>
@@ -279,9 +318,15 @@ const MapContainer = () => {
                   }}
                   onCloseClick={handleCloseInfoWindow}
                 >
-                  <div className="infoContent">
+                  <div
+                    className="infoContent"
+                    styles={{
+                      background: "red",
+                      backgroundSize: "cover",
+                    }}
+                  >
                     <h2>{selectedBuilding.name}</h2>
-                    <Carousel>
+                    <Carousel {...settings} l>
                       {selectedBuilding.imageUrls.map((url, index) => (
                         <div key={index}>
                           <img
@@ -324,11 +369,15 @@ const MapContainer = () => {
           </GoogleMap>
         </div>
       </div>
-      <div style={{ margin: 20 }}>
+
+      <div className="descarga">
         <h3>
           No olvides descargar la versión completa de PoliPath exclusivamente
           para la Comunidad Politécnica
         </h3>
+        <img src={PoliPath} alt="PoliPath" />
+
+        <br />
         <a
           href="https://play.google.com"
           target="_blank"
