@@ -13,6 +13,8 @@ import PoliPath from "../../assets/App_Mvil.png";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
+import EntradasMarker from "../../assets/Entradas.png";
+
 const MapContainer = () => {
   const [buildings, setBuildings] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -26,9 +28,20 @@ const MapContainer = () => {
   const [destinationBuilding, setDestinationBuilding] = useState(null);
 
   const handleMarkerClick = (building) => {
-    setSelectedBuilding(building);
-    setInfoWindowOpen(true);
+    // Verifica si el marcador pertenece a defaultPoints
+    const isDefaultPoint = defaultPoints.some(
+      (defaultBuilding) =>
+        defaultBuilding.latitude === building.latitude &&
+        defaultBuilding.longitude === building.longitude
+    );
+
+    // Si no es un punto predeterminado, permite abrir la InfoWindow
+    if (!isDefaultPoint) {
+      setSelectedBuilding(building);
+      setInfoWindowOpen(true);
+    }
   };
+
   const [isLoading, setIsLoading] = useState(false);
   const handleCloseInfoWindow = () => {
     setInfoWindowOpen(false);
@@ -193,7 +206,12 @@ const MapContainer = () => {
       },
     ],
   };
-
+  const markerDimensions = {
+    width: 70, // Ancho predeterminado para otros markers
+    height: 100, // Alto predeterminado para otros markers
+    defaultWidth: 40, // Ancho personalizado para defaultPoints
+    defaultHeight: 40, // Alto personalizado para defaultPoints
+  };
   return (
     <div className="mapInvitado">
       <h2>Modo Invitado: Campus EPN</h2>
@@ -293,9 +311,45 @@ const MapContainer = () => {
                   lng: building.longitude,
                 }}
                 icon={{
-                  url: MarkerMi,
-                  scaledSize: new window.google.maps.Size(70, 100),
-                  labelOrigin: new window.google.maps.Point(35, 110),
+                  url: defaultPoints.some(
+                    (defaultBuilding) =>
+                      defaultBuilding.latitude === building.latitude &&
+                      defaultBuilding.longitude === building.longitude
+                  )
+                    ? EntradasMarker
+                    : MarkerMi,
+                  scaledSize: new window.google.maps.Size(
+                    defaultPoints.some(
+                      (defaultBuilding) =>
+                        defaultBuilding.latitude === building.latitude &&
+                        defaultBuilding.longitude === building.longitude
+                    )
+                      ? markerDimensions.defaultWidth
+                      : markerDimensions.width,
+                    defaultPoints.some(
+                      (defaultBuilding) =>
+                        defaultBuilding.latitude === building.latitude &&
+                        defaultBuilding.longitude === building.longitude
+                    )
+                      ? markerDimensions.defaultHeight
+                      : markerDimensions.height
+                  ),
+                  labelOrigin: new window.google.maps.Point(
+                    defaultPoints.some(
+                      (defaultBuilding) =>
+                        defaultBuilding.latitude === building.latitude &&
+                        defaultBuilding.longitude === building.longitude
+                    )
+                      ? markerDimensions.defaultWidth / 2
+                      : markerDimensions.width / 2,
+                    defaultPoints.some(
+                      (defaultBuilding) =>
+                        defaultBuilding.latitude === building.latitude &&
+                        defaultBuilding.longitude === building.longitude
+                    )
+                      ? markerDimensions.defaultHeight + 20 // Ajusta según sea necesario
+                      : markerDimensions.height + 20 // Ajusta según sea necesario
+                  ),
                 }}
                 onClick={() => handleMarkerClick(building)}
                 label={{
@@ -304,11 +358,18 @@ const MapContainer = () => {
                   fontSize: "16px",
                   fontWeight: "bold",
                   padding: "20px",
-                  backgroundColor: "aliceblue",
+                  backgroundColor: defaultPoints.some(
+                    (defaultBuilding) =>
+                      defaultBuilding.latitude === building.latitude &&
+                      defaultBuilding.longitude === building.longitude
+                  )
+                    ? "orange"
+                    : "aliceblue",
                 }}
                 animation={window.google.maps.Animation.DROP}
               />
             ))}
+
             {selectedBuilding && infoWindowOpen && (
               <div className="prueba">
                 <InfoWindow
