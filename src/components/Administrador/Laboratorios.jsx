@@ -28,7 +28,7 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
     />
   );
 }
-const MAX_DESCRIPTION_LENGTH = 150;
+const MAX_DESCRIPTION_LENGTH = 400;
 const Laboratorios = () => {
   const [remainingChars, setRemainingChars] = useState(MAX_DESCRIPTION_LENGTH);
 
@@ -444,7 +444,7 @@ const Laboratorios = () => {
 
       setIsEditMode(false);
 
-      await fetchBuildings(token);
+      await fetchlaboratories(token);
       setPageSize(defaultPageSize);
       setPageNumber(0);
       Swal.fire({
@@ -491,17 +491,13 @@ const Laboratorios = () => {
         accessor: "name",
       },
       {
-        Header: "Imagenes",
+        Header: "Imágenes",
         accessor: "imageUrls",
-        Cell: ({ value }) => (
+        Cell: ({ value, row }) => (
           <div>
-            {value.length > 0 ? (
-              <button onClick={() => openImagesModal(value)}>
-                Ver Imágenes
-              </button>
-            ) : (
-              <p className="requerido">Sin imágenes aún</p>
-            )}
+            <button onClick={() => openImagesModal(value, row.original.id)}>
+              Ver Imágenes
+            </button>
           </div>
         ),
       },
@@ -509,7 +505,7 @@ const Laboratorios = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div>
+          <div style={{width:500}}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
@@ -757,6 +753,7 @@ const Laboratorios = () => {
         overlayClassName="modalOverlay"
       >
         <h2>Imágenes</h2>
+
         {tempImages.length > 0 ? (
           tempImages.map((imageUrl, index) => (
             <div
@@ -774,7 +771,7 @@ const Laboratorios = () => {
                     background: "none",
                     border: "none",
                   }}
-                  onClick={() => handleImageDelete(index)}
+                  onClick={() => confirmImageDelete(index)}
                 >
                   X
                 </button>
@@ -794,6 +791,7 @@ const Laboratorios = () => {
                   margin: "0 auto", // Centra la imagen
                   display: "block", // Hace que la imagen ocupe el ancho completo del contenedor
                   opacity: isEditMode ? 0.5 : 1,
+                  objectFit: "cover",
                 }}
               />
             </div>
