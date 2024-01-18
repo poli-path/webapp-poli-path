@@ -9,6 +9,7 @@ import Facultades from "../components/Administrador/Facultades";
 import Laboratorios from "../components/Administrador/Laboratorios";
 import Oficinas from "../components/Administrador/Oficinas";
 import DatosUsuario from "../components/Administrador/DatosUsuario";
+import PuntosInteres from "../components/Administrador/Puntos";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Adminis from "../assets/Default.webp"; // Esta será tu imagen por defecto
@@ -103,6 +104,9 @@ const Administrador = () => {
           <Link onClick={handleToggleClick} to="/administrador/oficinas">
             <button>Oficinas</button>
           </Link>
+          <Link onClick={handleToggleClick} to="/administrador/puntosInteres">
+            <button>Puntos de Interes</button>
+          </Link>
         </div>
         <div className="logout">
           <button onClick={handleLogoutClick}>Salir</button>
@@ -127,6 +131,7 @@ const Administrador = () => {
           <Route path="facultades" element={<Facultades />} />
           <Route path="laboratorios" element={<Laboratorios />} />
           <Route path="oficinas" element={<Oficinas />} />
+          <Route path="puntosInteres" element={<PuntosInteres />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

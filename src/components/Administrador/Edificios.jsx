@@ -120,7 +120,6 @@ const Edificios = () => {
           },
         }
       );
-      console.log(response.data)
       setEdificios(response.data);
       setBuildingIds(response.data.map((building) => building.id)); // Almacena los IDs
       setLoading(false);
@@ -398,7 +397,6 @@ const Edificios = () => {
     }
   };
 
-
   const [isEditMode, setIsEditMode] = useState(false);
   const [tempImages, setTempImages] = useState([]);
   const [deletedImages, setDeletedImages] = useState([]);
@@ -529,17 +527,13 @@ const Edificios = () => {
       {
         Header: "Número",
         accessor: "no",
-        Cell: ({ value }) => (
-          <div style={{ width: '50px' }}>
-            {value}
-          </div>
-        ),
+        Cell: ({ value }) => <div style={{ width: "50px" }}>{value}</div>,
       },
       {
         Header: "Imágenes",
         accessor: "imageUrls",
         Cell: ({ value, row }) => (
-          <div style={{ width: '100px' }}>
+          <div style={{ width: "100px" }}>
             <button onClick={() => openImagesModal(value, row.original.id)}>
               Ver Imágenes
             </button>
@@ -551,17 +545,13 @@ const Edificios = () => {
       {
         Header: "Nombre",
         accessor: "name",
-        Cell: ({ value }) => (
-          <div style={{ width: '150px' }}>
-            {value}
-          </div>
-        ),
+        Cell: ({ value }) => <div style={{ width: "150px" }}>{value}</div>,
       },
       {
         Header: "Dirección",
         accessor: "address",
         Cell: ({ value }) => (
-          <div style={{ width: '200px' }}>
+          <div style={{ width: "200px" }}>
             {value ? value : <p className="requerido">Sin Dirección aún</p>}
           </div>
         ),
@@ -570,7 +560,7 @@ const Edificios = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div style={{ width: '500px' }}>
+          <div style={{ width: "500px" }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
@@ -581,7 +571,8 @@ const Edificios = () => {
         Cell: ({ row }) => {
           const { longitude, latitude, name } = row.original;
           return (
-            <button style={{ width: '150px' }}
+            <button
+              style={{ width: "150px" }}
               onClick={() => handleOpenMapModal(latitude, longitude, name)}
             >
               Ver en Google Maps
@@ -591,18 +582,24 @@ const Edificios = () => {
         disableFilters: true,
       },
       {
+        Header: "Visitas",
+        accessor: "visits",
+        Cell: ({ value }) => (
+          <div style={{ width: "150px", textAlign: "center" }}>{value}</div>
+        ),
+      },
+      {
         Header: "Facultades",
         accessor: "faculties",
         Cell: ({ value }) => (
-          <div style={{ width: '250px' }}>
+          <div style={{ width: "250px" }}>
             {value.length > 0 ? (
               value.map((faculty) => (
                 <div key={faculty.id}>
                   {faculty.name}
-            <br />
-            <br />
+                  <br />
+                  <br />
                 </div>
-                
               ))
             ) : (
               <p className="requerido">No existen Facultades aún</p>
@@ -615,15 +612,14 @@ const Edificios = () => {
         Header: "Laboratorios",
         accessor: "laboratories",
         Cell: ({ value }) => (
-          <div style={{ width: '250px' }}>
+          <div style={{ width: "250px" }}>
             {value.length > 0 ? (
               value.map((lab) => (
                 <div key={lab.id}>
                   {lab.name}
-            <br />
-            <br />
+                  <br />
+                  <br />
                 </div>
-                
               ))
             ) : (
               <p className="requerido">No existen Facultades aún</p>
@@ -636,18 +632,37 @@ const Edificios = () => {
         Header: "Oficinas",
         accessor: "offices",
         Cell: ({ value }) => (
-          <div style={{ width: '250px' }}>
+          <div style={{ width: "250px" }}>
             {value.length > 0 ? (
               value.map((office) => (
                 <div key={office.id}>
                   {office.name}
-            <br />
-            <br />
+                  <br />
+                  <br />
                 </div>
-                
               ))
             ) : (
               <p className="requerido">No existen Facultades aún</p>
+            )}
+          </div>
+        ),
+        disableFilters: true,
+      },
+      {
+        Header: "Puntos de Interés",
+        accessor: "pointOfInterests",
+        Cell: ({ value }) => (
+          <div style={{ width: "250px" }}>
+            {value.length > 0 ? (
+              value.map((pointOfInterests) => (
+                <div key={pointOfInterests.id}>
+                  {pointOfInterests.name}
+                  <br />
+                  <br />
+                </div>
+              ))
+            ) : (
+              <p className="requerido">No existen Puntos aún</p>
             )}
           </div>
         ),
@@ -749,7 +764,7 @@ const Edificios = () => {
             }}
             zoom={19}
             options={{
-              mapId: '9ddcb7692f5e8d1'
+              mapId: "9ddcb7692f5e8d1",
             }}
           >
             <Marker
@@ -760,7 +775,7 @@ const Edificios = () => {
               }}
               onClick={() => setInfoWindowOpen(true)}
               options={{
-                mapId: '9ddcb7692f5e8d1'
+                mapId: "9ddcb7692f5e8d1",
               }}
             />
 
@@ -899,7 +914,7 @@ const Edificios = () => {
                 });
               }}
               options={{
-                mapId: '9ddcb7692f5e8d1'
+                mapId: "9ddcb7692f5e8d1",
               }}
             >
               <Marker
@@ -998,12 +1013,12 @@ const Edificios = () => {
             />
             {errorsEdit.descripcion && (
               <p className="requerido">
-              La descripción debe tener más de 3 caracteres
+                La descripción debe tener más de 3 caracteres
+              </p>
+            )}
+            <p>
+              Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
             </p>
-          )}
-          <p>
-            Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
-          </p>
           </label>
           <label>
             Dirección:
@@ -1083,7 +1098,7 @@ const Edificios = () => {
                 });
               }}
               options={{
-                mapId: '9ddcb7692f5e8d1'
+                mapId: "9ddcb7692f5e8d1",
               }}
             >
               <Marker

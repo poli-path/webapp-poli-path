@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
-import "../../styles/Administrador/Oficinas.css";
+import "../../styles/Administrador/PuntosInteres.css";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -28,14 +28,22 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
     />
   );
 }
+const MAX_DESCRIPTION_LENGTH = 400;
+const PuntosInteres = () => {
+  const [remainingChars, setRemainingChars] = useState(MAX_DESCRIPTION_LENGTH);
 
-const Oficinas = () => {
-  const [Oficinas, setOficinas] = useState([]);
+  const handleDescriptionChange = (e) => {
+    const inputText = e.target.value;
+    const remaining = MAX_DESCRIPTION_LENGTH - inputText.length;
+    setRemainingChars(Math.max(0, remaining));
+  };
+
+  const [PuntosInteres, setPuntosInteres] = useState([]);
   const [edificios, setEdificios] = useState([]); // Nuevo estado para almacenar la lista de edificios
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalEditarIsOpen, setModalEditarIsOpen] = useState(false);
-  const [OficinaEditado, setOficinaEditado] = useState(null);
+  const [PuntoEditado, setPuntoEditado] = useState(null);
 
   const {
     register: registerAdd,
@@ -62,27 +70,27 @@ const Oficinas = () => {
     const payload = {
       buildingId,
       name: data.nombre,
-      codeOrNo: Number(data.codeOrNo), // Agrega el campo "code_or_no"
+      description: data.descripcion,
     };
 
     try {
-      setLoadingOficina(true);
+      setLoadingPunto(true);
       const token = Cookies.get("token");
 
-      const existingFaculty = Oficinas.find(
+      const existingFaculty = PuntosInteres.find(
         (faculty) => faculty.name === data.nombre
       );
       if (existingFaculty) {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Ya existe una Oficina con ese nombre",
+          text: "Ya existe un Punto con ese nombre",
         });
         return;
       }
 
       const result = await Swal.fire({
-        title: "¿Estás seguro de agregar esta Oficina?",
+        title: "¿Estás seguro de agregar esta Punto?",
         showDenyButton: true,
         confirmButtonText: `Continuar`,
         denyButtonText: `Cancelar`,
@@ -90,7 +98,7 @@ const Oficinas = () => {
 
       if (result.isConfirmed) {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/offices`,
+          `${process.env.REACT_APP_API_URL}/point-of-interests`,
           payload,
           {
             headers: {
@@ -99,15 +107,16 @@ const Oficinas = () => {
           }
         );
 
-        setOficinas([...Oficinas, response.data]);
+        setPuntosInteres([...PuntosInteres, response.data]);
         setModalIsOpen(false);
         setLoading(true);
 
-        await fetchoffices(token);
+        await fetchPointsInterests(token);
         setPageSize(defaultPageSize);
         setPageNumber(0);
-        toast.success("Oficina agregada exitosamente!");
+        toast.success("Punto agregado exitosamente!");
         resetAdd();
+        // Actualiza el estado local para forzar la recarga de datos
       }
       setLoading(false);
     } catch (error) {
@@ -116,46 +125,45 @@ const Oficinas = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Error al agregar la Oficina",
+        text: "Error al agregar la Punto",
       });
     } finally {
-      setLoadingOficina(false);
+      setLoadingPunto(false);
     }
   };
 
-  const editarOficina = (index) => {
+  const editarPunto = (index) => {
     const token = Cookies.get("token");
     Swal.fire({
-      title: "Verificando Oficina",
+      title: "Verificando Punto",
       text: "Por favor, espera...",
       icon: "info",
       allowOutsideClick: false,
       showConfirmButton: false,
     });
     axios
-      .get(`${process.env.REACT_APP_API_URL}/offices/${index}`, {
+      .get(`${process.env.REACT_APP_API_URL}/point-of-interests/${index}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
         const edificio = response.data;
-        setOficinaEditado(edificio);
+        setPuntoEditado(edificio);
 
         setValueEdit("edificio", edificio.building.id);
         setValueEdit("nombre", edificio.name);
-        setValueEdit("profesor", edificio.teacherName);
-        setValueEdit("codeOrNo", edificio.codeOrNo);
+        setValueEdit("descripcion", edificio.description);
         Swal.close();
 
         setModalEditarIsOpen(true);
       })
       .catch((error) => {
-        fetchoffices(token);
+        fetchPointsInterests(token);
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Error al verificar Oficina, prueba de nuevo",
+          text: "Error al verificar Punto, prueba de nuevo",
         });
         setPageSize(defaultPageSize);
         setPageNumber(0);
@@ -167,22 +175,21 @@ const Oficinas = () => {
 
     try {
       const confirmResult = await Swal.fire({
-        title: "¿Estás seguro de editar esta Oficina?",
+        title: "¿Estás seguro de editar este Punto de Interes?",
         showDenyButton: true,
         confirmButtonText: `Continuar`,
         denyButtonText: `Cancelar`,
       });
 
       if (confirmResult.isConfirmed) {
-        setLoadingOficina(true);
+        setLoadingPunto(true);
         // Realiza la petición tipo PATCH con el token
         await axios.patch(
-          `${process.env.REACT_APP_API_URL}/offices/${OficinaEditado.id}`,
+          `${process.env.REACT_APP_API_URL}/point-of-interests/${PuntoEditado.id}`,
           {
             buildingId: data.edificio,
             name: data.nombre,
-            teacherName: data.profesor,
-            codeOrNo: data.codeOrNo,
+            description: data.descripcion,
           },
           {
             headers: {
@@ -191,26 +198,28 @@ const Oficinas = () => {
           }
         );
 
-        setOficinas(
-          Oficinas.map((edif) => (edif === OficinaEditado ? data : edif))
+        setPuntosInteres(
+          PuntosInteres.map((edif) =>
+            edif === PuntoEditado ? data : edif
+          )
         );
 
-        await fetchoffices(token);
+        await fetchPointsInterests(token);
 
-        toast.success("Oficina editada exitosamente!");
+        toast.success("Punto editado exitosamente!");
         setPageSize(defaultPageSize);
         setPageNumber(0);
 
         setModalEditarIsOpen(false);
-        setLoadingOficina(false);
+        setLoadingPunto(false);
       }
       resetEdit();
     } catch (error) {
-      await fetchoffices(token);
+      await fetchPointsInterests(token);
 
-      setLoadingOficina(false);
+      setLoadingPunto(false);
       Swal.fire({
-        title: "Error al editar la Oficina",
+        title: "Error al editar el Punto",
         text: error.response?.data?.message || "Hubo un error inesperado",
         icon: "error",
       });
@@ -219,11 +228,11 @@ const Oficinas = () => {
     }
   };
 
-  const eliminarOficina = async (oficinaId) => {
+  const eliminarPunto = async (PuntoId) => {
     try {
       const result = await Swal.fire({
         title: "Confirmar eliminación",
-        text: "¿Estás seguro de eliminar esta Oficina?",
+        text: "¿Estás seguro de eliminar este Punto?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: `Eliminar`,
@@ -236,25 +245,27 @@ const Oficinas = () => {
 
         const token = Cookies.get("token");
         await axios.delete(
-          `${process.env.REACT_APP_API_URL}/offices/${oficinaId}`,
+          `${process.env.REACT_APP_API_URL}/point-of-interests/${PuntoId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        await fetchoffices(token);
+        await fetchPointsInterests(token);
 
-        Swal.fire("Oficina eliminada correctamente!", "", "info");
+        Swal.fire("Punto eliminado correctamente!", "", "info");
+        // Actualiza el estado local para forzar la recarga de datos
         setPageSize(defaultPageSize);
         setPageNumber(0);
       }
     } catch (error) {
-      console.error("Error al eliminar Oficina:", error);
+      console.error("Error al eliminar Punto:", error);
       Swal.fire({
         title: "Error",
         text:
-          error.response.data.message || "Hubo un error al eliminar la Oficina",
+          error.response.data.message ||
+          "Hubo un error al eliminar el Punto",
         icon: "error",
       });
     } finally {
@@ -263,15 +274,17 @@ const Oficinas = () => {
   };
 
   const [loading, setLoading] = useState(true);
-  const [loadingOficina, setLoadingOficina] = useState(false); // Modificado: Inicializado en "false"
+  const [loadingPunto, setLoadingPunto] = useState(false); // Modificado: Inicializado en "false"
 
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [defaultPageSize, setDefaultPageSize] = useState(5);
 
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
-      fetchoffices(token);
+      fetchPointsInterests(token);
       fetchBuildings(token); // Llamada a la función para obtener la lista de edificios
     }
   }, []);
@@ -292,11 +305,11 @@ const Oficinas = () => {
     }
   };
 
-  const fetchBuildingInfo = async (OficinaId) => {
+  const fetchBuildingInfo = async (PuntoId) => {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/offices/${OficinaId}`,
+        `${process.env.REACT_APP_API_URL}/point-of-interests/${PuntoId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -311,10 +324,10 @@ const Oficinas = () => {
       return null;
     }
   };
-  const fetchoffices = async (token) => {
+  const fetchPointsInterests = async (token) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/offices`,
+        `${process.env.REACT_APP_API_URL}/point-of-interests`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -322,18 +335,18 @@ const Oficinas = () => {
         }
       );
 
-      const OficinasWithBuildingInfo = await Promise.all(
-        response.data.map(async (Oficina) => {
-          const buildingInfo = await fetchBuildingInfo(Oficina.id);
+      const PuntosInteresWithBuildingInfo = await Promise.all(
+        response.data.map(async (Punto) => {
+          const buildingInfo = await fetchBuildingInfo(Punto.id);
           return {
-            ...Oficina,
+            ...Punto,
             edificioId: buildingInfo ? buildingInfo.id : null,
             edificioNombre: buildingInfo ? buildingInfo.name : null,
           };
         })
       );
 
-      setOficinas(OficinasWithBuildingInfo);
+      setPuntosInteres(PuntosInteresWithBuildingInfo);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching buildings:", error);
@@ -344,8 +357,6 @@ const Oficinas = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [tempImages, setTempImages] = useState([]);
   const [deletedImages, setDeletedImages] = useState([]);
-  const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
   const [OficinaIMGEditado, setOficinaIMGEditado] = useState("");
   const [loadingImages, setLoadingImages] = useState(false);
 
@@ -421,7 +432,7 @@ const Oficinas = () => {
       await Promise.all(fetchPromises);
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/files/offices/${OficinaIMGEditado}`,
+        `${process.env.REACT_APP_API_URL}/files/points-of-interest/${OficinaIMGEditado}`,
         formData,
         {
           headers: {
@@ -433,7 +444,7 @@ const Oficinas = () => {
 
       setIsEditMode(false);
 
-      await fetchoffices(token);
+      await fetchPointsInterests(token);
       setPageSize(defaultPageSize);
       setPageNumber(0);
       Swal.fire({
@@ -466,7 +477,7 @@ const Oficinas = () => {
     setIsEditMode(!isEditMode);
   };
 
-  const data = useMemo(() => Oficinas, [Oficinas]);
+  const data = useMemo(() => PuntosInteres, [PuntosInteres]);
 
   const columns = useMemo(
     () => [
@@ -475,18 +486,9 @@ const Oficinas = () => {
         accessor: "edificioNombre",
         Cell: ({ value }) => <div>{value}</div>,
       },
-
-      {
-        Header: "Código o Número",
-        accessor: "codeOrNo", // Cambia a "code_or_no"
-      },
       {
         Header: "Nombre",
         accessor: "name",
-      },
-      {
-        Header: "Profesor",
-        accessor: "teacherName", // Cambia a "teacherName"
       },
       {
         Header: "Imágenes",
@@ -500,20 +502,29 @@ const Oficinas = () => {
         ),
       },
       {
+        Header: "Descripcion",
+        accessor: "description",
+        Cell: ({ value }) => (
+          <div style={{width:500}}>
+            {value ? value : <p className="requerido">Sin Descripción aún</p>}
+          </div>
+        ),
+      },
+      {
         Header: "Acciones",
         Cell: ({ row: { original } }) => (
           <div>
             <button
               className="botonEyD"
               title="Editar"
-              onClick={() => editarOficina(original.id)}
+              onClick={() => editarPunto(original.id)}
             >
               <FontAwesomeIcon icon={faEdit} />
             </button>
             <button
               className="botonEyD"
               title="Eliminar"
-              onClick={() => eliminarOficina(original.id)}
+              onClick={() => eliminarPunto(original.id)}
             >
               <FontAwesomeIcon icon={faTrash} />
             </button>
@@ -550,32 +561,31 @@ const Oficinas = () => {
   );
 
   return (
-    <div className="Oficinas">
-      <h2>Oficinas</h2>
+    <div className="PuntosInteres">
+      <h2>PuntosInteres</h2>
       <p>
-        ¡Bienvenido a la sección de administración de Oficinas! Aquí podrás
-        administrar y visualizar una lista de Oficinas en tu aplicación. Puedes
-        agregar nuevas Oficinas, editar sus detalles existentes y eliminarlas
-        individualmente. Esta herramienta ofrece una interfaz amigable para
-        mantener y actualizar la información de las Oficinas, proporcionando
-        opciones claras para gestionar eficientemente los registros en tu
-        sistema.
+        ¡Bienvenido a la sección de administración de Puntos de Interes! Aquí podrás
+        administrar y visualizar una lista de Puntos de Interes en tu aplicación.
+        Puedes agregar nuevas Puntos de Interes, editar sus detalles existentes y
+        eliminarlos individualmente. Esta herramienta ofrece una interfaz
+        amigable para mantener y actualizar la información de las Puntos de Interes,
+        proporcionando opciones claras para gestionar eficientemente los
+        registros en tu sistema.
       </p>
       <br />
-      <button onClick={() => setModalIsOpen(true)}>Agregar Oficina</button>
-
+      <button onClick={() => setModalIsOpen(true)}>Agregar Punto</button>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
         className="modalContent"
         overlayClassName="modalOverlay"
       >
-        <h2>Agregar nuevo Oficina</h2>
+        <h2>Agregar nuevo Punto</h2>
         <form onSubmit={handleSubmitAdd(onSubmit)}>
           <label>
             Edificio:
             <select
-              className="Oficinas input modalInput"
+              className="PuntosInteres input modalInput"
               {...registerAdd("edificio", { required: true })}
             >
               {edificios.map((edificio) => (
@@ -591,7 +601,7 @@ const Oficinas = () => {
           <label>
             Nombre:
             <input
-              className="Oficinas input modalInput"
+              className="PuntosInteres input modalInput"
               {...registerAdd("nombre", {
                 required: true,
                 validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
@@ -602,14 +612,35 @@ const Oficinas = () => {
               <p className="requerido">El nombre debe tener más de 3 letras</p>
             )}
           </label>
-          {loadingOficina ? (
+          <label>
+            Descripcion:
+            <input
+              className="PuntosInteres input modalInput"
+              {...registerAdd("descripcion", {
+                required: true,
+                validate: (value) => value.trim().length > 3,
+              })}
+              placeholder="Descripción"
+              onChange={handleDescriptionChange}
+              maxLength={MAX_DESCRIPTION_LENGTH}
+            />
+            {errorsAdd.descripcion && (
+              <p className="requerido">
+                La descripción debe tener más de 3 caracteres
+              </p>
+            )}
+            <p>
+              Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
+            </p>
+          </label>
+          {loadingPunto ? (
             <div className="botones">
               <ClipLoader
                 color="#3d8463"
-                loading={loadingOficina}
+                loading={loadingPunto}
                 size={"90px"}
               />
-              <div style={{ fontSize: "30px" }}>Agregando Oficina...</div>
+              <div style={{ fontSize: "30px" }}>Agregando Punto...</div>
             </div>
           ) : (
             <>
@@ -628,19 +659,18 @@ const Oficinas = () => {
           )}
         </form>
       </Modal>
-
       <Modal
         isOpen={modalEditarIsOpen}
         onRequestClose={() => setModalEditarIsOpen(false)}
         className="modalContent"
         overlayClassName="modalOverlay"
       >
-        <h2>Editar Oficina</h2>
+        <h2>Editar Punto</h2>
         <form onSubmit={handleSubmitEdit(onSubmitEditar)}>
           <label>
             Edificio:
             <select
-              className="Oficinas input modalInput"
+              className="PuntosInteres input modalInput"
               {...registerEdit("edificio", { required: true })}
             >
               {edificios.map((edificio) => (
@@ -656,7 +686,7 @@ const Oficinas = () => {
           <label>
             Nombre:
             <input
-              className="Oficinas input modalInput"
+              className="PuntosInteres input modalInput"
               {...registerEdit("nombre", {
                 required: true,
                 validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
@@ -668,42 +698,42 @@ const Oficinas = () => {
             )}
           </label>
           <label>
-            Nombre:
+            Descripcion:
             <input
-              className="Oficinas input modalInput"
-              {...registerEdit("profesor", {
-                required: false,
+              className="PuntosInteres input modalInput"
+              {...registerEdit("descripcion", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
               })}
-              placeholder="Profesor"
+              placeholder="Descripción"
+              onChange={handleDescriptionChange}
+              maxLength={MAX_DESCRIPTION_LENGTH}
             />
-          </label>
-          <label>
-            Código o Número:
-            <input
-              className="Oficinas input modalInput"
-              {...registerEdit("codeOrNo", {
-                required: false,
-              })}
-              placeholder="Código o Número"
-            />
-            {errorsEdit.codeOrNo && (
-              <p className="requerido">"Este campo es requerido"</p>
+            {errorsEdit.descripcion && (
+              <p className="requerido">
+                La descripción debe tener más de 3 caracteres
+              </p>
             )}
+            <p>
+              Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
+            </p>
           </label>
-          {loadingOficina ? (
+          {loadingPunto ? (
             <div className="botones">
               <ClipLoader
                 color="#3d8463"
-                loading={loadingOficina}
+                loading={loadingPunto}
                 size={"90px"}
               />
-              <div style={{ fontSize: "30px" }}>Actualizando Oficina...</div>
+              <div style={{ fontSize: "30px" }}>
+                Actualizando Punto...
+              </div>
             </div>
           ) : (
             <>
               <div className="btnContainer">
                 <button type="submit" className="agregarBtn">
-                  Actualizar
+                  Agregar
                 </button>
                 <button
                   className="cancelarBtn"
@@ -716,7 +746,6 @@ const Oficinas = () => {
           )}
         </form>
       </Modal>
-
       <Modal
         isOpen={modalImagesIsOpen}
         onRequestClose={() => setModalImagesIsOpen(false)}
@@ -809,7 +838,7 @@ const Oficinas = () => {
       </Modal>
 
       <ToastContainer />
-      <div className="tablaOficinas">
+      <div className="tablaPuntosInteres">
         {loading ? (
           <div className="botones">
             <ClipLoader color="#3d8463" loading={loading} size={"90px"} />
@@ -905,4 +934,4 @@ const Oficinas = () => {
   );
 };
 
-export default Oficinas;
+export default PuntosInteres;
