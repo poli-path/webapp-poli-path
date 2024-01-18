@@ -28,7 +28,7 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
     />
   );
 }
-const MAX_DESCRIPTION_LENGTH = 150;
+const MAX_DESCRIPTION_LENGTH = 400;
 
 const Facultades = () => {
   const [facultades, setFacultades] = useState([]);
@@ -439,7 +439,7 @@ const Facultades = () => {
 
       setIsEditMode(false);
 
-      await fetchBuildings(token);
+      await fetchFaculties(token);
       setPageSize(defaultPageSize);
       setPageNumber(0);
       Swal.fire({
