@@ -105,7 +105,7 @@ const Administrador = () => {
             <button>Oficinas</button>
           </Link>
           <Link onClick={handleToggleClick} to="/administrador/puntosInteres">
-            <button>Puntos de Interes</button>
+            <button>Puntos de Interés</button>
           </Link>
         </div>
         <div className="logout">

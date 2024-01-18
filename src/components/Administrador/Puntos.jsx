@@ -175,7 +175,7 @@ const PuntosInteres = () => {
 
     try {
       const confirmResult = await Swal.fire({
-        title: "¿Estás seguro de editar este Punto de Interes?",
+        title: "¿Estás seguro de editar este Punto de Interés?",
         showDenyButton: true,
         confirmButtonText: `Continuar`,
         denyButtonText: `Cancelar`,
@@ -562,13 +562,13 @@ const PuntosInteres = () => {
 
   return (
     <div className="PuntosInteres">
-      <h2>PuntosInteres</h2>
+      <h2>Puntos de Interés</h2>
       <p>
-        ¡Bienvenido a la sección de administración de Puntos de Interes! Aquí podrás
-        administrar y visualizar una lista de Puntos de Interes en tu aplicación.
-        Puedes agregar nuevas Puntos de Interes, editar sus detalles existentes y
+        ¡Bienvenido a la sección de administración de Puntos de Interés! Aquí podrás
+        administrar y visualizar una lista de Puntos de Interés en tu aplicación.
+        Puedes agregar nuevas Puntos de Interés, editar sus detalles existentes y
         eliminarlos individualmente. Esta herramienta ofrece una interfaz
-        amigable para mantener y actualizar la información de las Puntos de Interes,
+        amigable para mantener y actualizar la información de las Puntos de Interés,
         proporcionando opciones claras para gestionar eficientemente los
         registros en tu sistema.
       </p>

@@ -72,10 +72,10 @@ a:-webkit-any-link {
 }
 .swal2-title {
   background: linear-gradient(180deg, #ba001300, #ba001300);
-  color: aliceblue;
+  color: white;
 }
 div:where(.swal2-container) .swal2-html-container {
-  color: aliceblue;
+  color: white;
 }
 select {
   width: 120px;
@@ -99,6 +99,7 @@ option {
   border: 3px solid white;
   border-radius: 20px;
   box-shadow: 0 20px 32px 0 black;
+  color: white;
 }
 
 .Toastify__toast.Toastify__toast-theme--light.Toastify__toast--error.Toastify--animate.Toastify__bounce-enter--top-right {
