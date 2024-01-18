@@ -102,10 +102,6 @@ option {
 }
 
 .Toastify__toast.Toastify__toast-theme--light.Toastify__toast--error.Toastify--animate.Toastify__bounce-enter--top-right {
-  background: #fafafa7e;
-  background-size: cover;
-  backdrop-filter: blur(0.4rem);
-  -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
 
   border: 3px solid white;
@@ -115,10 +111,6 @@ option {
   position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
 }
 .Toastify__toast.Toastify__toast-theme--light.Toastify__toast--success.Toastify--animate.Toastify__bounce-enter--top-right {
-  background: #fafafa7e;
-  background-size: cover;
-  backdrop-filter: blur(0.4rem);
-  -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
 
   border: 3px solid white;

@@ -15,7 +15,7 @@
   height: 100vh;
   position: relative;
   overflow: hidden; /* Ocultar cualquier desbordamiento de los elementos hijos */
-  background-image: url('../../assets/EntradaPoli.jpg');
+  background-image: url('../../assets/EntradaPoli.webp');
   background-size: cover;
   background-repeat: no-repeat;
 
@@ -34,7 +34,7 @@
 
 .login-container::after {
   content: "";
-  background-image: url('../../assets/EntradaPoli.jpg');
+  background-image: url('../../assets/EntradaPoli.webp');
   background-size: cover;
   background-repeat: no-repeat;
   position: absolute;

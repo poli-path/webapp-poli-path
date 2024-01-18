@@ -4,7 +4,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import ClipLoader from "react-spinners/ClipLoader";
-import Defaultimg from "../../assets/Default.jpg";
+import Defaultimg from "../../assets/Default.webp";
 
 function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
   const count = preFilteredRows.length;

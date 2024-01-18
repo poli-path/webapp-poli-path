@@ -21,7 +21,7 @@
 }
 .content {
   grid-column: 2; 
-  background-image: url('../../assets/LogoDark.png') ;
+  background-image: url('../../assets/LogoDark.webp') ;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -81,7 +81,7 @@
 .logo {
   height: 30vh;
   width: 100%;
-  background-image: url('../../assets/EntradaPoli.jpg');
+  background-image: url('../../assets/EntradaPoli.webp');
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -126,7 +126,7 @@
 
 .logo::after {
   content: "";
-  background-image: url('../../assets/EntradaPoli.jpg');
+  background-image: url('../../assets/EntradaPoli.webp');
   background-size: cover;
   background-repeat: no-repeat;
   top: 0;

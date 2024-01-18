@@ -37,17 +37,17 @@
 
 /* Estilos específicos para cada slide */
 .slide-0 {
-  background-image: url('../../assets/EPN_360_1.jpg');
+  background-image: url('../../assets/EPN_360_1.webp');
   background-position: left center; /* Alineación a la izquierda */
 }
 
 .slide-1 {
-  background-image: url('../../assets/EPN_360_2.jpg');
+  background-image: url('../../assets/EPN_360_2.webp');
   background-position: right center; /* Alineación a la derecha */
 }
 
 .slide-2 {
-  background-image: url('../../assets/EPN_appmóvil.jpg');
+  background-image: url('../../assets/EPN_appmóvil.webp');
 }
 
 .carousel-slide h1 {

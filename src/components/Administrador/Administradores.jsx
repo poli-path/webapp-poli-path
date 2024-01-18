@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useTable, usePagination, useFilters } from "react-table";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import Defaultimg from "../../assets/Default.jpg";
+import Defaultimg from "../../assets/Default.webp";
 
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";

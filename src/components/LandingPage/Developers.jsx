@@ -1,8 +1,8 @@
 import { FaWhatsapp, FaGithub, FaLinkedin } from "react-icons/fa";
 import "../../styles/LandingPage/Developers.css";
-import Nestor from "../../assets/FotoNstor.jpg";
-import Daniel from "../../assets/FotoDaniel.jpg";
-import Salo from "../../assets/FotoSalo.jpg";
+import Nestor from "../../assets/FotoNstor.webp";
+import Daniel from "../../assets/FotoDaniel.webp";
+import Salo from "../../assets/FotoSalo.webp";
 
 const Developers = () => {
   const mensaje = "Hola, quiero saber más sobre PoliPath";

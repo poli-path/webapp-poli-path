@@ -8,12 +8,12 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 import axios from "axios";
-import MarkerMi from "../../assets/Marker.png";
-import PoliPath from "../../assets/App_Mvil.png";
+import MarkerMi from "../../assets/Marker.webp";
+import PoliPath from "../../assets/App_Mvil.webp";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
-import EntradasMarker from "../../assets/Entradas.png";
+import EntradasMarker from "../../assets/Entradas.webp";
 
 const MapContainer = () => {
   const [buildings, setBuildings] = useState([]);
@@ -189,7 +189,7 @@ const MapContainer = () => {
     arrows: false,
   };
   const mapOptions = {
-    mapContainerStyle: { width: "100%", height: "100vh" },
+    mapContainerStyle: { width: "100%", height: "100%" },
     center: selectedBuilding
       ? { lat: selectedBuilding.latitude, lng: selectedBuilding.longitude }
       : userLocation || { lat: -0.21055556, lng: -78.48888889 },

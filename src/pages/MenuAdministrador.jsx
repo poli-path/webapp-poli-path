@@ -11,7 +11,7 @@ import Oficinas from "../components/Administrador/Oficinas";
 import DatosUsuario from "../components/Administrador/DatosUsuario";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import Adminis from "../assets/Default.jpg"; // Esta será tu imagen por defecto
+import Adminis from "../assets/Default.webp"; // Esta será tu imagen por defecto
 import ClipLoader from "react-spinners/ClipLoader";
 
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";

@@ -1,6 +1,6 @@
 import { FaGooglePlay } from "react-icons/fa";
 import "../../styles/LandingPage/MobileApp.css";
-import ImgGift from "../../assets/App_Mvil.png";
+import ImgGift from "../../assets/App_Mvil.webp";
 
 const MobileApp = () => {
   return (

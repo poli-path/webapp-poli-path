@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/NotFoundPage.css'; // Asegúrate de crear este archivo CSS
-import logo from '../assets/Logo.png'; // Reemplaza esto con la ruta a tu logo
+import logo from '../assets/Logo.webp'; // Reemplaza esto con la ruta a tu logo
 
 const NotFoundPage = () => {
     return (

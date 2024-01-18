@@ -2,7 +2,7 @@
 
 /* Estilos generales para el componente */
 .mapInvitado {
-  padding: 3%;  
+  padding: 3%;
   background: #fafafa10;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
@@ -11,8 +11,8 @@
   border: 3px solid fafafa10;
   border-radius: 50px;
 }
-.descarga{
-  padding: 3%;  
+.descarga {
+  padding: 3%;
   background: #fafafa06;
   background-size: cover;
   backdrop-filter: blur(0.4rem);
@@ -21,27 +21,17 @@
   border: 3px solid fafafa10;
   border-radius: 50px;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15%;
+  max-height: 50%;
 }
 .infoContent {
   background: #0040ff4b;
-
-  color: white; 
+  color: white;
   padding: 10px;
-  max-width: 300px; 
+  max-width: 300px;
 }
 
-.places-suggestions {
-  position: absolute;
-  width: 100%;
-  background-color: #ff00003a;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  z-index: 1;
-  color: black;
-}
 /* Estilos para los títulos */
-
 .mapInvitado h2 {
   margin-bottom: 10px;
 }
@@ -55,23 +45,116 @@
 .main-container {
   display: flex;
   max-height: 100vh;
+  position: relative; /* Añadido: posición relativa para posicionar los elementos hijos de manera absoluta */
 }
 
 /* Estilos para el contenedor del buscador */
 .search-container {
   flex: 1;
   width: 40vw;
+  position: relative; /* Añadido: posición relativa para posicionar los elementos hijos de manera absoluta */
+  max-height: fit-content;
 }
-.search-container p{
+.search-container p {
   color: black;
 }
+
 /* Estilos para el contenedor del mapa */
 .map-content {
   flex: 2;
+  position: relative; /* Añadido: posición relativa para posicionar los elementos hijos de manera absoluta */
 }
 
 /* Estilos para el mapa */
 .map {
   width: 100%;
-  height: 100%;
+  height: fit-content
+}
+
+/* Estilos para la información de la ruta */
+.instrucciones {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+/* Estilos para la InfoWindow */
+.prueba {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2; /* Ajustado a un valor mayor para estar sobre las instrucciones */
+}
+
+/* Estilos para el contenedor principal de las secciones */
+.main-container {
+  display: flex;
+  max-height: 100vh;
+  position: relative;
+  z-index: 0; /* Añadido: asegura que el contenedor principal esté por debajo de otros elementos */
+}
+
+/* Estilos para el contenedor del buscador */
+.search-container {
+  flex: 1;
+  width: 40vw;
+  position: relative;
+  z-index: 0; /* Añadido: asegura que el contenedor del buscador esté por debajo de otros elementos */
+}
+
+/* Estilos para el contenedor del mapa */
+.map-content {
+  flex: 2;
+  position: relative;
+  z-index: 0; /* Añadido: asegura que el contenedor del mapa esté por debajo de otros elementos */
+}
+
+
+/* Estilos para la InfoWindow */
+.prueba {
+  position: absolute; /* Añadido: posición absoluta para superponer encima del mapa */
+  top: 10px; /* Ajusta según sea necesario */
+  right: 10px; /* Ajusta según sea necesario */
+  z-index: 1; /* Añadido: asegura que esté sobre el mapa */
+}
+
+/* Estilos para el contenedor de descarga de la aplicación */
+.descarga {
+  /* ... (otros estilos) */
+  position: relative; /* Añadido: posición relativa para posicionar los elementos hijos de manera absoluta */
+}
+
+/* Estilos para las sugerencias de lugares */
+.places-suggestions {
+  /* ... (otros estilos) */
+  position: absolute; /* Añadido: posición absoluta para superponer encima del mapa */
+  top: 50px; /* Ajusta según sea necesario */
+}
+
+/* ... (otros estilos) */
+/* ... (otros estilos) */
+
+/* Estilos para el contenedor principal de las secciones en pantalla pequeña */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Estilos para el contenedor del buscador en pantalla pequeña */
+  .search-container {
+    width: 100%;
+  }
+
+  /* Estilos para el contenedor del mapa en pantalla pequeña */
+  .map-content {
+    width: 100%;
+  }
+
+  /* ... (otros estilos específicos para pantalla pequeña) */
 }

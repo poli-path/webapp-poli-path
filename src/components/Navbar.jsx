@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/Navbar.css';
 import { Link } from 'react-router-dom';
-import Logo from "../assets/Logo.png";
+import Logo from "../assets/Logo.webp";
 
 const Navbar = () => {
     const [showMenu, setShowMenu] = useState(false);

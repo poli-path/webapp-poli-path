@@ -9,8 +9,8 @@ import RecoverAdministrador from "./pages/RecoverAdministrador";
 import NotFoundPage from "./pages/NotFoundPage"; // Asegúrate de crear este componente
 import "@fontsource/keania-one";
 import "./App.css";
-import lightModeIcon from "./assets/LightMode.png";
-import darkModeIcon from "./assets/DarkMode.png";
+import lightModeIcon from "./assets/LightMode.webp";
+import darkModeIcon from "./assets/DarkMode.webp";
 import WithAdminAuth from './hoc/WithAdminAuth';
 import { LoadScript } from "@react-google-maps/api";
 // Crear el contexto para el estado del script de Google Maps

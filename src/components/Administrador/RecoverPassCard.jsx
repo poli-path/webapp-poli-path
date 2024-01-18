@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import '../../styles/Administrador/RecoverPasswordCard.css';
-import Adminis from "../../assets/Adminis.jpg";
+import Adminis from "../../assets/Adminis.webp";
 import { Link, useNavigate } from 'react-router-dom';
 import ClipLoader from "react-spinners/ClipLoader"; // Importa ClipLoader
 

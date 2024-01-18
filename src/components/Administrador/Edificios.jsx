@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
-import MarkerMi from "../../assets/Marker.png";
+import MarkerMi from "../../assets/Marker.webp";
 
 Modal.setAppElement("#root");
 

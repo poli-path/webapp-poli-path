@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../styles/Administrador/Bienvenida.css'
-import logo from '../../assets/Logo.png'
+import logo from '../../assets/Logo.webp'
 
 const NotFoundPage = () => {
     return (

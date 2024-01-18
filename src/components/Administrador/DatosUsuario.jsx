@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import "../../styles/Administrador/DatosUsuario.css";
-import Nestor from "../../assets/Default.jpg";
+import Nestor from "../../assets/Default.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
@@ -37,41 +37,39 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
 
   const userId = Cookies.get("id");
   const token = Cookies.get("token");
+  const getUserData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
+      const data = response.data;
+      setUsuario({
+        nombre: data.name,
+        apellido: data.lastname,
+        contrasena: "",
+        imagen: data.imageUrl || Nestor,
+      });
+
+      // Establece los valores iniciales de los campos de entrada y la imagen en la previsualización
+      setValue("nombre", data.name);
+      setValue("apellido", data.lastname);
+      setValue("imagen", data.imageUrl || Nestor);
+      setPreviewImage(data.imageUrl || Nestor); // Establece la imagen actual en la previsualización
+
+      setUserData({ ...data, imageUrl: data.imageUrl }); // Guarda la imageUrl en setUserData
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/users/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const data = response.data;
-        setUsuario({
-          nombre: data.name,
-          apellido: data.lastname,
-          contrasena: "",
-          imagen: data.imageUrl || Nestor,
-        });
-
-        // Establece los valores iniciales de los campos de entrada y la imagen en la previsualización
-        setValue("nombre", data.name);
-        setValue("apellido", data.lastname);
-        setValue("imagen", data.imageUrl || Nestor);
-        setPreviewImage(data.imageUrl || Nestor); // Establece la imagen actual en la previsualización
-
-        setUserData({ ...data, imageUrl: data.imageUrl }); // Guarda la imageUrl en setUserData
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
     getUserData();
   }, []);
 
@@ -105,6 +103,8 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
               const updatedUserData = { ...usuario, imagen: usuario.imagen };
               setUsuario(updatedUserData);
               setUserData(data);
+              await getUserData();
+
               setIsEditable(false);
               toast.success("Datos actualizados exitosamente!");
             } else {
@@ -113,12 +113,15 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           } catch (error) {
             console.error("Error:", error);
           } finally {
+
             setIsSaving(false);
           }
         }
       });
     } else {
       setIsEditable(true);
+      await getUserData();
+
       setActiveForm("userData");
     }
   };
@@ -138,6 +141,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     const file = e.target.files[0];
     setNewImage(file);
     setPreviewImage(URL.createObjectURL(file));
+    
   };
 
   const handleCancelImageChange = () => {
@@ -156,7 +160,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     setModalPasswordIsOpen(false);
     setActiveForm("userData"); // Cuando se cierra el modal de contraseña, activamos nuevamente el formulario de userData
   };
-  
+
   const handleUploadImage = async () => {
     if (newImage) {
       const formData = new FormData();
@@ -184,6 +188,7 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           setUsuario(updatedUserData);
           setModalIsOpen(false);
           setNewImage(null);
+          await getUserData();
 
           toast.success("Imagen actualizada exitosamente");
 

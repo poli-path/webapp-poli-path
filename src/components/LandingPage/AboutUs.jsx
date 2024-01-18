@@ -1,5 +1,5 @@
 import "../../styles/LandingPage/AboutUs.css";
-import ImgGift from "../../assets/Nosotros.png";
+import ImgGift from "../../assets/Nosotros.webp";
 
 const AboutUs = () => {
   return (
