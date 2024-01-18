@@ -487,11 +487,6 @@ const Oficinas = () => {
       {
         Header: "Profesor",
         accessor: "teacherName", // Cambia a "teacherName"
-        Cell: ({ value }) => (
-          <div>
-            {value ? value : <p className="requerido">Sin Profesor aún</p>}
-          </div>
-        ),
       },
       {
         Header: "Imágenes",
@@ -607,22 +602,6 @@ const Oficinas = () => {
               <p className="requerido">El nombre debe tener más de 3 letras</p>
             )}
           </label>
-          <label>
-            Código o Número:
-            <input
-              type="number"
-              min="0"
-              className="Oficinas input modalInput"
-              {...registerAdd("codeOrNo", {
-                required: true,
-                valueAsNumber: true,
-              })}
-              placeholder="Código o Número"
-            />
-            {errorsAdd.codeOrNo && (
-              <p className="requerido">"Este campo es requerido"</p>
-            )}
-          </label>
           {loadingOficina ? (
             <div className="botones">
               <ClipLoader
@@ -701,12 +680,9 @@ const Oficinas = () => {
           <label>
             Código o Número:
             <input
-              type="number"
-              min="0"
               className="Oficinas input modalInput"
               {...registerEdit("codeOrNo", {
-                required: true,
-                valueAsNumber: true,
+                required: false,
               })}
               placeholder="Código o Número"
             />

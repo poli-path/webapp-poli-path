@@ -40,7 +40,14 @@ const Usuarios = () => {
             }
           );
 
-          const filteredUsers = response.data.filter(
+          const modifiedUsers = response.data.map((user) => ({
+            ...user,
+            favoriteBuildings: user.favoriteBuildings.map((building) => ({
+              no: building.no,
+              name: building.name,
+            })),
+          }));
+          const filteredUsers = modifiedUsers.filter(
             (user) => !user.roles.includes("admin")
           );
           setUsuarios(filteredUsers);
@@ -93,9 +100,28 @@ const Usuarios = () => {
         accessor: "registerDate",
       },
       {
-        Header: "Puntos de Interés",
+        Header: "Favoritos",
         accessor: "favoriteBuildings",
+        Cell: ({ value }) => (
+          <div>
+            {value.length > 0 ? (
+              value.map((building) => (
+                <div key={building.no}>
+                  Edificio {building.no}. {building.name}
+            <br />
+            <br />
+                </div>
+                
+              ))
+            ) : (
+              <p className="requerido">No existen edificios favoritos aún</p>
+            )}
+          </div>
+        ),
+        disableFilters: true,
+
       },
+      
     ],
     []
   );

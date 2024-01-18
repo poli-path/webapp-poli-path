@@ -80,12 +80,39 @@
   border-collapse: collapse; /* Elimina el espacio entre las celdas */
   border-radius: 50px 50px 25px 25px;
 }
+.tablaUsuarios {
+  overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es más ancha que la pantalla */
+  width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+  max-height: 100vh; /* Limita la altura de la tabla a la mitad de la altura de la vista */
+  border-radius: 30px;
+}
+.tablaUsuarios::-webkit-scrollbar {
+  width: 7px; /* Ancho de la barra de desplazamiento */
+  height: 7px; /* Ancho de la barra de desplazamiento */
+  border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
+  border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+}
 
+.tablaUsuarios::-webkit-scrollbar-track {
+  background: transparent; /* Color de la pista de la barra de desplazamiento */
+}
+
+.tablaUsuarios::-webkit-scrollbar-thumb {
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.449
+  ); /* Color del pulgar de la barra de desplazamiento */
+  border-radius: 50px; /* Radio del borde del pulgar de la barra de desplazamiento */
+  border: 1px solid black; /* Borde del pulgar de la barra de desplazamiento */
+}
 .usuarios th,
 .usuarios td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd; /* Añade una línea debajo de cada fila */
+  max-width: 300px;
 }
 .usuarios p {
   text-align: justify; /* Justifica el texto */

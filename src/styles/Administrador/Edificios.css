@@ -68,7 +68,6 @@
   padding-right: 35px;
   text-align: left;
   border-bottom: 1px solid #ddd; /* Añade una línea debajo de cada fila */
-  min-width: 200px;
 }
 
 /* Estilos para los botones de acciones */
@@ -97,15 +96,6 @@
   text-align: justify; /* Justifica el texto */
 }
 
-/* Añade un efecto hover a las filas */
-.edificios tr:hover {
-  background: #fafafa10;
-  background-size: cover;
-  backdrop-filter: blur(0.4rem);
-  box-shadow: 0 8px 20px 0 rgba(255, 0, 0, 0.445);
-
-  -webkit-backdrop-filter: blur(0.4rem);
-}
 
 /* Añade estilos a la entrada de texto del filtro */
 .edificios input {

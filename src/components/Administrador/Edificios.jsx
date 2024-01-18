@@ -29,7 +29,7 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
     />
   );
 }
-const MAX_DESCRIPTION_LENGTH = 150;
+const MAX_DESCRIPTION_LENGTH = 400;
 
 const Edificios = () => {
   const [edificios, setEdificios] = useState([]);
@@ -120,7 +120,7 @@ const Edificios = () => {
           },
         }
       );
-
+      console.log(response.data)
       setEdificios(response.data);
       setBuildingIds(response.data.map((building) => building.id)); // Almacena los IDs
       setLoading(false);
@@ -529,28 +529,39 @@ const Edificios = () => {
       {
         Header: "Número",
         accessor: "no",
+        Cell: ({ value }) => (
+          <div style={{ width: '50px' }}>
+            {value}
+          </div>
+        ),
       },
       {
         Header: "Imágenes",
         accessor: "imageUrls",
         Cell: ({ value, row }) => (
-          <div>
+          <div style={{ width: '100px' }}>
             <button onClick={() => openImagesModal(value, row.original.id)}>
               Ver Imágenes
             </button>
           </div>
         ),
+        disableFilters: true,
       },
 
       {
         Header: "Nombre",
         accessor: "name",
+        Cell: ({ value }) => (
+          <div style={{ width: '150px' }}>
+            {value}
+          </div>
+        ),
       },
       {
         Header: "Dirección",
         accessor: "address",
         Cell: ({ value }) => (
-          <div>
+          <div style={{ width: '200px' }}>
             {value ? value : <p className="requerido">Sin Dirección aún</p>}
           </div>
         ),
@@ -559,7 +570,7 @@ const Edificios = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div>
+          <div style={{ width: '500px' }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
@@ -570,7 +581,7 @@ const Edificios = () => {
         Cell: ({ row }) => {
           const { longitude, latitude, name } = row.original;
           return (
-            <button
+            <button style={{ width: '150px' }}
               onClick={() => handleOpenMapModal(latitude, longitude, name)}
             >
               Ver en Google Maps
@@ -583,13 +594,16 @@ const Edificios = () => {
         Header: "Facultades",
         accessor: "faculties",
         Cell: ({ value }) => (
-          <div>
-            {value && value.length > 0 ? (
-              <ul>
-                {value.map((faculty) => (
-                  <li key={faculty.id}>{faculty.name}</li>
-                ))}
-              </ul>
+          <div style={{ width: '250px' }}>
+            {value.length > 0 ? (
+              value.map((faculty) => (
+                <div key={faculty.id}>
+                  {faculty.name}
+            <br />
+            <br />
+                </div>
+                
+              ))
             ) : (
               <p className="requerido">No existen Facultades aún</p>
             )}
@@ -601,15 +615,18 @@ const Edificios = () => {
         Header: "Laboratorios",
         accessor: "laboratories",
         Cell: ({ value }) => (
-          <div>
-            {value && value.length > 0 ? (
-              <ul>
-                {value.map((lab) => (
-                  <li key={lab.id}>{lab.name}</li>
-                ))}
-              </ul>
+          <div style={{ width: '250px' }}>
+            {value.length > 0 ? (
+              value.map((lab) => (
+                <div key={lab.id}>
+                  {lab.name}
+            <br />
+            <br />
+                </div>
+                
+              ))
             ) : (
-              <p className="requerido">No existen Laboratorios aún</p>
+              <p className="requerido">No existen Facultades aún</p>
             )}
           </div>
         ),
@@ -619,15 +636,18 @@ const Edificios = () => {
         Header: "Oficinas",
         accessor: "offices",
         Cell: ({ value }) => (
-          <div>
-            {value && value.length > 0 ? (
-              <ul>
-                {value.map((office) => (
-                  <li key={office.id}>{office.name}</li>
-                ))}
-              </ul>
+          <div style={{ width: '250px' }}>
+            {value.length > 0 ? (
+              value.map((office) => (
+                <div key={office.id}>
+                  {office.name}
+            <br />
+            <br />
+                </div>
+                
+              ))
             ) : (
-              <p className="requerido">No existen Oficinas aún</p>
+              <p className="requerido">No existen Facultades aún</p>
             )}
           </div>
         ),
