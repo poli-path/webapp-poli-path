@@ -1,0 +1,38 @@
+{
+  "files": {
+    "main.css": "/webapp-poli-path.git/static/css/main.2e80cfd0.css",
+    "main.js": "/webapp-poli-path.git/static/js/main.cd684cbd.js",
+    "static/media/EPN_360_1.webp": "/webapp-poli-path.git/static/media/EPN_360_1.0f1b4f537a333b443ef0.webp",
+    "static/media/EPN_appmóvil.webp": "/webapp-poli-path.git/static/media/EPN_appmóvil.c4c3d3192bb45e9fb05e.webp",
+    "static/media/EPN_360_2.webp": "/webapp-poli-path.git/static/media/EPN_360_2.d8085872611e060d69a4.webp",
+    "static/media/LightMode.webp": "/webapp-poli-path.git/static/media/LightMode.7c1b9d9e15205e88f9a6.webp",
+    "static/media/Nosotros.webp": "/webapp-poli-path.git/static/media/Nosotros.f0db0042c216e396fa27.webp",
+    "static/media/EntradaPoli.webp": "/webapp-poli-path.git/static/media/EntradaPoli.682c4b229e6c4c61a06c.webp",
+    "static/media/Logo.webp": "/webapp-poli-path.git/static/media/Logo.6c4dab0c035316b8d084.webp",
+    "static/media/Adminis.webp": "/webapp-poli-path.git/static/media/Adminis.a9f03d8371a470d9be51.webp",
+    "static/media/LogoDark.webp": "/webapp-poli-path.git/static/media/LogoDark.6930e3e9907949857172.webp",
+    "static/media/FotoNstor.webp": "/webapp-poli-path.git/static/media/FotoNstor.30086b4af8e5578337ef.webp",
+    "static/media/Marker.webp": "/webapp-poli-path.git/static/media/Marker.774bd71e4beb2088a32b.webp",
+    "static/media/FotoSalo.webp": "/webapp-poli-path.git/static/media/FotoSalo.3b7bfa4b1fe299b37506.webp",
+    "static/media/App_Mvil.webp": "/webapp-poli-path.git/static/media/App_Mvil.20c976a479d00c1f4ea9.webp",
+    "static/media/Entradas.webp": "/webapp-poli-path.git/static/media/Entradas.35ffaaf23ffa96bdb22d.webp",
+    "static/media/FotoDaniel.webp": "/webapp-poli-path.git/static/media/FotoDaniel.a6bc39731f3c7cf6cf3d.webp",
+    "static/media/DarkMode.webp": "/webapp-poli-path.git/static/media/DarkMode.1ad84991b3da9fdabd70.webp",
+    "static/media/keania-one-latin-400-normal.woff": "/webapp-poli-path.git/static/media/keania-one-latin-400-normal.de39d331f3dbbe11f49f.woff",
+    "static/media/keania-one-latin-400-normal.woff2": "/webapp-poli-path.git/static/media/keania-one-latin-400-normal.5700b6cf1e46b4220c09.woff2",
+    "static/media/keania-one-latin-ext-400-normal.woff": "/webapp-poli-path.git/static/media/keania-one-latin-ext-400-normal.72ba5fd065def1941e9d.woff",
+    "static/media/Default.webp": "/webapp-poli-path.git/static/media/Default.32225a21d842b17c5b5e.webp",
+    "static/media/slick.svg": "/webapp-poli-path.git/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/keania-one-latin-ext-400-normal.woff2": "/webapp-poli-path.git/static/media/keania-one-latin-ext-400-normal.9df42d390a68475acc62.woff2",
+    "static/media/slick.eot": "/webapp-poli-path.git/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/webapp-poli-path.git/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/webapp-poli-path.git/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/webapp-poli-path.git/index.html",
+    "main.2e80cfd0.css.map": "/webapp-poli-path.git/static/css/main.2e80cfd0.css.map",
+    "main.cd684cbd.js.map": "/webapp-poli-path.git/static/js/main.cd684cbd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e80cfd0.css",
+    "static/js/main.cd684cbd.js"
+  ]
+}
