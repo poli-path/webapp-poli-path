@@ -199,9 +199,7 @@ const PuntosInteres = () => {
         );
 
         setPuntosInteres(
-          PuntosInteres.map((edif) =>
-            edif === PuntoEditado ? data : edif
-          )
+          PuntosInteres.map((edif) => (edif === PuntoEditado ? data : edif))
         );
 
         await fetchPointsInterests(token);
@@ -264,8 +262,7 @@ const PuntosInteres = () => {
       Swal.fire({
         title: "Error",
         text:
-          error.response.data.message ||
-          "Hubo un error al eliminar el Punto",
+          error.response.data.message || "Hubo un error al eliminar el Punto",
         icon: "error",
       });
     } finally {
@@ -505,7 +502,7 @@ const PuntosInteres = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div style={{width:500}}>
+          <div style={{ width: 500 }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
@@ -564,13 +561,13 @@ const PuntosInteres = () => {
     <div className="PuntosInteres">
       <h2>Puntos de Interés</h2>
       <p>
-        ¡Bienvenido a la sección de administración de Puntos de Interés! Aquí podrás
-        administrar y visualizar una lista de Puntos de Interés en tu aplicación.
-        Puedes agregar nuevas Puntos de Interés, editar sus detalles existentes y
-        eliminarlos individualmente. Esta herramienta ofrece una interfaz
-        amigable para mantener y actualizar la información de las Puntos de Interés,
-        proporcionando opciones claras para gestionar eficientemente los
-        registros en tu sistema.
+        ¡Bienvenido a la sección de administración de Puntos de Interés! Aquí
+        podrás administrar y visualizar una lista de Puntos de Interés en tu
+        aplicación. Puedes agregar nuevas Puntos de Interés, editar sus detalles
+        existentes y eliminarlos individualmente. Esta herramienta ofrece una
+        interfaz amigable para mantener y actualizar la información de las
+        Puntos de Interés, proporcionando opciones claras para gestionar
+        eficientemente los registros en tu sistema.
       </p>
       <br />
       <button onClick={() => setModalIsOpen(true)}>Agregar Punto</button>
@@ -614,7 +611,7 @@ const PuntosInteres = () => {
           </label>
           <label>
             Descripcion:
-            <input
+            <textarea
               className="PuntosInteres input modalInput"
               {...registerAdd("descripcion", {
                 required: true,
@@ -623,6 +620,7 @@ const PuntosInteres = () => {
               placeholder="Descripción"
               onChange={handleDescriptionChange}
               maxLength={MAX_DESCRIPTION_LENGTH}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
             />
             {errorsAdd.descripcion && (
               <p className="requerido">
@@ -699,7 +697,7 @@ const PuntosInteres = () => {
           </label>
           <label>
             Descripcion:
-            <input
+            <textarea
               className="PuntosInteres input modalInput"
               {...registerEdit("descripcion", {
                 required: true,
@@ -707,6 +705,8 @@ const PuntosInteres = () => {
               })}
               placeholder="Descripción"
               onChange={handleDescriptionChange}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
+
               maxLength={MAX_DESCRIPTION_LENGTH}
             />
             {errorsEdit.descripcion && (
@@ -725,9 +725,7 @@ const PuntosInteres = () => {
                 loading={loadingPunto}
                 size={"90px"}
               />
-              <div style={{ fontSize: "30px" }}>
-                Actualizando Punto...
-              </div>
+              <div style={{ fontSize: "30px" }}>Actualizando Punto...</div>
             </div>
           ) : (
             <>
@@ -837,7 +835,19 @@ const PuntosInteres = () => {
         </div>
       </Modal>
 
-      <ToastContainer />
+      <ToastContainer
+        theme="colored"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <div className="tablaPuntosInteres">
         {loading ? (
           <div className="botones">

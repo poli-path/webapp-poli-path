@@ -832,7 +832,19 @@ const Oficinas = () => {
         </div>
       </Modal>
 
-      <ToastContainer />
+      <ToastContainer
+        theme="colored"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <div className="tablaOficinas">
         {loading ? (
           <div className="botones">

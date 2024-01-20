@@ -757,7 +757,7 @@ const Edificios = () => {
             zoom={19}
             options={{
               mapId: "9ddcb7692f5e8d1",
-              mapTypeControl: false,  // Deshabilita el control de tipo de mapa
+              mapTypeControl: false, // Deshabilita el control de tipo de mapa
             }}
           >
             <Marker
@@ -905,7 +905,7 @@ const Edificios = () => {
               }}
               options={{
                 mapId: "9ddcb7692f5e8d1",
-                mapTypeControl: false,  // Deshabilita el control de tipo de mapa
+                mapTypeControl: false, // Deshabilita el control de tipo de mapa
               }}
             >
               <Marker
@@ -995,12 +995,13 @@ const Edificios = () => {
           </label>
           <label>
             Descripción:
-            <input
+            <textarea
               className="edificios input modalInput"
               {...registerEdit("descripcion", { required: true })}
               placeholder="Descripción"
               onChange={handleDescriptionChange}
               maxLength={MAX_DESCRIPTION_LENGTH}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
             />
             {errorsEdit.descripcion && (
               <p className="requerido">
@@ -1090,7 +1091,7 @@ const Edificios = () => {
               }}
               options={{
                 mapId: "9ddcb7692f5e8d1",
-                mapTypeControl: false,  // Deshabilita el control de tipo de mapa
+                mapTypeControl: false, // Deshabilita el control de tipo de mapa
               }}
             >
               <Marker
@@ -1228,7 +1229,18 @@ const Edificios = () => {
           )}
         </div>
       </Modal>
-      <ToastContainer />
+      <ToastContainer
+        theme="colored"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
       <div className="tablaEdificios">
         {loading ? (

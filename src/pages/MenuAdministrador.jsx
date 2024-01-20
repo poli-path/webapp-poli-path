@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Administrador/MenuAdministrador.css";
-import NotFoundPage from "../components/Administrador/NotFoundPageAdmin"; // Asegúrate de crear este componente
+import NotFoundPage from "../components/Administrador/NotFoundPageAdmin";
 import Bienvenida from "../components/Administrador/Bienvenida";
 import Usuarios from "../components/Administrador/Usuarios";
 import Administradores from "../components/Administrador/Administradores";
@@ -12,12 +12,12 @@ import DatosUsuario from "../components/Administrador/DatosUsuario";
 import PuntosInteres from "../components/Administrador/Puntos";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import Adminis from "../assets/Default.webp"; // Esta será tu imagen por defecto
+import Adminis from "../assets/Default.webp";
 import ClipLoader from "react-spinners/ClipLoader";
 
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink, Routes } from "react-router-dom";
 
-import axios from "axios"; // Asegúrate de tener axios instalado
+import axios from "axios";
 
 const Administrador = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const Administrador = () => {
 
   useEffect(() => {
     fetchData();
-  }, [usuario, setUsuario]); // Agrega setUsuario como dependencia
+  }, [usuario, setUsuario]);
 
   const truncateString = (str, maxLength) => {
     if (str.length <= maxLength) return str;
@@ -56,6 +56,10 @@ const Administrador = () => {
     Cookies.remove("token");
     Cookies.remove("role");
     navigate("/");
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -81,32 +85,32 @@ const Administrador = () => {
           )}
         </div>
         <div className="editar">
-          <Link onClick={handleToggleClick} to="/administrador/editarperfil">
+          <NavLink onClick={handleToggleClick} to="/administrador/editarperfil">
             <button>Editar Perfil</button>
-          </Link>
+          </NavLink>
         </div>
         <div className="buttons">
-          <Link onClick={handleToggleClick} to="/administrador/usuarios">
+          <NavLink onClick={handleToggleClick} to="/administrador/usuarios" activeClassName="active-link">
             <button>Usuarios</button>
-          </Link>
-          <Link onClick={handleToggleClick} to="/administrador/administradores">
+          </NavLink>
+          <NavLink onClick={handleToggleClick} to="/administrador/administradores" activeClassName="active-link">
             <button>Administradores</button>
-          </Link>
-          <Link onClick={handleToggleClick} to="/administrador/edificios">
+          </NavLink>
+          <NavLink onClick={handleToggleClick} to="/administrador/edificios" activeClassName="active-link">
             <button>Edificios</button>
-          </Link>
-          <Link onClick={handleToggleClick} to="/administrador/facultades">
+          </NavLink>
+          <NavLink onClick={handleToggleClick} to="/administrador/facultades" activeClassName="active-link">
             <button>Facultades</button>
-          </Link>
-          <Link onClick={handleToggleClick} to="/administrador/laboratorios">
+          </NavLink>
+          <NavLink onClick={handleToggleClick} to="/administrador/laboratorios" activeClassName="active-link">
             <button>Laboratorios</button>
-          </Link>
-          <Link onClick={handleToggleClick} to="/administrador/oficinas">
+          </NavLink>
+          <NavLink onClick={handleToggleClick} to="/administrador/oficinas" activeClassName="active-link">
             <button>Oficinas</button>
-          </Link>
-          <Link onClick={handleToggleClick} to="/administrador/puntosInteres">
+          </NavLink>
+          <NavLink onClick={handleToggleClick} to="/administrador/puntosInteres" activeClassName="active-link">
             <button>Puntos de Interés</button>
-          </Link>
+          </NavLink>
         </div>
         <div className="logout">
           <button onClick={handleLogoutClick}>Salir</button>
@@ -124,7 +128,6 @@ const Administrador = () => {
               />
             }
           />
-
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="administradores" element={<Administradores />} />
           <Route path="edificios" element={<Edificios />} />

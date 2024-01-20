@@ -505,7 +505,7 @@ const Laboratorios = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div style={{width:500}}>
+          <div style={{ width: 500 }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
@@ -614,7 +614,7 @@ const Laboratorios = () => {
           </label>
           <label>
             Descripcion:
-            <input
+            <textarea
               className="Laboratorios input modalInput"
               {...registerAdd("descripcion", {
                 required: true,
@@ -623,6 +623,7 @@ const Laboratorios = () => {
               placeholder="Descripción"
               onChange={handleDescriptionChange}
               maxLength={MAX_DESCRIPTION_LENGTH}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
             />
             {errorsAdd.descripcion && (
               <p className="requerido">
@@ -699,7 +700,7 @@ const Laboratorios = () => {
           </label>
           <label>
             Descripcion:
-            <input
+            <textarea
               className="Laboratorios input modalInput"
               {...registerEdit("descripcion", {
                 required: true,
@@ -708,6 +709,7 @@ const Laboratorios = () => {
               placeholder="Descripción"
               onChange={handleDescriptionChange}
               maxLength={MAX_DESCRIPTION_LENGTH}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
             />
             {errorsEdit.descripcion && (
               <p className="requerido">
@@ -837,7 +839,19 @@ const Laboratorios = () => {
         </div>
       </Modal>
 
-      <ToastContainer />
+      <ToastContainer
+        theme="colored"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <div className="tablaLaboratorios">
         {loading ? (
           <div className="botones">

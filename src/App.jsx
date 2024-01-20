@@ -17,7 +17,7 @@ import { LoadScript } from "@react-google-maps/api";
 export const GoogleMapsContext = React.createContext();
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);

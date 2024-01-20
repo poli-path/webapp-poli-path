@@ -147,21 +147,21 @@ const Administradores = () => {
         cancelButtonText: "Cancelar",
         dangerMode: true,
       });
-  
+
       if (confirmResult.isConfirmed) {
         setLoading(true);
-  
+
         await axios.delete(`${process.env.REACT_APP_API_URL}/users/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         // Espera a que se resuelva la promesa antes de continuar
         await fetchAdministradores();
-  
+
         toast.success("¡Administrador eliminado correctamente!");
-  
+
         // Actualiza el estado local para forzar la recarga de datos
         setPageSize(defaultPageSize);
         setPageNumber(0);
@@ -181,7 +181,6 @@ const Administradores = () => {
       setLoading(false);
     }
   };
-  
 
   const data = useMemo(() => administradores, [administradores]);
 
@@ -244,7 +243,7 @@ const Administradores = () => {
         ),
       },
     ],
-    [adminId]  // Asegúrate de incluir adminId como dependencia
+    [adminId] // Asegúrate de incluir adminId como dependencia
   );
 
   const {
@@ -455,7 +454,18 @@ const Administradores = () => {
           </div>
         </form>
       </Modal>
-      <ToastContainer />
+      <ToastContainer
+        theme="colored"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="tablaAdministradores">
         {loading ? (
           <div className="botones">

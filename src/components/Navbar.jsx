@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/Navbar.css';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Logo from "../assets/Logo.webp";
 
 const Navbar = () => {
@@ -9,20 +9,24 @@ const Navbar = () => {
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
-    
+
+    const scrollToTop = () => {
+        window.scrollTo(0, 0);
+    };
+
     return (
         <nav className='navbar'>
             <div className='navbar__logo'>
-                <Link to='/'>
+                <NavLink to='/' onClick={scrollToTop}>
                     <img src={Logo} alt='Logo' />
                     <h1><strong>PoliPath</strong></h1>
-                </Link>
+                </NavLink>
             </div>
             <button onClick={toggleMenu} className='menu-btn'>Menu</button>
             <div className={`navbar__links ${showMenu ? 'show' : ''}`}>
-                <Link to='/' className='navbar__link'><button>Inicio</button></Link>
-                <Link to='/invitado' className='navbar__link'><button>Invitado</button></Link>
-                <Link to='/admin' className='navbar__link'><button>Administrador</button></Link>
+                <NavLink to='/' onClick={scrollToTop} className='navbar__link'><button>Inicio</button></NavLink>
+                <NavLink to='/invitado' onClick={scrollToTop} className='navbar__link'><button>Invitado</button></NavLink>
+                <NavLink to='/admin' onClick={scrollToTop} className='navbar__link'><button>Administrador</button></NavLink>
             </div>
         </nav>
     );

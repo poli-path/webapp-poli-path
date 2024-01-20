@@ -479,7 +479,7 @@ const Facultades = () => {
       {
         Header: "Edificio",
         accessor: "edificioNombre",
-        Cell: ({ value }) => <div>{value}</div>,
+        Cell: ({ value }) => <div style={{ width: 200 }}>{value}</div>,
       },
       {
         Header: "Nombre",
@@ -500,7 +500,7 @@ const Facultades = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div>
+          <div style={{ width: 500 }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
@@ -609,7 +609,7 @@ const Facultades = () => {
           </label>
           <label>
             Descripción:
-            <input
+            <textarea
               className="facultades input modalInput"
               {...registerAdd("descripcion", {
                 required: true,
@@ -618,15 +618,16 @@ const Facultades = () => {
               placeholder="Descripción"
               onChange={handleDescriptionChange}
               maxLength={MAX_DESCRIPTION_LENGTH}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
             />
             {errorsAdd.descripcion && (
               <p className="requerido">
-              La descripción debe tener más de 3 caracteres
+                La descripción debe tener más de 3 caracteres
+              </p>
+            )}
+            <p>
+              Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
             </p>
-          )}
-          <p>
-            Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
-          </p>
           </label>
           {loadingFacultad ? (
             <div className="botones">
@@ -697,7 +698,7 @@ const Facultades = () => {
           </label>
           <label>
             Descripción:
-            <input
+            <textarea
               className="facultades input modalInput"
               {...registerEdit("descripcion", {
                 required: true,
@@ -706,15 +707,16 @@ const Facultades = () => {
               placeholder="Descripción"
               onChange={handleDescriptionChange}
               maxLength={MAX_DESCRIPTION_LENGTH}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
             />
             {errorsEdit.descripcion && (
               <p className="requerido">
-              La descripción debe tener más de 3 caracteres
+                La descripción debe tener más de 3 caracteres
+              </p>
+            )}
+            <p>
+              Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
             </p>
-          )}
-          <p>
-            Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
-          </p>
           </label>
           {loadingFacultad ? (
             <div className="botones">
@@ -831,8 +833,19 @@ const Facultades = () => {
           )}
         </div>
       </Modal>
+      <ToastContainer
+        theme="colored"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
-      <ToastContainer />
       <div className="tablafacultades">
         {loading ? (
           <div className="botones">

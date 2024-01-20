@@ -113,7 +113,6 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
           } catch (error) {
             console.error("Error:", error);
           } finally {
-
             setIsSaving(false);
           }
         }
@@ -141,7 +140,6 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
     const file = e.target.files[0];
     setNewImage(file);
     setPreviewImage(URL.createObjectURL(file));
-    
   };
 
   const handleCancelImageChange = () => {
@@ -494,7 +492,18 @@ const DatosUsuario = ({ setUserData, setUserImage }) => {
         )}
       </Modal>
 
-      <ToastContainer />
+      <ToastContainer
+        theme="colored"
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
