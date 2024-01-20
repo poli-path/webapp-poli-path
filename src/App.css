@@ -102,25 +102,6 @@ option {
   color: white;
 }
 
-.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--error.Toastify--animate.Toastify__bounce-enter--top-right {
-  box-shadow: 0 20px 32px 0 black;
-
-  border: 3px solid white;
-  border-radius: 20px;
-  top: 5vh; /* Ajusta según sea necesario */
-  right: 1vh; /* Ajusta según sea necesario */
-  position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
-}
-.Toastify__toast.Toastify__toast-theme--light.Toastify__toast--success.Toastify--animate.Toastify__bounce-enter--top-right {
-  box-shadow: 0 20px 32px 0 black;
-
-  border: 3px solid white;
-  border-radius: 20px;
-  top: 5vh; /* Ajusta según sea necesario */
-  right: 1vh; /* Ajusta según sea necesario */
-  position: fixed; /* Añade esto para hacer que el botón del menú sea flotante */
-}
-
 .instrucciones {
   margin-right: 30px;
   max-height: 50vh;
@@ -188,9 +169,7 @@ overflow-y: auto;
 .requerido {
   color: rgba(249, 249, 36, 0.85);
 }
-.Toastify__close-button.Toastify__close-button--light {
-  background: transparent;
-}
+
 .swal2-popup.swal2-modal.swal2-hide {
   background: #fafafa10;
   background-size: cover;

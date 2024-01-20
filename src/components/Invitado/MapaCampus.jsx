@@ -295,6 +295,7 @@ const MapContainer = () => {
             {...mapOptions}
             options={{
               mapId: "9ddcb7692f5e8d1",
+              mapTypeControl: false,  // Deshabilita el control de tipo de mapa
             }}
           >
             {directions && (

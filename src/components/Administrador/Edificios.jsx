@@ -592,15 +592,13 @@ const Edificios = () => {
         Header: "Facultades",
         accessor: "faculties",
         Cell: ({ value }) => (
-          <div style={{ width: "250px" }}>
-            {value.length > 0 ? (
-              value.map((faculty) => (
-                <div key={faculty.id}>
-                  {faculty.name}
-                  <br />
-                  <br />
-                </div>
-              ))
+          <div style={{ width: "200px" }}>
+            {value && value.length > 0 ? (
+              <ul>
+                {value.map((faculty) => (
+                  <li key={faculty.id}>{faculty.name}</li>
+                ))}
+              </ul>
             ) : (
               <p className="requerido">No existen Facultades aún</p>
             )}
@@ -612,17 +610,15 @@ const Edificios = () => {
         Header: "Laboratorios",
         accessor: "laboratories",
         Cell: ({ value }) => (
-          <div style={{ width: "250px" }}>
-            {value.length > 0 ? (
-              value.map((lab) => (
-                <div key={lab.id}>
-                  {lab.name}
-                  <br />
-                  <br />
-                </div>
-              ))
+          <div style={{ width: "200px" }}>
+            {value && value.length > 0 ? (
+              <ul>
+                {value.map((lab) => (
+                  <li key={lab.id}>{lab.name}</li>
+                ))}
+              </ul>
             ) : (
-              <p className="requerido">No existen Facultades aún</p>
+              <p className="requerido">No existen Laboratorios aún</p>
             )}
           </div>
         ),
@@ -632,17 +628,15 @@ const Edificios = () => {
         Header: "Oficinas",
         accessor: "offices",
         Cell: ({ value }) => (
-          <div style={{ width: "250px" }}>
-            {value.length > 0 ? (
-              value.map((office) => (
-                <div key={office.id}>
-                  {office.name}
-                  <br />
-                  <br />
-                </div>
-              ))
+          <div style={{ width: "200px" }}>
+            {value && value.length > 0 ? (
+              <ul>
+                {value.map((office) => (
+                  <li key={office.id}>{office.name}</li>
+                ))}
+              </ul>
             ) : (
-              <p className="requerido">No existen Facultades aún</p>
+              <p className="requerido">No existen Oficinas aún</p>
             )}
           </div>
         ),
@@ -652,17 +646,15 @@ const Edificios = () => {
         Header: "Puntos de Interés",
         accessor: "pointOfInterests",
         Cell: ({ value }) => (
-          <div style={{ width: "250px" }}>
-            {value.length > 0 ? (
-              value.map((pointOfInterests) => (
-                <div key={pointOfInterests.id}>
-                  {pointOfInterests.name}
-                  <br />
-                  <br />
-                </div>
-              ))
+          <div style={{ width: "200px" }}>
+            {value && value.length > 0 ? (
+              <ul>
+                {value.map((pointOfInterests) => (
+                  <li key={pointOfInterests.id}>{pointOfInterests.name}</li>
+                ))}
+              </ul>
             ) : (
-              <p className="requerido">No existen Puntos aún</p>
+              <p className="requerido">No existen Oficinas aún</p>
             )}
           </div>
         ),
@@ -765,6 +757,7 @@ const Edificios = () => {
             zoom={19}
             options={{
               mapId: "9ddcb7692f5e8d1",
+              mapTypeControl: false,  // Deshabilita el control de tipo de mapa
             }}
           >
             <Marker
@@ -774,9 +767,6 @@ const Edificios = () => {
                 scaledSize: new window.google.maps.Size(70, 100),
               }}
               onClick={() => setInfoWindowOpen(true)}
-              options={{
-                mapId: "9ddcb7692f5e8d1",
-              }}
             />
 
             <InfoWindow
@@ -915,6 +905,7 @@ const Edificios = () => {
               }}
               options={{
                 mapId: "9ddcb7692f5e8d1",
+                mapTypeControl: false,  // Deshabilita el control de tipo de mapa
               }}
             >
               <Marker
@@ -1099,6 +1090,7 @@ const Edificios = () => {
               }}
               options={{
                 mapId: "9ddcb7692f5e8d1",
+                mapTypeControl: false,  // Deshabilita el control de tipo de mapa
               }}
             >
               <Marker
