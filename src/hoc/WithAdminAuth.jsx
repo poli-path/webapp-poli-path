@@ -12,7 +12,7 @@ const WithAdminAuth = ({ children }) => {
     if (!token || !userRole.includes('admin')) {
       Swal.fire(
         'Acceso denegado',
-        'No tienes permiso para acceder a esta página, debes iniciar sesión',
+        '¡Oh no! No tienes permiso para acceder a esta página, debes iniciar sesión',
         'error'
       );
       navigate('/'); // Redirige al usuario a la página de inicio si no tiene un token válido o si su rol no es de administrador

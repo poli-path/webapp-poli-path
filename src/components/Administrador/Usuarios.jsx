@@ -93,7 +93,11 @@ const Usuarios = () => {
       {
         Header: "Estado",
         accessor: "isActive",
-        Cell: ({ value }) => (value ? "Activo" : "Inactivo"),
+        Cell: ({ value }) => (
+          <span className={value ? "activo" : "inactivo"}>
+            {value ? "Activo" : "Inactivo"}
+          </span>
+        ),
       },
       {
         Header: "Fecha de Registro",

@@ -207,8 +207,8 @@ const MapContainer = () => {
     ],
   };
   const markerDimensions = {
-    width: 70, // Ancho predeterminado para otros markers
-    height: 100, // Alto predeterminado para otros markers
+    width: 60, // Ancho predeterminado para otros markers
+    height: 80, // Alto predeterminado para otros markers
     defaultWidth: 40, // Ancho personalizado para defaultPoints
     defaultHeight: 40, // Alto personalizado para defaultPoints
   };
@@ -232,7 +232,7 @@ const MapContainer = () => {
             <option value="currentLocation">Ubicación Actual</option>
             {buildings.map((building, index) => (
               <option key={index} value={building.name}>
-                No.{building.no} "{building.name}"
+                Edif. {building.no} "{building.name}"
               </option>
             ))}
           </select>
@@ -248,7 +248,7 @@ const MapContainer = () => {
             <option value="">Selecciona un edificio de destino</option>
             {buildings.map((building, index) => (
               <option key={index} value={building.name}>
-                No.{building.no} "{building.name}"
+                Edif. {building.no} "{building.name}"
               </option>
             ))}
           </select>
@@ -295,7 +295,7 @@ const MapContainer = () => {
             {...mapOptions}
             options={{
               mapId: "9ddcb7692f5e8d1",
-              mapTypeControl: false,  // Deshabilita el control de tipo de mapa
+              mapTypeControl: false, // Deshabilita el control de tipo de mapa
             }}
           >
             {directions && (
@@ -354,7 +354,10 @@ const MapContainer = () => {
                 }}
                 onClick={() => handleMarkerClick(building)}
                 label={{
-                  text: building.name,
+                  text:
+                    building.name.length > 40
+                      ? building.name.substring(0, 30) + "..."
+                      : building.name,
                   color: "black",
                   fontSize: "16px",
                   fontWeight: "bold",
@@ -387,8 +390,10 @@ const MapContainer = () => {
                       backgroundSize: "cover",
                     }}
                   >
-                    <h2>{selectedBuilding.name}</h2>
-                    <Carousel {...settings} l>
+                    <h2 style={{ fontSize: "18px" }}>
+                      {selectedBuilding.name}
+                    </h2>
+                    <Carousel {...settings}>
                       {selectedBuilding.imageUrls.map((url, index) => (
                         <div key={index}>
                           <img
@@ -404,9 +409,7 @@ const MapContainer = () => {
                         </div>
                       ))}
                     </Carousel>
-                    <p style={{ color: "black" }}>
-                      {selectedBuilding.description}
-                    </p>
+                    <p>{selectedBuilding.description}</p>
                   </div>
                 </InfoWindow>
               </div>
@@ -416,8 +419,8 @@ const MapContainer = () => {
                 position={userLocation}
                 icon={{
                   url: MarkerMi,
-                  scaledSize: new window.google.maps.Size(70, 100),
-                  labelOrigin: new window.google.maps.Point(35, 110),
+                  scaledSize: new window.google.maps.Size(60, 80),
+                  labelOrigin: new window.google.maps.Point(30, 85),
                 }}
                 label={{
                   text: "Tu ubicación",

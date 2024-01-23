@@ -1,6 +1,28 @@
 * {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
+.activo {
+  font-size: 25px;
+  color: green;
+}
+
+.inactivo {
+  font-size: 25px;
+
+  color: red;
+}
+.verificado {
+  font-size: 25px;
+
+  color: green;
+}
+
+.no-verificado {
+  font-size: 25px;
+
+  color: red;
+}
+
 .mapContainer,
 .mapContainer * {
   padding: 12 !important;
@@ -57,14 +79,18 @@ a:-webkit-any-link {
   text-decoration: none;
   color: aliceblue;
 }
-.infoContent {
-  backdrop-filter: blur(0.4rem);
-  -webkit-backdrop-filter: blur(0.4rem);
-  box-shadow: 0 20px 32px 0 black;
+
+.light-mode .infoContent {
+  background: linear-gradient(#034c8b, #2477c0, #034c8b);
   padding: 20px;
-  text-align: center;
-  max-width: 250px;
-  max-height: 250px;
+  text-align: justify;
+}
+.dark-mode .infoContent {
+
+  background: linear-gradient(#010326, #0a1a74, #010326);
+
+  padding: 20px;
+  text-align: justify;
 }
 
 .icon {
@@ -110,7 +136,7 @@ option {
   backdrop-filter: blur(0.4rem);
   -webkit-backdrop-filter: blur(0.4rem);
   box-shadow: 0 20px 32px 0 black;
-overflow-y: auto;
+  overflow-y: auto;
   border: 3px solid #fafafa10;
   border-radius: 50px;
   padding: 7%;
@@ -340,7 +366,27 @@ html::-webkit-scrollbar-thumb {
   body {
     font-size: 16px; /* Ajusta el tamaño de la fuente */
   }
-
+  .activo {
+    font-size: 20px;
+    color: green;
+  }
+  
+  .inactivo {
+    font-size:20px;
+  
+    color: red;
+  }
+  .verificado {
+    font-size: 20px;
+  
+    color: green;
+  }
+  
+  .no-verificado {
+    font-size: 20px;
+  
+    color: red;
+  }
   /* Ajusta otros estilos según sea necesario */
 }
 

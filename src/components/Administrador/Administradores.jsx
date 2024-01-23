@@ -222,8 +222,12 @@ const Administradores = () => {
       {
         Header: "Estado",
         accessor: "isVerified",
-        Cell: ({ value }) => (value ? "Verificado" : "No Verificado"),
-      },
+        Cell: ({ value }) => (
+          <span className={value ? "verificado" : "no-verificado"}>
+            {value ? "Verificado" : "No Verificado"}
+          </span>
+        ),
+      },      
       {
         Header: "Acciones",
         Cell: ({ row }) => (

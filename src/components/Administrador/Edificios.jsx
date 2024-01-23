@@ -338,7 +338,7 @@ const Edificios = () => {
         // Muestra SweetAlert de error
         Swal.fire({
           title: "No se puede eliminar",
-          text: "Este edificio tiene registros asociados en Facultades, Oficinas o Laboratorios. Por favor, elimina estos registros antes de eliminar el edificio.",
+          text: "Este edificio tiene registros asociados en Facultades, Oficinas, Laboratorios o Puntos de Interés. Por favor, elimina estos registros antes de eliminar el edificio.",
           icon: "error",
         });
         return;
@@ -654,7 +654,7 @@ const Edificios = () => {
                 ))}
               </ul>
             ) : (
-              <p className="requerido">No existen Oficinas aún</p>
+              <p className="requerido">No existen Puntos de Interés aún</p>
             )}
           </div>
         ),
@@ -764,7 +764,7 @@ const Edificios = () => {
               position={selectedBuildingCoordinates}
               icon={{
                 url: MarkerMi,
-                scaledSize: new window.google.maps.Size(70, 100),
+                scaledSize: new window.google.maps.Size(80, 100),
               }}
               onClick={() => setInfoWindowOpen(true)}
             />
@@ -912,7 +912,7 @@ const Edificios = () => {
                 position={markerPosition}
                 icon={{
                   url: MarkerMi,
-                  scaledSize: new window.google.maps.Size(70, 100),
+                  scaledSize: new window.google.maps.Size(80, 100),
                   labelOrigin: new window.google.maps.Point(35, 110),
                 }}
                 label={{

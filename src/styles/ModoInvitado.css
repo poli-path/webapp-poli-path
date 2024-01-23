@@ -16,3 +16,10 @@
   padding: 5%;
   padding-top: 10%;
 }
+
+
+@media (max-width: 768px) {
+  .descarga img{
+    max-width: 200px;
+    }
+}

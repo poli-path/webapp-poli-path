@@ -25,7 +25,6 @@
   max-height: 50%;
 }
 .infoContent {
-  background: #0040ff4b;
   color: white;
   padding: 10px;
   max-width: 300px;
@@ -136,25 +135,9 @@
   top: 50px; /* Ajusta según sea necesario */
 }
 
-/* ... (otros estilos) */
-/* ... (otros estilos) */
-
-/* Estilos para el contenedor principal de las secciones en pantalla pequeña */
 @media (max-width: 768px) {
-  .main-container {
-    flex-direction: column;
-    align-items: stretch;
-  }
+  .descarga img{
+    max-width: 200px;
+    }
 
-  /* Estilos para el contenedor del buscador en pantalla pequeña */
-  .search-container {
-    width: 100%;
-  }
-
-  /* Estilos para el contenedor del mapa en pantalla pequeña */
-  .map-content {
-    width: 100%;
-  }
-
-  /* ... (otros estilos específicos para pantalla pequeña) */
 }

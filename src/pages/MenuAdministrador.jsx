@@ -15,7 +15,12 @@ import Cookies from "js-cookie";
 import Adminis from "../assets/Default.webp";
 import ClipLoader from "react-spinners/ClipLoader";
 
-import { BrowserRouter as Router, Route, NavLink, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  NavLink,
+  Routes,
+} from "react-router-dom";
 
 import axios from "axios";
 
@@ -90,25 +95,53 @@ const Administrador = () => {
           </NavLink>
         </div>
         <div className="buttons">
-          <NavLink onClick={handleToggleClick} to="/administrador/usuarios" activeClassName="active-link">
+          <NavLink
+            onClick={handleToggleClick}
+            to="/administrador/usuarios"
+            activeClassName="active-link"
+          >
             <button>Usuarios</button>
           </NavLink>
-          <NavLink onClick={handleToggleClick} to="/administrador/administradores" activeClassName="active-link">
+          <NavLink
+            onClick={handleToggleClick}
+            to="/administrador/administradores"
+            activeClassName="active-link"
+          >
             <button>Administradores</button>
           </NavLink>
-          <NavLink onClick={handleToggleClick} to="/administrador/edificios" activeClassName="active-link">
+          <NavLink
+            onClick={handleToggleClick}
+            to="/administrador/edificios"
+            activeClassName="active-link"
+          >
             <button>Edificios</button>
           </NavLink>
-          <NavLink onClick={handleToggleClick} to="/administrador/facultades" activeClassName="active-link">
+          <NavLink
+            onClick={handleToggleClick}
+            to="/administrador/facultades"
+            activeClassName="active-link"
+          >
             <button>Facultades</button>
           </NavLink>
-          <NavLink onClick={handleToggleClick} to="/administrador/laboratorios" activeClassName="active-link">
+          <NavLink
+            onClick={handleToggleClick}
+            to="/administrador/laboratorios"
+            activeClassName="active-link"
+          >
             <button>Laboratorios</button>
           </NavLink>
-          <NavLink onClick={handleToggleClick} to="/administrador/oficinas" activeClassName="active-link">
+          <NavLink
+            onClick={handleToggleClick}
+            to="/administrador/oficinas"
+            activeClassName="active-link"
+          >
             <button>Oficinas</button>
           </NavLink>
-          <NavLink onClick={handleToggleClick} to="/administrador/puntosInteres" activeClassName="active-link">
+          <NavLink
+            onClick={handleToggleClick}
+            to="/administrador/puntosInteres"
+            activeClassName="active-link"
+          >
             <button>Puntos de Interés</button>
           </NavLink>
         </div>
