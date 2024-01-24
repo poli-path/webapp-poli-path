@@ -207,10 +207,10 @@ const MapContainer = () => {
     ],
   };
   const markerDimensions = {
-    width: 60, // Ancho predeterminado para otros markers
-    height: 80, // Alto predeterminado para otros markers
+    width: 40, // Ancho predeterminado para otros markers
+    height: 60, // Alto predeterminado para otros markers
     defaultWidth: 40, // Ancho personalizado para defaultPoints
-    defaultHeight: 40, // Alto personalizado para defaultPoints
+    defaultHeight: 35, // Alto personalizado para defaultPoints
   };
   return (
     <div className="mapInvitado">
@@ -348,8 +348,8 @@ const MapContainer = () => {
                         defaultBuilding.latitude === building.latitude &&
                         defaultBuilding.longitude === building.longitude
                     )
-                      ? markerDimensions.defaultHeight + 20 // Ajusta según sea necesario
-                      : markerDimensions.height + 20 // Ajusta según sea necesario
+                      ? markerDimensions.defaultHeight + 10 // Ajusta según sea necesario
+                      : markerDimensions.height + 10 // Ajusta según sea necesario
                   ),
                 }}
                 onClick={() => handleMarkerClick(building)}
@@ -358,8 +358,8 @@ const MapContainer = () => {
                     building.name.length > 40
                       ? building.name.substring(0, 30) + "..."
                       : building.name,
-                  color: "black",
-                  fontSize: "16px",
+                  color: "white",
+                  fontSize: "15px",
                   fontWeight: "bold",
                   padding: "20px",
                   backgroundColor: defaultPoints.some(
@@ -419,13 +419,13 @@ const MapContainer = () => {
                 position={userLocation}
                 icon={{
                   url: MarkerMi,
-                  scaledSize: new window.google.maps.Size(60, 80),
-                  labelOrigin: new window.google.maps.Point(30, 85),
+                  scaledSize: new window.google.maps.Size(40, 60),
+                  labelOrigin: new window.google.maps.Point(20, 70),
                 }}
                 label={{
                   text: "Tu ubicación",
-                  color: "black",
-                  fontSize: "20px",
+                  color: "white",
+                  fontSize: "15px",
                   fontWeight: "bold",
                 }}
                 animation={window.google.maps.Animation.DROP}

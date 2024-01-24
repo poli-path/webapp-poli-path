@@ -764,7 +764,7 @@ const Edificios = () => {
               position={selectedBuildingCoordinates}
               icon={{
                 url: MarkerMi,
-                scaledSize: new window.google.maps.Size(80, 100),
+                scaledSize: new window.google.maps.Size(40, 60),
               }}
               onClick={() => setInfoWindowOpen(true)}
             />
@@ -912,13 +912,13 @@ const Edificios = () => {
                 position={markerPosition}
                 icon={{
                   url: MarkerMi,
-                  scaledSize: new window.google.maps.Size(80, 100),
-                  labelOrigin: new window.google.maps.Point(35, 110),
+                  scaledSize: new window.google.maps.Size(40, 60),
+                  labelOrigin: new window.google.maps.Point(20, 70),
                 }}
                 label={{
                   text: "Aquí estará tu edificio",
-                  color: "black",
-                  fontSize: "20px",
+                  color: "rgb(68, 68, 68)",
+                  fontSize: "15px",
                   fontWeight: "bold",
                 }}
               />
@@ -1098,14 +1098,14 @@ const Edificios = () => {
                 position={markerPosition}
                 icon={{
                   url: MarkerMi,
-                  scaledSize: new window.google.maps.Size(70, 100),
-                  labelOrigin: new window.google.maps.Point(35, 110),
+                  scaledSize: new window.google.maps.Size(50, 70),
+                  labelOrigin: new window.google.maps.Point(25, 80),
                 }}
                 label={{
                   text: "Ubicación del Edificio",
-                  color: "black",
+                  color: "rgb(68, 68, 68)",
                   background: "black",
-                  fontSize: "20px",
+                  fontSize: "15px",
                   fontWeight: "bold",
                   textShadow: "1px 3px 0px black",
                 }}
