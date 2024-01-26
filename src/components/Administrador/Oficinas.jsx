@@ -28,6 +28,7 @@ function TextFilter({ column: { filterValue, preFilteredRows, setFilter } }) {
     />
   );
 }
+const MAX_DESCRIPTION_LENGTH = 400;
 
 const Oficinas = () => {
   const [Oficinas, setOficinas] = useState([]);
@@ -36,7 +37,13 @@ const Oficinas = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalEditarIsOpen, setModalEditarIsOpen] = useState(false);
   const [OficinaEditado, setOficinaEditado] = useState(null);
+  const [remainingChars, setRemainingChars] = useState(MAX_DESCRIPTION_LENGTH);
 
+  const handleDescriptionChange = (e) => {
+    const inputText = e.target.value;
+    const remaining = MAX_DESCRIPTION_LENGTH - inputText.length;
+    setRemainingChars(Math.max(0, remaining));
+  };
   const {
     register: registerAdd,
     handleSubmit: handleSubmitAdd,
@@ -146,6 +153,9 @@ const Oficinas = () => {
         setValueEdit("nombre", edificio.name);
         setValueEdit("profesor", edificio.teacherName);
         setValueEdit("codeOrNo", edificio.codeOrNo);
+        setValueEdit("schedule", edificio.schedule);
+        setValueEdit("description", edificio.description);
+
         Swal.close();
 
         setModalEditarIsOpen(true);
@@ -183,6 +193,8 @@ const Oficinas = () => {
             name: data.nombre,
             teacherName: data.profesor,
             codeOrNo: data.codeOrNo,
+            schedule: data.schedule,
+            description: data.description,
           },
           {
             headers: {
@@ -204,7 +216,6 @@ const Oficinas = () => {
         setModalEditarIsOpen(false);
         setLoadingOficina(false);
       }
-      resetEdit();
     } catch (error) {
       await fetchoffices(token);
 
@@ -475,7 +486,6 @@ const Oficinas = () => {
         accessor: "edificioNombre",
         Cell: ({ value }) => <div>{value}</div>,
       },
-
       {
         Header: "Código o Número",
         accessor: "codeOrNo", // Cambia a "code_or_no"
@@ -490,6 +500,24 @@ const Oficinas = () => {
         Cell: ({ value }) => (
           <div>
             {value ? value : <p className="requerido">Sin Profesor aún</p>}
+          </div>
+        ),
+      },
+      {
+        Header: "Horarios",
+        accessor: "schedule", // Nueva columna
+        Cell: ({ value }) => (
+          <div>
+            {value ? value : <p className="requerido">Sin Horarios aún</p>}
+          </div>
+        ),
+      },
+      {
+        Header: "Descripcion",
+        accessor: "description", // Nueva columna
+        Cell: ({ value }) => (
+          <div style={{ width: "350px", whiteSpace: "pre-line" }}>
+            {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
       },
@@ -620,7 +648,7 @@ const Oficinas = () => {
               placeholder="Código o Número"
             />
             {errorsAdd.codeOrNo && (
-              <p className="requerido">"Este campo es requerido"</p>
+              <p className="requerido">Este campo es requerido</p>
             )}
           </label>
           {loadingOficina ? (
@@ -689,16 +717,6 @@ const Oficinas = () => {
             )}
           </label>
           <label>
-            Nombre:
-            <input
-              className="Oficinas input modalInput"
-              {...registerEdit("profesor", {
-                required: false,
-              })}
-              placeholder="Profesor"
-            />
-          </label>
-          <label>
             Código o Número:
             <input
               type="number"
@@ -711,9 +729,52 @@ const Oficinas = () => {
               placeholder="Código o Número"
             />
             {errorsEdit.codeOrNo && (
-              <p className="requerido">"Este campo es requerido"</p>
+              <p className="requerido">Este campo es requerido</p>
             )}
           </label>
+          <label>
+            Profesor:
+            <input
+              className="Oficinas input modalInput"
+              {...registerEdit("profesor", {
+                required: false,
+              })}
+              placeholder="Profesor"
+            />
+          </label>
+          <label>
+            Horarios:
+            <textarea
+              className="Oficinas input modalInput"
+              {...registerEdit("schedule", {
+                required: false,
+              })}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
+              placeholder="Horarios"
+            />
+          </label>
+          <label>
+            Descripción:
+            <textarea
+              className="Oficinas input modalInput"
+              {...registerEdit("description", {
+                required: true,
+                validate: (value) => value.trim().length > 3, // Validación para más de 3 letras
+              })}
+              onChange={handleDescriptionChange}
+              maxLength={MAX_DESCRIPTION_LENGTH}
+              rows={4} // Cambia la cantidad de filas según tus preferencias
+              placeholder="Descripción"
+            />
+          </label>
+          {errorsEdit.description && (
+              <p className="requerido">
+                La descripción debe tener más de 3 caracteres
+              </p>
+            )}
+          <p>
+            Caracteres restantes: {remainingChars}/{MAX_DESCRIPTION_LENGTH}
+          </p>
           {loadingOficina ? (
             <div className="botones">
               <ClipLoader

@@ -213,7 +213,6 @@ const Laboratorios = () => {
         setModalEditarIsOpen(false);
         setLoadingLaboratorio(false);
       }
-      resetEdit();
     } catch (error) {
       await fetchlaboratories(token);
 
@@ -505,7 +504,7 @@ const Laboratorios = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div style={{ width: 500 }}>
+          <div style={{ width: 500, whiteSpace: "pre-line" }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),

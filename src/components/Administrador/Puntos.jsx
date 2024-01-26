@@ -211,7 +211,6 @@ const PuntosInteres = () => {
         setModalEditarIsOpen(false);
         setLoadingPunto(false);
       }
-      resetEdit();
     } catch (error) {
       await fetchPointsInterests(token);
 
@@ -502,7 +501,7 @@ const PuntosInteres = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div style={{ width: 500 }}>
+          <div style={{ width: 500, whiteSpace: "pre-line"  }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),

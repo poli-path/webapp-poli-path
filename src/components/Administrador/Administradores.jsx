@@ -227,6 +227,7 @@ const Administradores = () => {
             {value ? "Verificado" : "No Verificado"}
           </span>
         ),
+        disableFilters: true, // Deshabilita los filtros para esta columna
       },      
       {
         Header: "Acciones",

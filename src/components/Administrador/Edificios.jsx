@@ -206,7 +206,7 @@ const Edificios = () => {
       allowOutsideClick: false,
       showConfirmButton: false,
     });
-    // Realiza una solicitud tipo GET para obtener los detalles del edificio
+  
     axios
       .get(`${process.env.REACT_APP_API_URL}/buildings/${index}`, {
         headers: {
@@ -216,20 +216,24 @@ const Edificios = () => {
       .then((response) => {
         const edificio = response.data;
         setEdificioEditado(edificio);
-
+  
         setValueEdit("numero", edificio.no);
         setValueEdit("nombre", edificio.name);
         setValueEdit("descripcion", edificio.description);
         setValueEdit("direccion", edificio.address);
         setValueEdit("longitud", edificio.longitude);
         setValueEdit("latitud", edificio.latitude);
+        setMarkerPosition({
+          lat: edificio.latitude,
+          lng: edificio.longitude,
+        });
+  
         Swal.close();
-
         setModalEditarIsOpen(true);
       })
       .catch((error) => {
         fetchBuildings(token);
-
+  
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -239,6 +243,7 @@ const Edificios = () => {
         setPageNumber(0);
       });
   };
+  
 
   const onSubmitEditar = async (data) => {
     const token = Cookies.get("token");
@@ -285,7 +290,6 @@ const Edificios = () => {
         setPageSize(defaultPageSize);
         setPageNumber(0);
       }
-      resetEdit();
     } catch (error) {
       await fetchBuildings(token);
 
@@ -560,7 +564,7 @@ const Edificios = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div style={{ width: "500px" }}>
+          <div style={{ width: "500px",whiteSpace: "pre-line" }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),
@@ -592,7 +596,7 @@ const Edificios = () => {
         Header: "Facultades",
         accessor: "faculties",
         Cell: ({ value }) => (
-          <div style={{ width: "200px" }}>
+          <div style={{ width: "200px", maxHeight: "150px", overflowY: "auto" }}>
             {value && value.length > 0 ? (
               <ul>
                 {value.map((faculty) => (
@@ -610,7 +614,7 @@ const Edificios = () => {
         Header: "Laboratorios",
         accessor: "laboratories",
         Cell: ({ value }) => (
-          <div style={{ width: "200px" }}>
+          <div style={{ width: "200px", maxHeight: "150px", overflowY: "auto" }}>
             {value && value.length > 0 ? (
               <ul>
                 {value.map((lab) => (
@@ -628,7 +632,7 @@ const Edificios = () => {
         Header: "Oficinas",
         accessor: "offices",
         Cell: ({ value }) => (
-          <div style={{ width: "200px" }}>
+          <div style={{ width: "200px", maxHeight: "150px", overflowY: "auto" }}>
             {value && value.length > 0 ? (
               <ul>
                 {value.map((office) => (
@@ -646,11 +650,11 @@ const Edificios = () => {
         Header: "Puntos de Interés",
         accessor: "pointOfInterests",
         Cell: ({ value }) => (
-          <div style={{ width: "200px" }}>
+          <div style={{ width: "300px", maxHeight: "150px", overflowY: "auto" }}>
             {value && value.length > 0 ? (
               <ul>
-                {value.map((pointOfInterests) => (
-                  <li key={pointOfInterests.id}>{pointOfInterests.name}</li>
+                {value.map((pointOfInterest) => (
+                  <li key={pointOfInterest.id}>{pointOfInterest.name}</li>
                 ))}
               </ul>
             ) : (
@@ -882,11 +886,13 @@ const Edificios = () => {
               </p>
             )}
           </label>
+          <p style={{textAlign:"center"}}>Haz click en el mapa para escoger la ubicación del edificio</p>
 
           <div
             className="mapContainer"
             style={{ height: "400px", width: "100%", position: "relative" }}
           >
+
             <GoogleMap
               mapContainerStyle={{
                 height: "100%",
@@ -894,7 +900,7 @@ const Edificios = () => {
                 position: "absolute",
               }}
               center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
-              zoom={17}
+              zoom={18}
               onClick={(e) => {
                 setValueAdd("longitud", e.latLng.lng());
                 setValueAdd("latitud", e.latLng.lat());
@@ -929,7 +935,7 @@ const Edificios = () => {
               <ClipLoader
                 color="#3d8463"
                 loading={loadingAddEdificio}
-                size={"90px"}
+                size={"90px"}modalIsOpen
               />
               <div style={{ fontSize: "30px" }}>Agregando Edificio...</div>
             </div>
@@ -1068,6 +1074,7 @@ const Edificios = () => {
               </p>
             )}
           </label>
+          <p style={{textAlign:"center"}}>Haz click en el mapa para escoger la ubicación del edificio</p>
 
           <div
             className="mapContainer"
@@ -1080,7 +1087,7 @@ const Edificios = () => {
                 position: "absolute",
               }}
               center={{ lat: markerPosition.lat, lng: markerPosition.lng }}
-              zoom={17}
+              zoom={18}
               onClick={(e) => {
                 setValueEdit("longitud", e.latLng.lng());
                 setValueEdit("latitud", e.latLng.lat());

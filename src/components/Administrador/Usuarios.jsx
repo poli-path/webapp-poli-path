@@ -98,6 +98,7 @@ const Usuarios = () => {
             {value ? "Activo" : "Inactivo"}
           </span>
         ),
+        disableFilters: true, // Deshabilita los filtros para esta columna
       },
       {
         Header: "Fecha de Registro",

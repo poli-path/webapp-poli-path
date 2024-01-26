@@ -208,7 +208,6 @@ const Facultades = () => {
         setModalEditarIsOpen(false);
         setLoadingFacultad(false);
       }
-      resetEdit();
     } catch (error) {
       await fetchFaculties(token);
 
@@ -500,7 +499,7 @@ const Facultades = () => {
         Header: "Descripcion",
         accessor: "description",
         Cell: ({ value }) => (
-          <div style={{ width: 500 }}>
+          <div style={{ width: 500, whiteSpace: "pre-line" }}>
             {value ? value : <p className="requerido">Sin Descripción aún</p>}
           </div>
         ),

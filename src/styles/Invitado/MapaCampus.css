@@ -139,5 +139,7 @@
   .descarga img{
     max-width: 200px;
     }
-
+    .mapInvitado{
+      margin-top: 10vh
+    }
 }
