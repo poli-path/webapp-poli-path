@@ -24,7 +24,7 @@ const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(0);
-  const [defaultPageSize, setDefaultPageSize] = useState(5); // Cambia el nombre de la variable de estado a defaultPageSize
+  const [defaultPageSize] = useState(5); // Cambia el nombre de la variable de estado a defaultPageSize
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -108,7 +108,7 @@ const Usuarios = () => {
         Header: "Favoritos",
         accessor: "favoriteBuildings",
         Cell: ({ value }) => (
-          <div>
+          <div  style={{ width: "300px", maxHeight: "150px", overflowY: "auto" }}>
             {value.length > 0 ? (
               value.map((building) => (
                 <div key={building.no}>

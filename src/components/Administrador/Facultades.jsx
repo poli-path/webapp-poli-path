@@ -47,10 +47,7 @@ const Facultades = () => {
     register: registerAdd,
     handleSubmit: handleSubmitAdd,
     formState: { errors: errorsAdd },
-    setValue: setValueAdd,
     reset: resetAdd,
-    getValues: getValuesAdd,
-    watch: watchAdd,
   } = useForm();
 
   const {
@@ -58,9 +55,6 @@ const Facultades = () => {
     handleSubmit: handleSubmitEdit,
     formState: { errors: errorsEdit },
     setValue: setValueEdit,
-    reset: resetEdit,
-    getValues: getValuesEdit,
-    watch: watchEdit,
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -270,10 +264,10 @@ const Facultades = () => {
   const [loading, setLoading] = useState(true);
   const [loadingFacultad, setLoadingFacultad] = useState(false); // Modificado: Inicializado en "false"
 
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [ setSelectedImages] = useState([]);
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
-  const [defaultPageSize, setDefaultPageSize] = useState(5);
+  const [defaultPageSize] = useState(5);
 
   useEffect(() => {
     const token = Cookies.get("token");

@@ -49,10 +49,9 @@ const PuntosInteres = () => {
     register: registerAdd,
     handleSubmit: handleSubmitAdd,
     formState: { errors: errorsAdd },
-    setValue: setValueAdd,
+
     reset: resetAdd,
-    getValues: getValuesAdd,
-    watch: watchAdd,
+
   } = useForm();
 
   const {
@@ -60,9 +59,7 @@ const PuntosInteres = () => {
     handleSubmit: handleSubmitEdit,
     formState: { errors: errorsEdit },
     setValue: setValueEdit,
-    reset: resetEdit,
-    getValues: getValuesEdit,
-    watch: watchEdit,
+
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -272,10 +269,10 @@ const PuntosInteres = () => {
   const [loading, setLoading] = useState(true);
   const [loadingPunto, setLoadingPunto] = useState(false); // Modificado: Inicializado en "false"
 
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [ setSelectedImages] = useState([]);
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
-  const [defaultPageSize, setDefaultPageSize] = useState(5);
+  const [defaultPageSize] = useState(5);
 
   useEffect(() => {
     const token = Cookies.get("token");

@@ -37,10 +37,10 @@ const Edificios = () => {
   const [modalEditarIsOpen, setModalEditarIsOpen] = useState(false);
   const [edificioEditado, setEdificioEditado] = useState(null);
   const [pageNumber, setPageNumber] = useState(0);
-  const [defaultPageSize, setDefaultPageSize] = useState(5);
+  const [defaultPageSize] = useState(5);
   const [loading, setLoading] = useState(true);
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [ setSelectedImages] = useState([]);
   const [loadingAddEdificio, setLoadingAddEdificio] = useState(false);
   const [mapModalIsOpen, setMapModalIsOpen] = useState(false);
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
@@ -66,8 +66,6 @@ const Edificios = () => {
     formState: { errors: errorsAdd },
     setValue: setValueAdd,
     reset: resetAdd,
-    getValues: getValuesAdd,
-    watch: watchAdd,
   } = useForm();
 
   const {
@@ -75,9 +73,6 @@ const Edificios = () => {
     handleSubmit: handleSubmitEdit,
     formState: { errors: errorsEdit },
     setValue: setValueEdit,
-    reset: resetEdit,
-    getValues: getValuesEdit,
-    watch: watchEdit,
   } = useForm();
 
   const [markerPosition, setMarkerPosition] = useState({
@@ -334,7 +329,8 @@ const Edificios = () => {
       if (
         edificio.faculties.length > 0 ||
         edificio.laboratories.length > 0 ||
-        edificio.offices.length > 0
+        edificio.offices.length > 0 ||
+        edificio.pointOfInterests.length > 0
       ) {
         // Oculta el SweetAlert de carga
         Swal.close();

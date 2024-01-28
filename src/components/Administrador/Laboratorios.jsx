@@ -275,10 +275,10 @@ const Laboratorios = () => {
   const [loading, setLoading] = useState(true);
   const [loadingLaboratorio, setLoadingLaboratorio] = useState(false); // Modificado: Inicializado en "false"
 
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [ setSelectedImages] = useState([]);
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
-  const [defaultPageSize, setDefaultPageSize] = useState(5);
+  const [defaultPageSize] = useState(5);
 
   useEffect(() => {
     const token = Cookies.get("token");

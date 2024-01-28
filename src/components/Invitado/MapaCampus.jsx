@@ -20,7 +20,7 @@ const MapContainer = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [directions, setDirections] = useState(null);
-  const [startLocation, setStartLocation] = useState("");
+  const [setStartLocation] = useState("");
   const [startLocationCoords, setStartLocationCoords] = useState(null);
   const [startBuilding, setStartBuilding] = useState(null);
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);

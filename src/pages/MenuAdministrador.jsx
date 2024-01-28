@@ -16,7 +16,6 @@ import Adminis from "../assets/Default.webp";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import {
-  BrowserRouter as Router,
   Route,
   NavLink,
   Routes,
@@ -48,11 +47,6 @@ const Administrador = () => {
     fetchData();
   }, [usuario, setUsuario]);
 
-  const truncateString = (str, maxLength) => {
-    if (str.length <= maxLength) return str;
-    return `${str.substring(0, maxLength)}...`;
-  };
-
   const handleToggleClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -61,10 +55,6 @@ const Administrador = () => {
     Cookies.remove("token");
     Cookies.remove("role");
     navigate("/");
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo(0, 0);
   };
 
   return (

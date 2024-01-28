@@ -1,4 +1,4 @@
-import { FaWhatsapp, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaWhatsapp, FaGithub} from "react-icons/fa";
 import "../../styles/LandingPage/Developers.css";
 import Nestor from "../../assets/FotoNstor.webp";
 import Daniel from "../../assets/FotoDaniel.webp";
