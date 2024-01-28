@@ -350,7 +350,7 @@ const Oficinas = () => {
   const [tempImages, setTempImages] = useState([]);
   const [deletedImages, setDeletedImages] = useState([]);
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
-  const [ setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [OficinaIMGEditado, setOficinaIMGEditado] = useState("");
   const [loadingImages, setLoadingImages] = useState(false);
 

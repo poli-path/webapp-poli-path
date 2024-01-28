@@ -275,7 +275,7 @@ const Laboratorios = () => {
   const [loading, setLoading] = useState(true);
   const [loadingLaboratorio, setLoadingLaboratorio] = useState(false); // Modificado: Inicializado en "false"
 
-  const [ setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [defaultPageSize] = useState(5);

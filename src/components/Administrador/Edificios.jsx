@@ -40,7 +40,7 @@ const Edificios = () => {
   const [defaultPageSize] = useState(5);
   const [loading, setLoading] = useState(true);
   const [modalImagesIsOpen, setModalImagesIsOpen] = useState(false);
-  const [ setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [loadingAddEdificio, setLoadingAddEdificio] = useState(false);
   const [mapModalIsOpen, setMapModalIsOpen] = useState(false);
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
