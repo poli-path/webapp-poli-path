@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://backend-poli-path-production.up.railway.app/api/v1',
+      target: `${process.env.REACT_APP_API_URL}`,
       changeOrigin: true,
       onProxyRes: function (proxyRes, req, res) {
         proxyRes.headers['Access-Control-Allow-Origin'] = '*';

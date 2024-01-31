@@ -507,11 +507,11 @@ const Oficinas = () => {
         ),
       },
       {
-        Header: "Descripcion",
+        Header: "Nota",
         accessor: "description", // Nueva columna
         Cell: ({ value }) => (
           <div style={{ width: "350px", whiteSpace: "pre-line" }}>
-            {value ? value : <p className="requerido">Sin Descripción aún</p>}
+            {value ? value : <p className="requerido">Sin Notas aún</p>}
           </div>
         ),
       },
@@ -748,7 +748,7 @@ const Oficinas = () => {
             />
           </label>
           <label>
-            Descripción:
+            Nota:
             <textarea
               className="Oficinas input modalInput"
               {...registerEdit("description", {
@@ -763,7 +763,7 @@ const Oficinas = () => {
           </label>
           {errorsEdit.description && (
               <p className="requerido">
-                La descripción debe tener más de 3 caracteres
+                La Nota debe tener más de 3 caracteres
               </p>
             )}
           <p>
