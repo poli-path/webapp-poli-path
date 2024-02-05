@@ -1,9 +1,9 @@
-import { FaWhatsapp, FaGithub} from "react-icons/fa";
+import { FaWhatsapp, FaGithub } from "react-icons/fa";
 import "../../styles/LandingPage/Developers.css";
 import Nestor from "../../assets/FotoNstor.webp";
 import Daniel from "../../assets/FotoDaniel.webp";
 import Salo from "../../assets/FotoSalo.webp";
-
+import { PiMicrosoftOutlookLogoLight } from "react-icons/pi";
 const Developers = () => {
   const mensaje = "Hola, quiero saber más sobre PoliPath";
   const salolink = `https://wa.me/593963562745?text=${encodeURIComponent(
@@ -39,7 +39,7 @@ const Developers = () => {
         <div className="developer_contact">
           <img src={Salo} alt="Foto del desarrollador" />
           <a href={salolink} target="_blank" rel="noopener noreferrer">
-            <FaWhatsapp />
+            <FaWhatsapp style={{ marginRight: "5px" }} />
             Whatsapp
           </a>
           <a
@@ -47,17 +47,13 @@ const Developers = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaGithub />
+            <FaGithub style={{ marginRight: "5px" }} />
             Github
           </a>
-          {/* <a
-            href="https://www.linkedin.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaLinkedin />
-            Linkedin
-          </a> */}
+          <span>
+            <PiMicrosoftOutlookLogoLight style={{ marginRight: "5px" }} />
+            salome.quispe@epn.edu.ec
+          </span>
         </div>
       </div>
       <div className="developers_v2">
@@ -78,7 +74,7 @@ const Developers = () => {
         <div className="developer_contact">
           <img src={Nestor} alt="Foto del desarrollador" />
           <a href={neslink} target="_blank" rel="noopener noreferrer">
-            <FaWhatsapp />
+            <FaWhatsapp style={{ marginRight: "5px" }} />
             Whatsapp
           </a>
           <a
@@ -86,17 +82,13 @@ const Developers = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaGithub />
+            <FaGithub style={{ marginRight: "5px" }} />
             Github
           </a>
-          {/* <a
-            href="https://www.linkedin.com/in/nestor-david-chumania-chumaña-2ab23a252/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaLinkedin />
-            Linkedin
-          </a> */}
+          <span>
+            <PiMicrosoftOutlookLogoLight style={{ marginRight: "5px" }} />
+            nestor.chumania@epn.edu.ec
+          </span>
         </div>
       </div>
       <div className="developers_v1">
@@ -117,7 +109,7 @@ const Developers = () => {
         <div className="developer_contact">
           <img src={Daniel} alt="Foto del desarrollador" />
           <a href={danilink} target="_blank" rel="noopener noreferrer">
-            <FaWhatsapp />
+            <FaWhatsapp style={{ marginRight: "5px" }} />
             Whatsapp
           </a>
           <a
@@ -125,17 +117,13 @@ const Developers = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <FaGithub />
+            <FaGithub style={{ marginRight: "5px" }} />
             Github
           </a>
-          {/* <a
-            href="https://www.linkedin.com/in/nestor-david-chumania-chumaña-2ab23a252/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaLinkedin />
-            Linkedin
-          </a> */}
+          <span>
+            <PiMicrosoftOutlookLogoLight style={{ marginRight: "5px" }} />
+            daniel.quishpe@epn.edu.ec
+          </span>
         </div>
       </div>
     </div>

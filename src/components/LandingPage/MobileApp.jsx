@@ -1,4 +1,4 @@
-import { FaGooglePlay } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa6";
 import "../../styles/LandingPage/MobileApp.css";
 import ImgGift from "../../assets/App_Mvil.webp";
 
@@ -24,12 +24,12 @@ const MobileApp = () => {
         </p>
         <br />
         <a
-          href="https://play.google.com "
+          href="https://movilapppolipath.es.aptoide.com/app"
           target="_blank"
           rel="noopener noreferrer"          className="app-download-button"
         >
-          <FaGooglePlay />
-          Descargar desde Google Play
+          <FaDownload style={{marginRight:"5px"}}/>
+            Descargar <strong>Poli Path</strong>
         </a>
       </div>
       <div className="mobile-app__gif">

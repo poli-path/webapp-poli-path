@@ -1,4 +1,4 @@
-import { FaGooglePlay } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa6";
 import "../../styles/Invitado/MapaCampus.css";
 import React, { useEffect, useState } from "react";
 import {
@@ -443,15 +443,16 @@ const MapContainer = () => {
         <img src={PoliPath} alt="PoliPath" />
 
         <br />
+        <br />
         <a
-          href="https://play.google.com"
+          href="https://movilapppolipath.es.aptoide.com/app"
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer"          
           className="app-download-button"
-          style={{ padding: 0 }}
+          style={{padding: "20px", fontSize:25}}
         >
-          <FaGooglePlay />
-          Descargar desde Google Play
+          <FaDownload style={{marginRight:"5px", fontSize:50}}/>
+            Descargar <strong>Poli Path</strong>
         </a>
       </div>
     </div>
