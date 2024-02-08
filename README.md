@@ -1,11 +1,11 @@
 <div align="center" width="100%">
-  <img style="height: 200pxx" src="https://github.com/poli-path/webapp-poli-path/assets/117753370/83ddd9a1-ec9f-491f-ae75-1bdf13897bee" />
+  <img style="height: 200px" src="https://github.com/poli-path/webapp-poli-path/assets/117753370/83ddd9a1-ec9f-491f-ae75-1bdf13897bee" />
 </div>
 
 ---
-<div align="center" width="100%">
+
 ## :blue_book: DESARROLLO DE UNA APLICACIÓN DE GEOLOCALIZACIÓN PARA LA ESCUELA POLITÉCNICA NACIONAL   :blue_book:
-</div>
+
 
 ### :book: Desarrollo de un *frontend* :book:
 En este proyecto se desarrolla un *frontend*, que permite, a través de consumo de *endpoints* de un *backend*, la gestión de la información de cada Edificio que se muestra dentro de la aplicación móvil de **PoliPath** asi como 
